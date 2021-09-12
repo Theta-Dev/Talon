@@ -3,6 +3,3 @@
 </script>
 
 <Menu />
-
-<style lang="scss">
-</style>
