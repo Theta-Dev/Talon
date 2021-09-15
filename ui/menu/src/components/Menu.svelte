@@ -3,6 +3,9 @@
     import ClickOutside from "svelte-click-outside"
 
     import Icon from "./Icon.svelte"
+    import ImageIcon from "./ImageIcon.svelte"
+
+    import talonLogo from "../assets/talon.svg"
 
     enum MenuState {
         Hidden,
@@ -52,42 +55,43 @@
     >
         <nav>
             <div class="nav-inner">
-                <ul>
-                    <li class="search" on:click={openSearch}>
-                        <Icon iconName="search" size="25"
-                              marginRight="1em"/>
-                        <input
-                            bind:this={searchInput}
-                            use:selectTextOnFocus
-                            placeholder="Search"
-                        />
-                    </li>
-                </ul>
-            </div>
+                <div class="item" on:click={openSearch}>
+                    <Icon iconName="search" size="40" scale="0.7"/>
+                    <input
+                        bind:this={searchInput}
+                        use:selectTextOnFocus
+                        placeholder="Search"
+                    />
+                </div>
 
+                <div class="item">
+                    <ImageIcon imageSrc={talonLogo} size="40"/>
+                    <span class="text">Talon</span>
+                </div>
+
+                <div class="item">
+                    <ImageIcon
+                        imageSrc="https://raw.githubusercontent.com/Theta-Dev/Spotify-Gender-Ex/master/assets/logo_square.svg"
+                        size="40"/>
+                    <span class="text">Spotify-Gender-Ex</span>
+                </div>
+
+                <div class="item">
+                    <ImageIcon
+                        imageSrc="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.imagesource.com%2Fwp-content%2Fuploads%2F2019%2F06%2FRio.jpg&f=1&nofb=1"
+                        size="40"/>
+                    <span class="text">Some landscape</span>
+                </div>
+            </div>
             <div class="nav-inner">
-                <ul>
-                    <li>
-                        <Icon iconName="github" size="25"
-                              marginRight="1em"/>
-                        <span class="text">View source</span>
-                    </li>
-                    <li>
-                        <Icon iconName="history" size="25"
-                              marginRight="1em"/>
-                        <span class="text">Version history</span>
-                    </li>
-                    <li>
-                        <Icon iconName="info" size="25"
-                              marginRight="1em"/>
-                        <span class="text">Site info</span>
-                    </li>
-                    <li class="button-close" on:click={() => closeMenu(true)}>
-                        <Icon iconName={menuIcon} size="25"
-                              marginRight="1em"/>
-                        <span class="text">Close sidebar</span>
-                    </li>
-                </ul>
+                <div class="item">
+                    <Icon iconName="github" size="40" scale="0.7"/>
+                    <span class="text">View source</span>
+                </div>
+                <div class="item" on:click={() => closeMenu(true)}>
+                    <Icon iconName={menuIcon} size="40" scale="0.7"/>
+                    <span class="text">Close sidebar</span>
+                </div>
             </div>
         </nav>
     </div>

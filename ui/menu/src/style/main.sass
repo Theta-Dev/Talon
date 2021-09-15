@@ -8,6 +8,10 @@
         padding: 0
         box-sizing: border-box
 
+        font-size: 15px
+        font-family: sans-serif
+        font-weight: normal
+
         color: values.$color-text
 
     // Sidebar wrapper
@@ -18,10 +22,7 @@
         width: 56px
         height: 100%
 
-        padding: 1.25rem 0.5rem 0
-
-        font-family: sans-serif
-        font-size: 1rem
+        padding: 1em 0
 
         background: values.$color-base
 
@@ -29,6 +30,10 @@
 
         &.show
             width: 250px
+
+            // .item > .text, .item > input
+                display: flex
+                opacity: 100%
 
         &.hide
             width: 0
@@ -47,53 +52,53 @@
 
                 +mixin.hideScrollbar
 
-            li, .search
+            .item
                 display: flex
-                align-items: center
-
-                cursor: pointer
 
                 padding: 8px
-                margin-bottom: 1rem
-                border-radius: 0.5rem
 
-                text-decoration: none
+                border-radius: 0.5rem
 
                 &.active, &:hover, &:focus-within
                     background: values.$color-primary
                     color: values.$color-text-active
 
-                .icon
-                    margin-right: 1rem
+                >*
+                    // vertical-align: middle
+                    display: flex
+                    align-items: center
+                    justify-content: center
 
-                .text
+                >.text, >input
+                    margin-left: 0.7em
                     font-weight: bold
+
+                    // opacity: 0
                     white-space: nowrap
 
-            .search
-                input
                     border: none
                     background: none
-                    width: 100%
-
-                    font-family: sans-serif
-                    font-weight: bold
-                    font-size: 1rem
 
                     outline: none
 
-                +mixin.placeholder
+                >.icon
+                    // flex: 0 0 56px
 
-                &.active, &:hover, &:focus-within
-                    input
-                        color: values.$color-text-active
-
-                    +mixin.placeholder
-                        color: values.$color-text-active
+                >input
+                    // flex: 0 0 160px
+                    // max-width: 160px
 
             .button-close
                 +mixin.mobile
                     display: none
+
+    .icon
+        //display: inline-block
+        //text-align: center
+        //vertical-align: middle
+        display: flex
+        align-items: center
+        justify-content: center
 
     // Floating button
     .fab
