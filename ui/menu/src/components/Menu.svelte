@@ -1,11 +1,11 @@
 <script lang="ts">
     import {selectTextOnFocus} from "../util/inputDirectives"
-    import ClickOutside from "svelte-click-outside"
+    // import ClickOutside from "svelte-click-outside"
 
     import Icon from "./Icon.svelte"
-    import ImageIcon from "./ImageIcon.svelte"
+    import ImageIcon from "./ImageIcon.svelte";
 
-    import talonLogo from "../assets/talon.svg"
+    import iconTalon from "../assets/talon.svg";
 
     enum MenuState {
         Hidden,
@@ -18,7 +18,7 @@
     }
 
     function openSearch(): void {
-        menuState = MenuState.Open;
+        searchOpen = true;
         searchInput.focus()
     }
 
@@ -41,62 +41,73 @@
         return window.innerWidth < 768
     }
 
-    let menuState = isMobile() ? MenuState.Hidden : MenuState.Closed
-    let menuIcon: string
-    let searchInput: HTMLInputElement
+    function closeSearch() {
+        searchOpen = false
+    }
 
-    $: menuIcon = menuState === MenuState.Open ? 'arrowRight' : 'close'
+    let menuState = isMobile() ? MenuState.Hidden : MenuState.Closed
+    let searchInput: HTMLInputElement
+    let searchOpen: boolean = false
 </script>
 
-<ClickOutside on:clickoutside={() => closeMenu(false)}>
-    <div class="wrapper"
-         class:show={menuState === MenuState.Open}
-         class:hide={menuState === MenuState.Hidden}
-    >
-        <nav>
-            <div class="nav-inner">
-                <div class="item" on:click={openSearch}>
-                    <Icon iconName="search" size="40" scale="0.7"/>
-                    <input
-                        bind:this={searchInput}
-                        use:selectTextOnFocus
-                        placeholder="Search"
-                    />
-                </div>
-
-                <div class="item">
-                    <ImageIcon imageSrc={talonLogo} size="40"/>
-                    <span class="text">Talon</span>
-                </div>
-
-                <div class="item">
-                    <ImageIcon
-                        imageSrc="https://raw.githubusercontent.com/Theta-Dev/Spotify-Gender-Ex/master/assets/logo_square.svg"
-                        size="40"/>
-                    <span class="text">Spotify-Gender-Ex</span>
-                </div>
-
-                <div class="item">
-                    <ImageIcon
-                        imageSrc="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.imagesource.com%2Fwp-content%2Fuploads%2F2019%2F06%2FRio.jpg&f=1&nofb=1"
-                        size="40"/>
-                    <span class="text">Some landscape</span>
-                </div>
-            </div>
-            <div class="nav-inner">
-                <div class="item">
-                    <Icon iconName="github" size="40" scale="0.7"/>
-                    <span class="text">View source</span>
-                </div>
-                <div class="item" on:click={() => closeMenu(true)}>
-                    <Icon iconName={menuIcon} size="40" scale="0.7"/>
-                    <span class="text">Close sidebar</span>
-                </div>
-            </div>
-        </nav>
+<!--<ClickOutside on:clickoutside={clickOut}>-->
+<div class="wrapper">
+    <div class="nav-inner">
+        <div class="item" class:active={searchOpen} on:click={openSearch}>
+            <span class="text"></span>
+            <input placeholder="Search..." bind:this={searchInput}
+                   on:focusout={closeSearch}
+                   use:selectTextOnFocus
+            >
+            <Icon iconName="search" size="40" scale="0.6"/>
+        </div>
+        <div class="item" on:click={() => alert("hi")}>
+            <span class="text">Talon</span>
+            <ImageIcon imageSrc={iconTalon} size="40" scale="0.8"/>
+        </div>
+        <div class="item">
+            <span class="text">Spotify-Gender-Ex</span>
+            <ImageIcon
+                imageSrc="https://raw.githubusercontent.com/Theta-Dev/Spotify-Gender-Ex/master/assets/logo_square.svg"
+                size="40" scale="0.8"/>
+        </div>
+        <div class="item">
+            <span class="text">Test</span>
+            <ImageIcon
+                imageSrc="" alt="te"
+                size="40" scale="0.8"/>
+        </div>
     </div>
-    <div class="fab" class:hide={menuState > MenuState.Hidden}
-         on:click={showMenu}>
-        <Icon iconName="menu" size="25"/>
+    <div class="nav-inner">
+        <div class="item">
+            <span class="text">View source</span>
+            <Icon iconName="github" size="40" scale="0.6"/>
+        </div>
+        <div class="item">
+            <span class="text"></span>
+            <div class="subitem">
+                <ul>
+                    <li>
+                        <a href="">06.08.2021 16:14 (537eab73)</a>
+                    </li>
+                    <li>
+                        <a href="">09.08.2021 17:46 (546c31b0)</a>
+                    </li>
+                    <li>
+                        <a href="">12.08.2021 21:08 (5a088a48)</a>
+                    </li>
+                </ul>
+            </div>
+            <Icon iconName="history" size="40" scale="0.6"/>
+        </div>
+        <div class="item">
+            <span class="text">Info</span>
+            <Icon iconName="info" size="40" scale="0.6"/>
+        </div>
     </div>
-</ClickOutside>
+</div>
+<!--<div class="fab" class:hide={menuState > MenuState.Hidden}
+     on:click={showMenu}>
+    <Icon iconName="menu" size="25"/>
+</div>-->
+<!--</ClickOutside>-->
