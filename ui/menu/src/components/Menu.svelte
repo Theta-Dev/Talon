@@ -1,20 +1,21 @@
 <script lang="ts">
     import {selectTextOnFocus} from "../util/inputDirectives"
-    // import ClickOutside from "svelte-click-outside"
-
     import Icon from "./Icon.svelte"
-    import ImageIcon from "./ImageIcon.svelte";
+    import MenuItem from "./MenuItem.svelte";
+    import type {TalonPage} from "../util/types";
 
     import iconTalon from "../assets/talon.svg";
 
-    enum MenuState {
-        Hidden,
-        Closed,
-        Open,
+    function showSidebar(): void {
+        sidebarShown = true;
     }
 
-    function showMenu(): void {
-        menuState = MenuState.Closed;
+    function hideSidebar(): void {
+        sidebarShown = false;
+    }
+
+    function isMobile(): boolean {
+        return window.innerWidth < 768
     }
 
     function openSearch(): void {
@@ -22,37 +23,35 @@
         searchInput.focus()
     }
 
-    function closeMenu(buttonClick: boolean): void {
-        // Mobile device: hide open menu on outside click
-        if (isMobile()) {
-            if (menuState > MenuState.Hidden) {
-                menuState = MenuState.Hidden
-            }
-        }
-        // Desktop device: only hide menu with close button
-        else {
-            if (menuState > MenuState.Closed || (buttonClick && menuState > MenuState.Hidden)) {
-                menuState--
-            }
-        }
-    }
-
-    function isMobile(): boolean {
-        return window.innerWidth < 768
-    }
-
     function closeSearch() {
         searchOpen = false
     }
 
-    let menuState = isMobile() ? MenuState.Hidden : MenuState.Closed
+    const testItem: TalonPage = {
+        name: "Talon",
+        uri: "",
+        color: "green",
+        image: iconTalon,
+        source: null,
+        versions: [],
+    }
+    const testItem2: TalonPage = {
+        name: "Talon, this is just a test",
+        uri: "",
+        color: "green",
+        image: null,
+        source: null,
+        versions: [],
+    }
+
+    let sidebarShown: boolean = !isMobile()
     let searchInput: HTMLInputElement
     let searchOpen: boolean = false
 </script>
 
-<!--<ClickOutside on:clickoutside={clickOut}>-->
-<div class="wrapper">
-    <div class="nav-inner">
+
+<div class="wrapper" class:hide={!sidebarShown}>
+    <div class="nav-inner" style="flex: 0 0 auto">
         <div class="item" class:active={searchOpen} on:click={openSearch}>
             <span class="text"></span>
             <input placeholder="Search..." bind:this={searchInput}
@@ -61,53 +60,27 @@
             >
             <Icon iconName="search" size="40" scale="0.6"/>
         </div>
-        <div class="item" on:click={() => alert("hi")}>
-            <span class="text">Talon</span>
-            <ImageIcon imageSrc={iconTalon} size="40" scale="0.8"/>
-        </div>
-        <div class="item">
-            <span class="text">Spotify-Gender-Ex</span>
-            <ImageIcon
-                imageSrc="https://raw.githubusercontent.com/Theta-Dev/Spotify-Gender-Ex/master/assets/logo_square.svg"
-                size="40" scale="0.8"/>
-        </div>
-        <div class="item">
-            <span class="text">Test</span>
-            <ImageIcon
-                imageSrc="" alt="te"
-                size="40" scale="0.8"/>
-        </div>
     </div>
-    <div class="nav-inner">
+    <div class="nav-inner" style="flex: 2 1 auto">
+        <MenuItem page={testItem}/>
+        <MenuItem page={testItem2}/>
+    </div>
+    <div class="nav-inner" style="flex: 0 0 auto">
         <div class="item">
             <span class="text">View source</span>
             <Icon iconName="github" size="40" scale="0.6"/>
         </div>
         <div class="item">
-            <span class="text"></span>
-            <div class="subitem">
-                <ul>
-                    <li>
-                        <a href="">06.08.2021 16:14 (537eab73)</a>
-                    </li>
-                    <li>
-                        <a href="">09.08.2021 17:46 (546c31b0)</a>
-                    </li>
-                    <li>
-                        <a href="">12.08.2021 21:08 (5a088a48)</a>
-                    </li>
-                </ul>
-            </div>
-            <Icon iconName="history" size="40" scale="0.6"/>
-        </div>
-        <div class="item">
             <span class="text">Info</span>
             <Icon iconName="info" size="40" scale="0.6"/>
         </div>
+        <div class="item" on:click={hideSidebar}>
+            <span class="text">Hide sidebar</span>
+            <Icon iconName="arrowRight" size="40" scale="0.6"/>
+        </div>
     </div>
 </div>
-<!--<div class="fab" class:hide={menuState > MenuState.Hidden}
-     on:click={showMenu}>
+<div class="fab" class:hide={sidebarShown}
+     on:click={showSidebar}>
     <Icon iconName="menu" size="25"/>
-</div>-->
-<!--</ClickOutside>-->
+</div>

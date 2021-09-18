@@ -32,8 +32,6 @@
         justify-content: space-between
         overflow: hidden
 
-        // background-color: values.$color-base
-
         .nav-inner
             overflow-x: hidden
             overflow-y: auto
@@ -57,11 +55,9 @@
 
                 align-items: center
 
-                // line-height: 32px
                 font-size: 1.1em
                 font-weight: bold
                 opacity: 0
-                // transition: opacity 0.4s
 
                 margin-left: auto
                 padding: 0 0.6em
@@ -76,10 +72,13 @@
 
                 background: none
                 border: none
+                outline: none
                 text-align: right
+                width: 10em
 
                 &:focus
                     opacity: 1
+                    border-bottom: solid #fff 2px
 
             .subitem
                 display: none
@@ -114,6 +113,9 @@
 
                 .icon
                     margin: 0 1em 0 0
+
+        &.hide
+            display: none
 
     .icon
         display: flex

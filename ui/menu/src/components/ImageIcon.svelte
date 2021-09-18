@@ -3,6 +3,7 @@
     export let size: number = 32
     export let scale: number = 1
     export let alt: string = "--"
+    export let color: string = "#4b228a"
 </script>
 
 <span
@@ -17,7 +18,7 @@
     {:else}
         <span
             class="placeholder"
-            style="width: {size * scale}px; height: {size * scale}px"
+            style="width: {size * scale}px; height: {size * scale}px; background: {color}"
         >
             {alt}
         </span>
@@ -39,5 +40,4 @@
         text-transform: uppercase
 
         border-radius: 50%
-        background-color: values.$color-primary-dark
 </style>
