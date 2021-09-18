@@ -4,27 +4,8 @@
     export let scale: number = 1
     export let alt: string = "--"
     export let color: string = "#4b228a"
+
 </script>
-
-<span
-    class="icon"
-    style="width: {size}px; height: {size}px;"
->
-    {#if imageSrc}
-        <img
-            src={imageSrc}
-            style="width: {size * scale}px; height: {size * scale}px"
-        >
-    {:else}
-        <span
-            class="placeholder"
-            style="width: {size * scale}px; height: {size * scale}px; background: {color}"
-        >
-            {alt}
-        </span>
-    {/if}
-</span>
-
 
 <style lang="sass">
     @use "../style/values"
@@ -41,3 +22,17 @@
 
         border-radius: 50%
 </style>
+
+<span class="icon" style="width: {size}px; height: {size}px;">
+    {#if imageSrc}
+        <img
+            src={imageSrc}
+            style="width: {size * scale}px; height: {size * scale}px" />
+    {:else}
+        <span
+            class="placeholder"
+            style="width: {size * scale}px; height: {size * scale}px; background: {color}">
+            {alt}
+        </span>
+    {/if}
+</span>

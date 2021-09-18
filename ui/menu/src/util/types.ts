@@ -1,10 +1,10 @@
 export interface TalonPage {
-    name: string,
-    uri: string,
+    name: string
+    uri: string
     color: string
     image: string | null
-    source: TalonLink | null,
-    versions: TalonVersion[],
+    source: TalonLink | null
+    versions: TalonVersion[]
 }
 
 export interface TalonLink {
@@ -22,7 +22,7 @@ export enum TalonLinkType {
 }
 
 export interface TalonVersion {
-    date: Date,
-    user: string,
-    tag: string,
+    date: Date
+    user: string
+    tag: string
 }

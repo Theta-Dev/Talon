@@ -1,40 +1,31 @@
 {
-  "name": "talonui-menu",
-  "version": "0.0.0",
-  "author": "ThetaDev",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "format": "prettier --plugin=./node_modules/prettier-plugin-svelte --check .",
-    "format-fix": "prettier --plugin=./node_modules/prettier-plugin-svelte --write .",
-    "lint": "eslint --ext .cjs,.js,.ts,.json,.svelte .",
-    "lint-fix": "eslint --fix --ext .cjs,.js,.ts,.json,.svelte ."
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.19",
-    "@testing-library/svelte": "^3.0.3",
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
-    "@typescript-eslint/parser": "^4.31.1",
-    "autoprefixer": "^10.3.4",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-svelte3": "^3.2.1",
-    "eslint-svelte3-preprocess": "^0.0.5",
-    "postcss": "^8.3.6",
-    "prettier": "^2.2.1",
-    "prettier-plugin-svelte": "^1.2.0",
-    "sass": "^1.39.0",
-    "svelte": "^3.42.4",
-    "svelte-preprocess": "^4.8.0",
-    "typescript": "^4.4.2",
-    "vite": "^2.5.1"
-  },
-  "dependencies": {
-    "@fortawesome/free-brands-svg-icons": "^5.15.4",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4"
-  }
+    "name": "talonui-menu",
+    "version": "0.0.0",
+    "author": "ThetaDev",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "format": "prettier --plugin=./node_modules/prettier-plugin-svelte --write .",
+        "format-check": "prettier --plugin=./node_modules/prettier-plugin-svelte --check ."
+    },
+    "devDependencies": {
+        "@sveltejs/vite-plugin-svelte": "^1.0.0-next.19",
+        "@testing-library/svelte": "^3.0.3",
+        "autoprefixer": "^10.3.4",
+        "postcss": "^8.3.6",
+        "prettier": "^2.2.1",
+        "prettier-plugin-svelte": "^1.2.0",
+        "sass": "^1.39.0",
+        "svelte": "^3.42.4",
+        "svelte-preprocess": "^4.8.0",
+        "typescript": "^4.4.2",
+        "vite": "^2.5.1"
+    },
+    "dependencies": {
+        "@fortawesome/free-brands-svg-icons": "^5.15.4",
+        "@fortawesome/free-solid-svg-icons": "^5.15.4"
+    }
 }
