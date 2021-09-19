@@ -1,8 +1,9 @@
 <script lang="ts">
     import ImageIcon from "./ImageIcon.svelte"
-    import type { TalonPage } from "../util/types"
+    import type {TalonPage} from "../util/types"
 
     export let page: TalonPage
+    export let rootPath: string = "/"
 
     const MAX_TEXT_LEN = 20
 
@@ -17,7 +18,7 @@
 
 </script>
 
-<div class="item">
+<a class="item" href={rootPath + page.path}>
     <span class="text">{text}</span>
     <ImageIcon
         imageSrc={page.image}
@@ -25,4 +26,4 @@
         alt={shortName}
         size="40"
         scale="0.8" />
-</div>
+</a>

@@ -1,17 +1,17 @@
-import { svgPathData as faSearch } from "@fortawesome/free-solid-svg-icons/faSearch"
-import { svgPathData as faLink } from "@fortawesome/free-solid-svg-icons/faExternalLinkAlt"
-import { svgPathData as faInfo } from "@fortawesome/free-solid-svg-icons/faInfoCircle"
-import { svgPathData as faHistory } from "@fortawesome/free-solid-svg-icons/faHistory"
-import { svgPathData as faArrowRight } from "@fortawesome/free-solid-svg-icons/faChevronRight"
-import { svgPathData as faClose } from "@fortawesome/free-solid-svg-icons/faTimes"
-import { svgPathData as faMenu } from "@fortawesome/free-solid-svg-icons/faTh"
+import {svgPathData as faSearch} from "@fortawesome/free-solid-svg-icons/faSearch"
+import {svgPathData as faLink} from "@fortawesome/free-solid-svg-icons/faExternalLinkAlt"
+import {svgPathData as faInfo} from "@fortawesome/free-solid-svg-icons/faInfoCircle"
+import {svgPathData as faHistory} from "@fortawesome/free-solid-svg-icons/faHistory"
+import {svgPathData as faArrowRight} from "@fortawesome/free-solid-svg-icons/faChevronRight"
+import {svgPathData as faClose} from "@fortawesome/free-solid-svg-icons/faTimes"
+import {svgPathData as faMenu} from "@fortawesome/free-solid-svg-icons/faTh"
 
-import { svgPathData as faGit } from "@fortawesome/free-brands-svg-icons/faGitAlt"
-import { svgPathData as faGithub } from "@fortawesome/free-brands-svg-icons/faGithub"
-import { svgPathData as faGitlab } from "@fortawesome/free-brands-svg-icons/faGitlab"
-import { svgPathData as faBitbucket } from "@fortawesome/free-brands-svg-icons/faBitbucket"
+import {svgPathData as faGit} from "@fortawesome/free-brands-svg-icons/faGitAlt"
+import {svgPathData as faGithub} from "@fortawesome/free-brands-svg-icons/faGithub"
+import {svgPathData as faGitlab} from "@fortawesome/free-brands-svg-icons/faGitlab"
+import {svgPathData as faBitbucket} from "@fortawesome/free-brands-svg-icons/faBitbucket"
 
-const icons: { [key: string]: [number, number, string] } = {
+const icons: {[key: string]: [number, number, string]} = {
     search: [512, 512, faSearch],
     link: [512, 512, faLink],
     info: [512, 512, faInfo],

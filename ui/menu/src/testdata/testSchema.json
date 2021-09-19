@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Talon menu data",
+  "definitions": {
+    "Version": {
+      "type": "object",
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user": {
+          "type": "string"
+        }
+      },
+      "required": ["tag", "date", "user"]
+    },
+    "Link": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["link", "git", "github", "gitlab", "gitea", "bitbucket"]
+        }
+      },
+      "required": ["url", "type"]
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "path": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^#[A-z\\d]{6}$"
+        },
+        "image": {
+          "type": "string",
+          "format": "uri"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["featured", "searchable", "hidden"]
+        },
+        "source": {
+          "$ref": "#/definitions/Link"
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Version"
+          }
+        }
+      },
+      "required": ["name", "path", "color", "visibility", "versions"]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "root_path": {
+          "type": "string"
+        },
+        "current_page": {
+          "$ref": "#/definitions/Page"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Page"
+          }
+        }
+      },
+      "required": ["root_path", "current_page", "pages"]
+    }
+  ]
+}

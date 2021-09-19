@@ -1,4 +1,13 @@
 {
-    "tabWidth": 4,
-    "semi": false
+  "tabWidth": 4,
+  "semi": false,
+  "bracketSpacing": false,
+  "overrides": [
+    {
+      "files": ["*.json", "*.md", "*.rst", "*.ini", "*.yml", "*.yaml"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
 }

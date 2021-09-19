@@ -23,7 +23,7 @@ Talon can be used for a lot of different purposes:
 - Mark
 - Name
 - Logo
-- Color + 3 characters as logo alternative
+- Color
 - **OPT:** Time to live
 - Number of kept versions
 - Visibility: Featured/Searchable/Hidden

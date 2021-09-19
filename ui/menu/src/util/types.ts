@@ -1,10 +1,22 @@
+export interface TalonData {
+    root_path: string
+    current_page: TalonPage
+    pages: TalonPage[]
+}
+
 export interface TalonPage {
     name: string
-    uri: string
+    path: string
     color: string
-    image: string | null
-    source: TalonLink | null
+    image: string | null | undefined
+    source: TalonLink | null | undefined
     versions: TalonVersion[]
+}
+
+export enum TalonVisibility {
+    FEATURED = "featured",
+    SEARCHABLE = "searchable",
+    HIDDEN = "hidden",
 }
 
 export interface TalonLink {
@@ -13,7 +25,7 @@ export interface TalonLink {
 }
 
 export enum TalonLinkType {
-    GENERIC = "generic",
+    LINK = "link",
     GIT = "git",
     GITHUB = "github",
     GITLAB = "gitlab",

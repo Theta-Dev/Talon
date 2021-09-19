@@ -27,6 +27,7 @@
     {#if imageSrc}
         <img
             src={imageSrc}
+            {alt}
             style="width: {size * scale}px; height: {size * scale}px" />
     {:else}
         <span

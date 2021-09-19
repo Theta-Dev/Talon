@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { selectTextOnFocus } from "../util/inputDirectives"
+    import {selectTextOnFocus} from "../util/inputDirectives"
     import Icon from "./Icon.svelte"
     import MenuItem from "./MenuItem.svelte"
-    import type { TalonPage } from "../util/types"
 
-    import iconTalon from "../assets/talon.svg"
+    import testData from "../testdata/test.json"
+    import type {TalonData} from "../util/types"
 
     function showSidebar(): void {
         sidebarShown = true
@@ -27,22 +27,7 @@
         searchOpen = false
     }
 
-    const testItem: TalonPage = {
-        name: "Talon",
-        uri: "",
-        color: "green",
-        image: iconTalon,
-        source: null,
-        versions: [],
-    }
-    const testItem2: TalonPage = {
-        name: "Talon, this is just a test",
-        uri: "",
-        color: "green",
-        image: null,
-        source: null,
-        versions: [],
-    }
+    const talonData: TalonData = testData
 
     let sidebarShown: boolean = !isMobile()
     let searchInput: HTMLInputElement
@@ -63,14 +48,24 @@
         </div>
     </div>
     <div class="nav-inner" style="flex: 2 1 auto">
-        <MenuItem page={testItem} />
-        <MenuItem page={testItem2} />
+        {#each talonData.pages as page}
+            <MenuItem {page} rootPath={talonData.root_path} />
+        {/each}
     </div>
     <div class="nav-inner" style="flex: 0 0 auto">
-        <div class="item">
-            <span class="text">View source</span>
-            <Icon iconName="github" size="40" scale="0.6" />
-        </div>
+        {#if talonData.current_page.source}
+            <a
+                class="item"
+                href={talonData.current_page.source.url}
+                target="_blank"
+                referrerpolicy="no-referrer">
+                <span class="text">View source</span>
+                <Icon
+                    iconName={talonData.current_page.source.type}
+                    size="40"
+                    scale="0.6" />
+            </a>
+        {/if}
         <div class="item">
             <span class="text">Info</span>
             <Icon iconName="info" size="40" scale="0.6" />
