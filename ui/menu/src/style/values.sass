@@ -1,7 +1,12 @@
+@use "sass:color"
+
 $color-base: #282d34
 $color-text: #ededed
-$color-text-active: $color-text
 $color-primary: #7935df
-$color-primary-dark: #4b228a
 
 $width-mobile: 768px
+
+$color-base-1: color.scale($color-base, $lightness: 10%)
+$color-base-2: color.scale($color-base, $lightness: 20%)
+$color-primary-light: color.scale($color-primary, $lightness: 15%)
+$color-primary-dark: color.scale($color-primary, $lightness: -15%)

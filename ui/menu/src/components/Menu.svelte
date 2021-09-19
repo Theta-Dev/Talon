@@ -1,7 +1,10 @@
 <script lang="ts">
+    import {Modals, closeModal, openModal} from "svelte-modals"
     import {selectTextOnFocus} from "../util/inputDirectives"
+
     import Icon from "./Icon.svelte"
     import MenuItem from "./MenuItem.svelte"
+    import InfoModal from "./InfoModal.svelte"
 
     import testData from "../testdata/test.json"
     import type {TalonData} from "../util/types"
@@ -27,6 +30,12 @@
         searchOpen = false
     }
 
+    function openInfo() {
+        openModal(InfoModal, {
+            data: talonData,
+        })
+    }
+
     const talonData: TalonData = testData
 
     let sidebarShown: boolean = !isMobile()
@@ -34,6 +43,16 @@
     let searchOpen: boolean = false
 
 </script>
+
+<style lang="sass">
+    .backdrop
+        position: fixed
+        top: 0
+        bottom: 0
+        right: 0
+        left: 0
+        background: rgba(0,0,0,0.6)
+</style>
 
 <div class="wrapper" class:hide={!sidebarShown}>
     <div class="nav-inner" style="flex: 0 0 auto">
@@ -66,7 +85,7 @@
                     scale="0.6" />
             </a>
         {/if}
-        <div class="item">
+        <div class="item" on:click={openInfo}>
             <span class="text">Info</span>
             <Icon iconName="info" size="40" scale="0.6" />
         </div>
@@ -79,3 +98,7 @@
 <div class="fab" class:hide={sidebarShown} on:click={showSidebar}>
     <Icon iconName="menu" size="25" />
 </div>
+
+<Modals>
+    <div slot="backdrop" class="backdrop" on:click={closeModal} />
+</Modals>

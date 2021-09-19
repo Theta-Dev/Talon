@@ -1,12 +1,14 @@
 @use "values"
 @use "mixin"
 
-#talon-sidebar-container
+.talon-sidebar-container
     // CSS Reset
     &, *
         margin: 0
         padding: 0
         box-sizing: border-box
+        display: block
+        position: unset
 
         font-size: 15px
         font-family: sans-serif
@@ -15,8 +17,33 @@
 
         color: values.$color-text
 
+    a, span, em, i, b, code
+        display: inline
+
+    a
+        color: values.$color-primary-light
+
     a:hover
-        font-weight: bold
+        text-decoration: underline
+
+    p
+        margin: 0.8em 0
+
+    h1
+        font-size: 2.6em
+        margin-bottom: 0.2em
+
+    h2
+        font-size: 2em
+
+    h3
+        font-size: 1.4em
+
+    code
+        font-family: monospace
+        background-color: values.$color-base-1
+        border-radius: 0.3em
+        padding: 0 0.3em
 
     // Sidebar wrapper
     .wrapper
@@ -92,6 +119,7 @@
             &:hover, &.active
                 pointer-events: auto
                 background-color: values.$color-primary
+                text-decoration: none
 
                 .text, input
                     opacity: 1

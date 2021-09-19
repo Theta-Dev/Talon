@@ -1,6 +1,7 @@
 export interface TalonData {
     root_path: string
     current_page: TalonPage
+    current_version: number
     pages: TalonPage[]
 }
 
@@ -36,5 +37,5 @@ export enum TalonLinkType {
 export interface TalonVersion {
     date: Date
     user: string
-    tag: string
+    tags: object
 }
