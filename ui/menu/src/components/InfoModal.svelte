@@ -83,12 +83,14 @@
             <p>Uploaded by: {currentVersion.user}</p>
             <p>Version-ID: <code>{data.current_version}</code></p>
 
-            {#each Object.entries(currentVersion.tags) as [key, val]}
-                <p>
-                    {key.replace(/^\w/, (c) => c.toUpperCase())}:
-                    <code>{val}</code>
-                </p>
-            {/each}
+            {#if currentVersion.tags}
+                {#each Object.entries(currentVersion.tags) as [key, val]}
+                    <p>
+                        {key.replace(/^\w/, (c) => c.toUpperCase())}:
+                        <code>{val}</code>
+                    </p>
+                {/each}
+            {/if}
 
             <p>
                 This site is powered by

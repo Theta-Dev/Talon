@@ -9,6 +9,7 @@ export interface TalonPage {
     name: string
     path: string
     color: string
+    visibility: TalonVisibility
     image: string | null | undefined
     source: TalonLink | null | undefined
     versions: TalonVersion[]

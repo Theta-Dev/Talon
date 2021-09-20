@@ -4,6 +4,7 @@
 
     export let page: TalonPage
     export let rootPath: string = "/"
+    export let active: boolean = false
 
     const MAX_TEXT_LEN = 20
 
@@ -18,7 +19,7 @@
 
 </script>
 
-<a class="item" href={rootPath + page.path}>
+<a class="item" class:active href={rootPath + page.path}>
     <span class="text">{text}</span>
     <ImageIcon
         imageSrc={page.image}

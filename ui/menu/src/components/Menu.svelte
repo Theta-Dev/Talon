@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Modals, closeModal, openModal} from "svelte-modals"
+    import {closeModal, Modals, openModal} from "svelte-modals"
     import {selectTextOnFocus} from "../util/inputDirectives"
 
     import Icon from "./Icon.svelte"
@@ -7,7 +7,8 @@
     import InfoModal from "./InfoModal.svelte"
 
     import testData from "../testdata/test.json"
-    import type {TalonData} from "../util/types"
+    import type {TalonData, TalonPage} from "../util/types"
+    import {TalonVisibility} from "../util/types"
 
     function showSidebar(): void {
         sidebarShown = true
@@ -28,6 +29,14 @@
 
     function closeSearch() {
         searchOpen = false
+
+        if (displayedPages.length === 0) searchText = ""
+    }
+
+    function searchKeypress(e: KeyboardEvent) {
+        if (e.key === "Enter" && displayedPages) {
+            window.location = talonData.root_path + displayedPages[0].path
+        }
     }
 
     function openInfo() {
@@ -41,6 +50,18 @@
     let sidebarShown: boolean = !isMobile()
     let searchInput: HTMLInputElement
     let searchOpen: boolean = false
+    let searchText: string = ""
+
+    let displayedPages: TalonPage[]
+    $: displayedPages = talonData.pages.filter((page) => {
+        if (searchText) {
+            return (
+                page.visibility !== TalonVisibility.HIDDEN &&
+                page.name.toLowerCase().includes(searchText.toLowerCase())
+            )
+        }
+        return page.visibility === TalonVisibility.FEATURED
+    })
 
 </script>
 
@@ -51,7 +72,7 @@
         bottom: 0
         right: 0
         left: 0
-        background: rgba(0,0,0,0.6)
+        background: rgba(0, 0, 0, 0.6)
 </style>
 
 <div class="wrapper" class:hide={!sidebarShown}>
@@ -61,14 +82,19 @@
             <input
                 placeholder="Search..."
                 bind:this={searchInput}
+                bind:value={searchText}
                 on:focusout={closeSearch}
+                on:keypress={searchKeypress}
                 use:selectTextOnFocus />
-            <Icon iconName="search" size="40" scale="0.6" />
+            <Icon iconName="search" size="40" scale="0.6" dot={searchText} />
         </div>
     </div>
     <div class="nav-inner" style="flex: 2 1 auto">
-        {#each talonData.pages as page}
-            <MenuItem {page} rootPath={talonData.root_path} />
+        {#each displayedPages as page, i}
+            <MenuItem
+                {page}
+                rootPath={talonData.root_path}
+                active={searchOpen && searchText && i === 0} />
         {/each}
     </div>
     <div class="nav-inner" style="flex: 0 0 auto">
