@@ -1,8 +1,11 @@
 <script lang="ts">
     import {fly} from "svelte/transition"
+    import {closeModal} from "svelte-modals"
+    import Keydown from "svelte-keydown"
 
     import type {TalonData, TalonVersion} from "../util/types"
     import ImageIcon from "./ImageIcon.svelte"
+    import Icon from "./Icon.svelte"
     // noinspection ES6UnusedImports
     import {version} from "../../package.json"
     import {TalonPage} from "../util/types";
@@ -63,7 +66,16 @@
             font-size: 2em
             margin-left: 0.25em
 
+    .close
+        position: absolute
+        background: none
+        border: none
+        right: 5px
+        top: 5px
+
 </style>
+
+<Keydown paused={!isOpen} on:Escape={closeModal} />
 
 {#if isOpen}
     <!-- on:introstart and on:outroend are required to transition 1 at a time between modals -->
@@ -85,7 +97,6 @@
             </div>
             <p>Upload date: {uploadDate}</p>
             <p>Uploaded by: {currentVersion.user}</p>
-            <p>Version-ID: <code>{data.current_version}</code></p>
 
             {#if currentVersion.tags}
                 {#each Object.entries(currentVersion.tags) as [key, val]}
@@ -112,6 +123,12 @@
                 <a href={data.root_path + 'int/license'} target="_blank">View
                     licenses</a>
             </p>
+            <button class="close" on:click={closeModal}>
+                <Icon
+                    iconName="close"
+                    size="40"
+                    scale="0.6" />
+            </button>
         </div>
     </div>
 {/if}

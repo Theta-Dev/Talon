@@ -29,13 +29,22 @@
 
     function closeSearch() {
         searchOpen = false
+        searchInput.blur()
 
         if (displayedPages.length === 0) searchText = ""
     }
 
     function searchKeypress(e: KeyboardEvent) {
-        if (e.key === "Enter" && displayedPages) {
-            window.location = talonData.root_path + displayedPages[0].path
+        console.log(e.key)
+        switch (e.key) {
+            case "Enter":
+               if (displayedPages) {
+                   window.location = talonData.root_path + displayedPages[0].path
+               }
+               break
+            case "Escape":
+                closeSearch()
+                break
         }
     }
 
@@ -80,16 +89,16 @@
 
 <div class="wrapper" class:hide={!sidebarShown}>
     <div class="nav-inner" style="flex: 0 0 auto">
-        <div class="item" class:active={searchOpen} on:click={openSearch}>
+        <div class="item" class:active={searchOpen || searchText} on:click={openSearch}>
             <span class="text" />
             <input
                 placeholder="Search..."
                 bind:this={searchInput}
                 bind:value={searchText}
                 on:focusout={closeSearch}
-                on:keypress={searchKeypress}
+                on:keyup={searchKeypress}
                 use:selectTextOnFocus />
-            <Icon iconName="search" size="40" scale="0.6" dot={searchText} />
+            <Icon iconName="search" size="40" scale="0.6" />
         </div>
     </div>
     <div class="nav-inner" style="flex: 2 1 auto">
