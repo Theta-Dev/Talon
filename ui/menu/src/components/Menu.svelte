@@ -5,6 +5,7 @@
     import Icon from "./Icon.svelte"
     import MenuItem from "./MenuItem.svelte"
     import InfoModal from "./InfoModal.svelte"
+    import FloatingButton from "./FloatingButton.svelte";
 
     import testData from "../testdata/test.json"
     import type {TalonData, TalonPage} from "../util/types"
@@ -38,10 +39,12 @@
         console.log(e.key)
         switch (e.key) {
             case "Enter":
-               if (displayedPages) {
-                   window.location = talonData.root_path + displayedPages[0].path
-               }
-               break
+                if (!searchText) {
+                    closeSearch()
+                } else if (displayedPages) {
+                    window.location = talonData.root_path + displayedPages[0].path
+                }
+                break
             case "Escape":
                 closeSearch()
                 break
@@ -78,6 +81,9 @@
 </script>
 
 <style lang="sass">
+    @use "../style/values"
+    @use "../style/mixin"
+
     .backdrop
         position: fixed
         top: 0
@@ -89,16 +95,17 @@
 
 <div class="wrapper" class:hide={!sidebarShown}>
     <div class="nav-inner" style="flex: 0 0 auto">
-        <div class="item" class:active={searchOpen || searchText} on:click={openSearch}>
-            <span class="text" />
+        <div class="item" class:active={searchOpen || searchText}
+             on:click={openSearch}>
+            <span class="text"/>
             <input
                 placeholder="Search..."
                 bind:this={searchInput}
                 bind:value={searchText}
                 on:focusout={closeSearch}
                 on:keyup={searchKeypress}
-                use:selectTextOnFocus />
-            <Icon iconName="search" size="40" scale="0.6" />
+                use:selectTextOnFocus/>
+            <Icon iconName="search" size="40" scale="0.6"/>
         </div>
     </div>
     <div class="nav-inner" style="flex: 2 1 auto">
@@ -106,7 +113,7 @@
             <MenuItem
                 {page}
                 rootPath={talonData.root_path}
-                active={searchOpen && searchText && i === 0} />
+                active={searchOpen && searchText && i === 0}/>
         {/each}
     </div>
     <div class="nav-inner" style="flex: 0 0 auto">
@@ -120,23 +127,22 @@
                 <Icon
                     iconName={currentPage.source.type}
                     size="40"
-                    scale="0.6" />
+                    scale="0.6"/>
             </a>
         {/if}
         <div class="item" on:click={openInfo}>
             <span class="text">Info</span>
-            <Icon iconName="info" size="40" scale="0.6" />
+            <Icon iconName="info" size="40" scale="0.6"/>
         </div>
         <div class="item" on:click={hideSidebar}>
             <span class="text">Hide sidebar</span>
-            <Icon iconName="arrowRight" size="40" scale="0.6" />
+            <Icon iconName="arrowRight" size="40" scale="0.6"/>
         </div>
     </div>
 </div>
-<div class="fab" class:hide={sidebarShown} on:click={showSidebar}>
-    <Icon iconName="menu" size="25" />
-</div>
+
+<FloatingButton hide={sidebarShown} on:click={showSidebar} />
 
 <Modals>
-    <div slot="backdrop" class="backdrop" on:click={closeModal} />
+    <div slot="backdrop" class="backdrop" on:click={closeModal}/>
 </Modals>

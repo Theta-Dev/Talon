@@ -37,6 +37,7 @@
       "name": "Spotify-Gender-Ex",
       "path": "Spotify-Gender-Ex",
       "color": "#1DB954",
+      "image": "https://raw.githubusercontent.com/Theta-Dev/Spotify-Gender-Ex/master/assets/logo_square.svg",
       "visibility": "featured",
       "source": {
         "url": "https://github.com/Theta-Dev/Spotify-Gender-Ex",

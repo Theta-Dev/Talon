@@ -68,8 +68,6 @@
 
     .close
         position: absolute
-        background: none
-        border: none
         right: 5px
         top: 5px
 
@@ -91,7 +89,7 @@
                     imageSrc={currentPage.image}
                     color={currentPage.color}
                     alt={shortName}
-                    size="40"
+                    size="60"
                     scale="0.8" />
                 <span class="text"> {currentPage.name} </span>
             </div>
@@ -106,6 +104,8 @@
                     </p>
                 {/each}
             {/if}
+
+            <hr/>
 
             <p>
                 This site is powered by

@@ -5,9 +5,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
-    "serve": "vite preview",
+    "serve": "vite preview --host",
     "format": "prettier --plugin=./node_modules/prettier-plugin-svelte --write .",
     "format-check": "prettier --plugin=./node_modules/prettier-plugin-svelte --check ."
   },

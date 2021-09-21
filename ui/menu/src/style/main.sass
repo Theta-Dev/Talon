@@ -15,6 +15,8 @@
         font-weight: normal
         text-decoration: none
 
+        background: none
+        border: none
         color: values.$color-text
 
     a, span, em, i, b, code
@@ -43,7 +45,16 @@
         font-family: monospace
         background-color: values.$color-base-1
         border-radius: 0.3em
-        padding: 0 0.3em
+        padding: 0.1em 0.3em
+
+    button
+        cursor: pointer
+
+    hr
+        width: 100%
+        height: 1px
+        margin: 1.6em 0
+        background-image: linear-gradient(to right, values.$color-base-1, values.$color-base-2, values.$color-base-1)
 
     // Sidebar wrapper
     .wrapper
@@ -67,7 +78,8 @@
 
         .item
             display: flex
-            flex-direction: row
+            flex-direction: row-reverse
+            align-items: center
 
             text-align: right
             margin-bottom: 0.2em
@@ -78,16 +90,13 @@
             pointer-events: none
 
             .text
-                display: flex
-
-                align-items: center
-
                 font-size: 1.1em
                 font-weight: bold
-                opacity: 0
 
                 margin-left: auto
-                padding: 0 0.6em
+                padding: 0 0.5em
+
+                display: none
 
             .icon
                 border-radius: 50%
@@ -95,7 +104,6 @@
 
             input
                 pointer-events: auto
-                opacity: 0
 
                 background: none
                 border: none
@@ -103,18 +111,11 @@
                 text-align: right
                 width: 10em
 
+                display: none
+
                 &:focus
                     opacity: 1
                     border-bottom: solid #fff 2px
-
-            .subitem
-                display: none
-                padding: 0.6em
-
-                ul
-                    list-style: none
-                    li
-                        margin: 0.4em 0
 
             &:hover, &.active
                 pointer-events: auto
@@ -122,25 +123,7 @@
                 text-decoration: none
 
                 .text, input
-                    opacity: 1
-
-                .subitem
                     display: flex
-
-        &.left
-            right: unset
-            left: 0
-
-            .item
-                flex-direction: row-reverse
-                text-align: left
-
-                .text
-                    margin-left: unset
-                    margin-right: auto
-
-                .icon
-                    margin: 0 1em 0 0
 
         &.hide
             display: none
@@ -149,28 +132,3 @@
         display: flex
         align-items: center
         justify-content: center
-
-    // Floating button
-    .fab
-        position: fixed
-        bottom: 25px
-        right: 25px
-
-        height: 56px
-        width: 56px
-
-        display: flex
-        align-items: center
-        justify-content: center
-
-        cursor: pointer
-        border-radius: 50%
-
-        background: values.$color-primary
-        opacity: 1
-
-        transition: bottom 0.5s, opacity 0.5s
-
-        &.hide
-            bottom: -56px
-            opacity: 0

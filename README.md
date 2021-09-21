@@ -2,7 +2,7 @@
 
 **static site management system**
 
-![](https://img.shields.io/badge/Completed-1%25-orange?style=flat-square)
+![](https://img.shields.io/badge/Completed-10%25-orange?style=flat-square)
 
 ---
 

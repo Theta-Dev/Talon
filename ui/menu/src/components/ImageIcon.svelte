@@ -17,7 +17,6 @@
         justify-content: center
 
     .placeholder
-        font-size: 1.2em !important
         text-transform: uppercase
 
         border-radius: 50%
@@ -32,7 +31,7 @@
     {:else}
         <span
             class="placeholder"
-            style="width: {size * scale}px; height: {size * scale}px; background: {color}">
+            style="width: {size * scale}px; height: {size * scale}px; font-size: {size * scale * 0.55}px; background: {color}">
             {alt}
         </span>
     {/if}
