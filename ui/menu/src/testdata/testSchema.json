@@ -59,15 +59,9 @@
         },
         "source": {
           "$ref": "#/definitions/Link"
-        },
-        "versions": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/Version"
-          }
         }
       },
-      "required": ["name", "path", "color", "visibility", "versions"]
+      "required": ["name", "path", "color", "visibility"]
     }
   },
   "oneOf": [
@@ -78,19 +72,25 @@
           "type": "string"
         },
         "current_page": {
-          "$ref": "#/definitions/Page"
+          "type": "string"
         },
         "current_version": {
-          "type": "integer"
+          "type": "string"
+        },
+        "versions": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Version"
+          }
         },
         "pages": {
-          "type": "array",
-          "items": {
+          "type": "object",
+          "additionalProperties": {
             "$ref": "#/definitions/Page"
           }
         }
       },
-      "required": ["root_path", "current_page", "current_version", "pages"]
+      "required": ["root_path", "current_page", "current_version", "versions", "pages"]
     }
   ]
 }

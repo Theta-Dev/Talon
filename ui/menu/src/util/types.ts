@@ -1,8 +1,9 @@
 export interface TalonData {
     root_path: string
-    current_page: TalonPage
-    current_version: number
-    pages: TalonPage[]
+    current_page: string
+    current_version: string
+    versions: {[key: string]: TalonVersion}
+    pages: {[key: string]: TalonPage}
 }
 
 export interface TalonPage {
@@ -12,7 +13,6 @@ export interface TalonPage {
     visibility: TalonVisibility
     image: string | null | undefined
     source: TalonLink | null | undefined
-    versions: TalonVersion[]
 }
 
 export enum TalonVisibility {
@@ -36,6 +36,7 @@ export enum TalonLinkType {
 }
 
 export interface TalonVersion {
+    id: number
     date: Date
     user: string
     tags: object

@@ -1,28 +1,19 @@
 {
   "root_path": "/",
-  "current_page": {
-    "name": "ThetaDev",
-    "path": "",
-    "color": "#1f91ee",
-    "visibility": "featured",
-    "source": {
-      "url": "https://github.com/Theta-Dev/Spotify-Gender-Ex",
-      "type": "github"
-    },
-    "versions": {
-      "5": {
-        "date": "2021-06-22T12:08:21+00:00",
-        "user": "ThetaDev",
-        "tags": {
-          "commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489",
-          "version": "0.1.2"
-        }
+  "current_page": "1",
+  "current_version": "5",
+  "versions": {
+    "5": {
+      "date": "2021-06-22T12:08:21+00:00",
+      "user": "ThetaDev",
+      "tags": {
+        "commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489",
+        "version": "0.1.2"
       }
     }
   },
-  "current_version": 5,
-  "pages": [
-    {
+  "pages": {
+    "1": {
       "name": "ThetaDev",
       "path": "",
       "color": "#1f91ee",
@@ -30,19 +21,9 @@
       "source": {
         "url": "https://github.com/Theta-Dev/Spotify-Gender-Ex",
         "type": "github"
-      },
-      "versions": {
-        "5": {
-          "date": "2021-06-22T12:08:21+00:00",
-          "user": "ThetaDev",
-          "tags": {
-            "commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489",
-            "version": "0.1.2"
-          }
-        }
       }
     },
-    {
+    "2": {
       "name": "Talon",
       "path": "Talon",
       "color": "#4b228a",
@@ -50,15 +31,9 @@
       "source": {
         "url": "https://github.com/Theta-Dev/Talon",
         "type": "github"
-      },
-      "versions": {
-        "6": {
-          "date": "2021-09-15T16:21:09+00:00",
-          "user": "ThetaDev"
-        }
       }
     },
-    {
+    "3": {
       "name": "Spotify-Gender-Ex",
       "path": "Spotify-Gender-Ex",
       "color": "#1DB954",
@@ -66,52 +41,25 @@
       "source": {
         "url": "https://github.com/Theta-Dev/Spotify-Gender-Ex",
         "type": "github"
-      },
-      "versions": {
-        "11": {
-          "date": "2021-06-22T12:08:21+00:00",
-          "user": "ThetaDev",
-          "tags": {
-            "version": "3.0.2"
-          }
-        }
       }
     },
-    {
+    "4": {
       "name": "A1",
       "path": "tests/a1",
       "color": "#ff0000",
-      "visibility": "searchable",
-      "versions": {
-        "11": {
-          "date": "2021-06-22T12:08:21+00:00",
-          "user": "ThetaDev"
-        }
-      }
+      "visibility": "searchable"
     },
-    {
+    "5": {
       "name": "B1",
       "path": "tests/b1",
       "color": "#00ff00",
-      "visibility": "searchable",
-      "versions": {
-        "11": {
-          "date": "2021-06-22T12:08:21+00:00",
-          "user": "ThetaDev"
-        }
-      }
+      "visibility": "searchable"
     },
-    {
+    "6": {
       "name": "C1",
       "path": "tests/c1",
       "color": "#0000ff",
-      "visibility": "searchable",
-      "versions": {
-        "11": {
-          "date": "2021-06-22T12:08:21+00:00",
-          "user": "ThetaDev"
-        }
-      }
+      "visibility": "searchable"
     }
-  ]
+  }
 }

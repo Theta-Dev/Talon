@@ -5,15 +5,19 @@
     import ImageIcon from "./ImageIcon.svelte"
     // noinspection ES6UnusedImports
     import {version} from "../../package.json"
+    import {TalonPage} from "../util/types";
 
     export let isOpen: boolean
     export let data: TalonData
 
-    let shortName: string
-    $: shortName = data.current_page.name.substr(0, 2)
+    let currentPage: TalonPage
+    $: currentPage = data.pages[data.current_page]
 
     let currentVersion: TalonVersion
-    $: currentVersion = data.current_page.versions[data.current_version]
+    $: currentVersion = data.versions[data.current_version]
+
+    let shortName: string
+    $: shortName = currentPage.name.substr(0, 2)
 
     let uploadDate: string
     $: uploadDate = new Date(currentVersion.date).toLocaleString(
@@ -72,12 +76,12 @@
         <div class="contents">
             <div class="tag">
                 <ImageIcon
-                    imageSrc={data.current_page.image}
-                    color={data.current_page.color}
+                    imageSrc={currentPage.image}
+                    color={currentPage.color}
                     alt={shortName}
                     size="40"
                     scale="0.8" />
-                <span class="text"> {data.current_page.name} </span>
+                <span class="text"> {currentPage.name} </span>
             </div>
             <p>Upload date: {uploadDate}</p>
             <p>Uploaded by: {currentVersion.user}</p>
@@ -95,7 +99,7 @@
             <p>
                 This site is powered by
                 <a
-                    href="https://github.com/Theta-Dev/Talon"
+                    href="https://github.com/Theta-Dev/Talon/tree/{version}"
                     target="_blank"
                     referrerpolicy="no-referrer">Talon
                     {version}</a>, a static site management system created by

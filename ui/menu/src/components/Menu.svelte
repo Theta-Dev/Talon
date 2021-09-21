@@ -52,8 +52,11 @@
     let searchOpen: boolean = false
     let searchText: string = ""
 
+    let currentPage: TalonPage
+    $: currentPage = talonData.pages[talonData.current_page]
+
     let displayedPages: TalonPage[]
-    $: displayedPages = talonData.pages.filter((page) => {
+    $: displayedPages = Object.values(talonData.pages).filter((page) => {
         if (searchText) {
             return (
                 page.visibility !== TalonVisibility.HIDDEN &&
@@ -98,15 +101,15 @@
         {/each}
     </div>
     <div class="nav-inner" style="flex: 0 0 auto">
-        {#if talonData.current_page.source}
+        {#if currentPage.source}
             <a
                 class="item"
-                href={talonData.current_page.source.url}
+                href={currentPage.source.url}
                 target="_blank"
                 referrerpolicy="no-referrer">
                 <span class="text">View source</span>
                 <Icon
-                    iconName={talonData.current_page.source.type}
+                    iconName={currentPage.source.type}
                     size="40"
                     scale="0.6" />
             </a>
