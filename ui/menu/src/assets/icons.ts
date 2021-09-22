@@ -14,8 +14,8 @@ import {svgPathData as faBitbucket} from "@fortawesome/free-brands-svg-icons/faB
 const icons: {[key: string]: [number, number, string]} = {
     search: [512, 512, faSearch],
     link: [512, 512, faLink],
-    info: [512, 512, faInfo],
-    history: [512, 512, faHistory],
+    // info: [512, 512, faInfo],
+    // history: [512, 512, faHistory],
     arrowRight: [320, 512, faArrowRight],
     close: [352, 512, faClose],
     menu: [512, 512, faMenu],
