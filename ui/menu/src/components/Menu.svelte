@@ -98,13 +98,13 @@
         background: rgba(0, 0, 0, 0.6)
 </style>
 
-<div class="wrapper" class:hide={!sidebarShown}>
-    <div class="nav-inner" style="flex: 0 0 auto">
+<div class="talon-wrapper" class:talon-hide={!sidebarShown}>
+    <div class="talon-nav-inner" style="flex: 0 0 auto">
         <div
-            class="item"
+            class="talon-item"
             class:active={searchOpen || searchText}
             on:click={openSearch}>
-            <span class="text" />
+            <span class="talon-text" />
             <input
                 placeholder="Search..."
                 bind:this={searchInput}
@@ -115,7 +115,7 @@
             <Icon iconName="search" size="40" scale="0.6" />
         </div>
     </div>
-    <div class="nav-inner" style="flex: 2 1 auto">
+    <div class="talon-nav-inner" style="flex: 2 1 auto">
         {#each displayedPages as page, i}
             <MenuItem
                 {page}
@@ -123,26 +123,26 @@
                 active={searchOpen && searchText && i === 0} />
         {/each}
     </div>
-    <div class="nav-inner" style="flex: 0 0 auto">
+    <div class="talon-nav-inner" style="flex: 0 0 auto">
         {#if currentPage.source}
             <a
-                class="item"
+                class="talon-item"
                 href={currentPage.source.url}
                 target="_blank"
                 referrerpolicy="no-referrer">
-                <span class="text">View source</span>
+                <span class="talon-text">View source</span>
                 <Icon
                     iconName={currentPage.source.type}
                     size="40"
                     scale="0.6" />
             </a>
         {/if}
-        <div class="item" on:click={openInfo}>
-            <span class="text">Info</span>
+        <div class="talon-item" on:click={openInfo}>
+            <span class="talon-text">Info</span>
             <PageIcon page={currentPage} />
         </div>
-        <div class="item" on:click={hideSidebar}>
-            <span class="text">Hide sidebar</span>
+        <div class="talon-item" on:click={hideSidebar}>
+            <span class="talon-text">Hide sidebar</span>
             <Icon iconName="arrowRight" size="40" scale="0.6" />
         </div>
     </div>

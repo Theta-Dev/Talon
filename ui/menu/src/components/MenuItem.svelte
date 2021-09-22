@@ -16,7 +16,7 @@
 
 </script>
 
-<a class="item" class:active href={rootPath + page.path}>
-    <span class="text">{text}</span>
+<a class="talon-item" class:active href={rootPath + page.path}>
+    <span class="talon-text">{text}</span>
     <PageIcon {page} />
 </a>

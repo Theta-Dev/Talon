@@ -8,7 +8,7 @@
 <style lang="sass">
     @use "../style/values"
 
-    .fab
+    .talon-fab
         position: fixed
         bottom: 25px
         right: 25px
@@ -27,11 +27,11 @@
 
         transition: bottom 0.5s, opacity 0.5s
 
-        &.hide
+        &.talon-hide
             bottom: -56px
             opacity: 0
 </style>
 
-<button class="fab" class:hide on:click>
+<button class="talon-fab" class:talon-hide={hide} on:click>
     <Icon iconName="menu" size="25" />
 </button>

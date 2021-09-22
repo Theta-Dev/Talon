@@ -29,7 +29,7 @@
 <style lang="sass">
     @use "../style/values"
 
-    .modal
+    .talon-modal
         position: fixed
         top: 0
         bottom: 0
@@ -40,7 +40,7 @@
         align-items: center
         pointer-events: none
 
-    .contents
+    .talon-contents
         position: relative
         overflow: auto
 
@@ -55,15 +55,15 @@
 
         pointer-events: auto
 
-    .tag
+    .talon-tag
         display: flex
         align-items: center
 
-        .text
+        .talon-text
             font-size: 2em
             margin-left: 0.25em
 
-    .close
+    .talon-close
         position: absolute
         right: 5px
         top: 5px
@@ -76,14 +76,14 @@
     <!-- on:introstart and on:outroend are required to transition 1 at a time between modals -->
     <div
         role="dialog"
-        class="modal"
+        class="talon-modal"
         transition:fly={{y: 50}}
         on:introstart
         on:outroend>
-        <div class="contents">
-            <div class="tag">
+        <div class="talon-contents">
+            <div class="talon-tag">
                 <PageIcon page={currentPage} size="60" scale="0.8" />
-                <span class="text"> {currentPage.name} </span>
+                <span class="talon-text"> {currentPage.name} </span>
             </div>
             <p>Upload date: {uploadDate}</p>
             <p>Uploaded by: {currentVersion.user}</p>
@@ -115,7 +115,7 @@
                 <a href={data.root_path + 'int/license'} target="_blank">View
                     licenses</a>
             </p>
-            <button class="close" on:click={closeModal}>
+            <button class="talon-close" on:click={closeModal}>
                 <Icon iconName="close" size="40" scale="0.6" />
             </button>
         </div>

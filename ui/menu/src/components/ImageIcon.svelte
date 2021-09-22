@@ -10,19 +10,19 @@
 <style lang="sass">
     @use "../style/values"
 
-    img, .placeholder
+    img, .talon-placeholder
         object-fit: cover
         display: flex
         align-items: center
         justify-content: center
 
-    .placeholder
+    .talon-placeholder
         text-transform: uppercase
 
         border-radius: 50%
 </style>
 
-<span class="icon" style="width: {size}px; height: {size}px;">
+<span class="talon-icon" style="width: {size}px; height: {size}px;">
     {#if imageSrc}
         <img
             src={imageSrc}
@@ -30,7 +30,7 @@
             style="width: {size * scale}px; height: {size * scale}px" />
     {:else}
         <span
-            class="placeholder"
+            class="talon-placeholder"
             style="width: {size * scale}px; height: {size * scale}px; font-size: {size * scale * 0.55}px; background: {color}">
             {alt}
         </span>

@@ -3,20 +3,17 @@
 
 .talon-sidebar-container
     // CSS Reset
-    &, *
+    &, :not(path)
+        all: unset
+
         margin: 0
         padding: 0
         box-sizing: border-box
         display: block
-        position: unset
 
         font-size: 15px
         font-family: sans-serif
-        font-weight: normal
-        text-decoration: none
 
-        background: none
-        border: none
         color: values.$color-text
 
     a, span, em, i, b, code
@@ -24,6 +21,7 @@
 
     a
         color: values.$color-primary-light
+        cursor: pointer
 
     a:hover
         text-decoration: underline
@@ -50,6 +48,9 @@
     button
         cursor: pointer
 
+    input
+        cursor: text
+
     hr
         width: 100%
         height: 1px
@@ -57,7 +58,7 @@
         background-image: linear-gradient(to right, values.$color-base-1, values.$color-base-2, values.$color-base-1)
 
     // Sidebar wrapper
-    .wrapper
+    .talon-wrapper
         position: fixed
         top: 0
         right: 0
@@ -70,13 +71,13 @@
         justify-content: space-between
         overflow: hidden
 
-        .nav-inner
+        .talon-nav-inner
             overflow-x: hidden
             overflow-y: auto
 
             +mixin.hideScrollbar
 
-        .item
+        .talon-item
             display: flex
             flex-direction: row-reverse
             align-items: center
@@ -89,7 +90,7 @@
             cursor: pointer
             pointer-events: none
 
-            .text
+            .talon-text
                 font-size: 1.1em
                 font-weight: bold
 
@@ -98,7 +99,7 @@
 
                 display: none
 
-            .icon
+            .talon-icon
                 border-radius: 50%
                 pointer-events: auto
 
@@ -122,13 +123,13 @@
                 background-color: values.$color-primary
                 text-decoration: none
 
-                .text, input
+                .talon-text, input
                     display: flex
 
-        &.hide
+        &.talon-hide
             display: none
 
-    .icon
+    .talon-icon
         display: flex
         align-items: center
         justify-content: center
