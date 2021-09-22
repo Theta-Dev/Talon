@@ -2,6 +2,7 @@
     import Icon from "./Icon.svelte"
 
     export let hide: boolean = false
+
 </script>
 
 <style lang="sass">
@@ -31,6 +32,6 @@
             opacity: 0
 </style>
 
-<button class="fab" class:hide={hide} on:click>
-    <Icon iconName="menu" size="25"/>
+<button class="fab" class:hide on:click>
+    <Icon iconName="menu" size="25" />
 </button>

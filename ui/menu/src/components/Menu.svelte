@@ -5,11 +5,11 @@
     import Icon from "./Icon.svelte"
     import MenuItem from "./MenuItem.svelte"
     import InfoModal from "./InfoModal.svelte"
-    import FloatingButton from "./FloatingButton.svelte";
+    import FloatingButton from "./FloatingButton.svelte"
 
-    import testData from "../testdata/test.json"
     import type {TalonData, TalonPage} from "../util/types"
     import {TalonVisibility} from "../util/types"
+    import PageIcon from "./PageIcon.svelte"
 
     function showSidebar(): void {
         sidebarShown = true
@@ -42,7 +42,8 @@
                 if (!searchText) {
                     closeSearch()
                 } else if (displayedPages) {
-                    window.location = talonData.root_path + displayedPages[0].path
+                    window.location =
+                        talonData.root_path + displayedPages[0].path
                 }
                 break
             case "Escape":
@@ -57,7 +58,7 @@
         })
     }
 
-    const talonData: TalonData = testData
+    export let talonData: TalonData
 
     let sidebarShown: boolean = !isMobile()
     let searchInput: HTMLInputElement
@@ -68,15 +69,19 @@
     $: currentPage = talonData.pages[talonData.current_page]
 
     let displayedPages: TalonPage[]
-    $: displayedPages = Object.values(talonData.pages).filter((page) => {
-        if (searchText) {
-            return (
-                page.visibility !== TalonVisibility.HIDDEN &&
-                page.name.toLowerCase().includes(searchText.toLowerCase())
-            )
-        }
-        return page.visibility === TalonVisibility.FEATURED
-    })
+    $: displayedPages = Object.entries(talonData.pages)
+        .filter(([id, page]) => {
+            if (id === talonData.current_page) return false
+
+            if (searchText) {
+                return (
+                    page.visibility !== TalonVisibility.HIDDEN &&
+                    page.name.toLowerCase().includes(searchText.toLowerCase())
+                )
+            }
+            return page.visibility === TalonVisibility.FEATURED
+        })
+        .map(([, page]) => page)
 
 </script>
 
@@ -95,17 +100,19 @@
 
 <div class="wrapper" class:hide={!sidebarShown}>
     <div class="nav-inner" style="flex: 0 0 auto">
-        <div class="item" class:active={searchOpen || searchText}
-             on:click={openSearch}>
-            <span class="text"/>
+        <div
+            class="item"
+            class:active={searchOpen || searchText}
+            on:click={openSearch}>
+            <span class="text" />
             <input
                 placeholder="Search..."
                 bind:this={searchInput}
                 bind:value={searchText}
                 on:focusout={closeSearch}
                 on:keyup={searchKeypress}
-                use:selectTextOnFocus/>
-            <Icon iconName="search" size="40" scale="0.6"/>
+                use:selectTextOnFocus />
+            <Icon iconName="search" size="40" scale="0.6" />
         </div>
     </div>
     <div class="nav-inner" style="flex: 2 1 auto">
@@ -113,7 +120,7 @@
             <MenuItem
                 {page}
                 rootPath={talonData.root_path}
-                active={searchOpen && searchText && i === 0}/>
+                active={searchOpen && searchText && i === 0} />
         {/each}
     </div>
     <div class="nav-inner" style="flex: 0 0 auto">
@@ -127,16 +134,16 @@
                 <Icon
                     iconName={currentPage.source.type}
                     size="40"
-                    scale="0.6"/>
+                    scale="0.6" />
             </a>
         {/if}
         <div class="item" on:click={openInfo}>
             <span class="text">Info</span>
-            <Icon iconName="info" size="40" scale="0.6"/>
+            <PageIcon page={currentPage} />
         </div>
         <div class="item" on:click={hideSidebar}>
             <span class="text">Hide sidebar</span>
-            <Icon iconName="arrowRight" size="40" scale="0.6"/>
+            <Icon iconName="arrowRight" size="40" scale="0.6" />
         </div>
     </div>
 </div>
@@ -144,5 +151,5 @@
 <FloatingButton hide={sidebarShown} on:click={showSidebar} />
 
 <Modals>
-    <div slot="backdrop" class="backdrop" on:click={closeModal}/>
+    <div slot="backdrop" class="backdrop" on:click={closeModal} />
 </Modals>

@@ -4,11 +4,11 @@
     import Keydown from "svelte-keydown"
 
     import type {TalonData, TalonVersion} from "../util/types"
-    import ImageIcon from "./ImageIcon.svelte"
+    import PageIcon from "./PageIcon.svelte"
     import Icon from "./Icon.svelte"
     // noinspection ES6UnusedImports
     import {version} from "../../package.json"
-    import {TalonPage} from "../util/types";
+    import {TalonPage} from "../util/types"
 
     export let isOpen: boolean
     export let data: TalonData
@@ -18,9 +18,6 @@
 
     let currentVersion: TalonVersion
     $: currentVersion = data.versions[data.current_version]
-
-    let shortName: string
-    $: shortName = currentPage.name.substr(0, 2)
 
     let uploadDate: string
     $: uploadDate = new Date(currentVersion.date).toLocaleString(
@@ -85,12 +82,7 @@
         on:outroend>
         <div class="contents">
             <div class="tag">
-                <ImageIcon
-                    imageSrc={currentPage.image}
-                    color={currentPage.color}
-                    alt={shortName}
-                    size="60"
-                    scale="0.8" />
+                <PageIcon page={currentPage} size="60" scale="0.8" />
                 <span class="text"> {currentPage.name} </span>
             </div>
             <p>Upload date: {uploadDate}</p>
@@ -105,7 +97,7 @@
                 {/each}
             {/if}
 
-            <hr/>
+            <hr />
 
             <p>
                 This site is powered by
@@ -124,10 +116,7 @@
                     licenses</a>
             </p>
             <button class="close" on:click={closeModal}>
-                <Icon
-                    iconName="close"
-                    size="40"
-                    scale="0.6" />
+                <Icon iconName="close" size="40" scale="0.6" />
             </button>
         </div>
     </div>
