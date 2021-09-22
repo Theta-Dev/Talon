@@ -7,6 +7,8 @@
 
 </script>
 
-{#if talonData}
-    <Menu {talonData} />
-{/if}
+<div class="talon-sidebar-container">
+    {#if talonData}
+        <Menu {talonData} />
+    {/if}
+</div>

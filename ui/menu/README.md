@@ -1,31 +1,24 @@
-# STTV - Svelte / Typescript / Tailwind / Vite Template
+# Talon Menu
 
-Get up and running with Svelte, Typescript, Tailwind and Vite. Also includes testing setup using Jest.
+> ✨ Bootstrapped with Create Snowpack App (CSA).
 
-## Installation
+## Available Scripts
 
-```
-npx degit "srmullen/sttv#main" my_app
-cd my_app
-npm install
-```
+### npm start
 
-## Scripts
+Runs the app in the development mode.
+Open http://localhost:8080 to view it in the browser.
 
-### Start a development server
+The page will reload if you make edits.
+You will also see any lint errors in the console.
 
-`npm run dev`
+### npm run build
 
-### Run tests
+Builds a static copy of your site to the `build/` folder.
+Your app is ready to be deployed!
 
-`npm run test`
-or
-`npm run test:watch`
+**For the best production performance:** Add a build bundler plugin like [@snowpack/plugin-webpack](https://github.com/snowpackjs/snowpack/tree/main/plugins/plugin-webpack) or [snowpack-plugin-rollup-bundle](https://github.com/ParamagicDev/snowpack-plugin-rollup-bundle) to your `snowpack.config.mjs` config file.
 
-### Build the application
+### Q: What about Eject?
 
-`npm run build`
-
-### Serve the application
-
-`npm run serve`
+No eject needed! Snowpack guarantees zero lock-in, and CSA strives for the same.

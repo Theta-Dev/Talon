@@ -7,7 +7,7 @@
     import PageIcon from "./PageIcon.svelte"
     import Icon from "./Icon.svelte"
     // noinspection ES6UnusedImports
-    import {version} from "../../package.json"
+    import {VERSION} from "../util/const";
     import {TalonPage} from "../util/types"
 
     export let isOpen: boolean
@@ -102,10 +102,10 @@
             <p>
                 This site is powered by
                 <a
-                    href="https://github.com/Theta-Dev/Talon/tree/{version}"
+                    href="https://github.com/Theta-Dev/Talon/tree/{VERSION}"
                     target="_blank"
                     referrerpolicy="no-referrer">Talon
-                    {version}</a>, a static site management system created by
+                    {VERSION}</a>, a static site management system created by
                 <a
                     href="https://thetadev.de"
                     target="_blank"

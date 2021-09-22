@@ -1,2 +1,3 @@
-/node_modules/
-/dist/
+.snowpack
+build
+node_modules
