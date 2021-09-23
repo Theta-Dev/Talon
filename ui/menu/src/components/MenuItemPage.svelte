@@ -1,6 +1,7 @@
 <script lang="ts">
     import type {TalonPage} from "../util/types"
     import PageIcon from "./PageIcon.svelte"
+    import MenuItem from "./MenuItem.svelte"
 
     export let page: TalonPage
     export let rootPath: string = "/"
@@ -16,7 +17,6 @@
 
 </script>
 
-<a class="talon-item" class:active href={rootPath + page.path}>
-    <span class="talon-text">{text}</span>
+<MenuItem {active} {text} link={rootPath + page.path}>
     <PageIcon {page} />
-</a>
+</MenuItem>

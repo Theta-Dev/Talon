@@ -7,7 +7,6 @@
     import PageIcon from "./PageIcon.svelte"
     import Icon from "./Icon.svelte"
     // noinspection ES6UnusedImports
-    import {VERSION} from "../util/const";
     import {TalonPage} from "../util/types"
 
     export let isOpen: boolean
@@ -73,7 +72,6 @@
 <Keydown paused={!isOpen} on:Escape={closeModal} />
 
 {#if isOpen}
-    <!-- on:introstart and on:outroend are required to transition 1 at a time between modals -->
     <div
         role="dialog"
         class="talon-modal"
@@ -102,10 +100,11 @@
             <p>
                 This site is powered by
                 <a
-                    href="https://github.com/Theta-Dev/Talon/tree/{VERSION}"
+                    href="https://github.com/Theta-Dev/Talon/tree/{data.talon_version}"
                     target="_blank"
                     referrerpolicy="no-referrer">Talon
-                    {VERSION}</a>, a static site management system created by
+                    {data.talon_version}</a>, a static site management system
+                created by
                 <a
                     href="https://thetadev.de"
                     target="_blank"

@@ -1,9 +1,9 @@
 @use "values"
 @use "mixin"
 
-.talon-sidebar-container
+talon-sidebar
     // CSS Reset
-    &, :not(path)
+    &, *:not(path)
         all: unset
 
         margin: 0
@@ -56,80 +56,3 @@
         height: 1px
         margin: 1.6em 0
         background-image: linear-gradient(to right, values.$color-base-1, values.$color-base-2, values.$color-base-1)
-
-    // Sidebar wrapper
-    .talon-wrapper
-        position: fixed
-        top: 0
-        right: 0
-        height: 100%
-
-        padding: 1em 0.4em
-
-        display: flex
-        flex-direction: column
-        justify-content: space-between
-        overflow: hidden
-
-        .talon-nav-inner
-            overflow-x: hidden
-            overflow-y: auto
-
-            +mixin.hideScrollbar
-
-        .talon-item
-            display: flex
-            flex-direction: row-reverse
-            align-items: center
-
-            text-align: right
-            margin-bottom: 0.2em
-
-            border-radius: 20px
-
-            cursor: pointer
-            pointer-events: none
-
-            .talon-text
-                font-size: 1.1em
-                font-weight: bold
-
-                margin-left: auto
-                padding: 0 0.5em
-
-                display: none
-
-            .talon-icon
-                border-radius: 50%
-                pointer-events: auto
-
-            input
-                pointer-events: auto
-
-                background: none
-                border: none
-                outline: none
-                text-align: right
-                width: 10em
-
-                display: none
-
-                &:focus
-                    opacity: 1
-                    border-bottom: solid #fff 2px
-
-            &:hover, &.active
-                pointer-events: auto
-                background-color: values.$color-primary
-                text-decoration: none
-
-                .talon-text, input
-                    display: flex
-
-        &.talon-hide
-            display: none
-
-    .talon-icon
-        display: flex
-        align-items: center
-        justify-content: center

@@ -1,15 +1,16 @@
 <script lang="ts">
-    import {closeModal, Modals, openModal} from "svelte-modals"
-    import {selectTextOnFocus} from "../util/inputDirectives"
+    import {openModal} from "svelte-modals"
 
     import Icon from "./Icon.svelte"
     import MenuItem from "./MenuItem.svelte"
+    import MenuItemPage from "./MenuItemPage.svelte"
     import InfoModal from "./InfoModal.svelte"
     import FloatingButton from "./FloatingButton.svelte"
 
-    import type {TalonData, TalonPage} from "../util/types"
+    import type {Focusable, TalonData, TalonPage} from "../util/types"
     import {TalonVisibility} from "../util/types"
     import PageIcon from "./PageIcon.svelte"
+    import MenuItemInput from "./MenuItemInput.svelte"
 
     function showSidebar(): void {
         sidebarShown = true
@@ -36,14 +37,15 @@
     }
 
     function searchKeypress(e: KeyboardEvent) {
-        console.log(e.key)
         switch (e.key) {
             case "Enter":
                 if (!searchText) {
                     closeSearch()
-                } else if (displayedPages) {
+                } else if (displayedPages.length) {
                     window.location =
                         talonData.root_path + displayedPages[0].path
+                } else {
+                    closeSearch()
                 }
                 break
             case "Escape":
@@ -61,7 +63,7 @@
     export let talonData: TalonData
 
     let sidebarShown: boolean = !isMobile()
-    let searchInput: HTMLInputElement
+    let searchInput: Focusable
     let searchOpen: boolean = false
     let searchText: string = ""
 
@@ -89,7 +91,31 @@
     @use "../style/values"
     @use "../style/mixin"
 
-    .backdrop
+
+    nav
+        position: fixed
+        top: 0
+        right: 0
+        height: 100%
+
+        padding: 1em 0.4em
+
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        overflow: hidden
+
+        >div
+            flex: 2 1 auto
+            overflow-x: hidden
+            overflow-y: auto
+
+            &:first-child, &:last-child
+                flex: 0 0 auto
+
+            +mixin.hideScrollbar
+
+    .talon-backdrop
         position: fixed
         top: 0
         bottom: 0
@@ -98,58 +124,46 @@
         background: rgba(0, 0, 0, 0.6)
 </style>
 
-<div class="talon-wrapper" class:talon-hide={!sidebarShown}>
-    <div class="talon-nav-inner" style="flex: 0 0 auto">
-        <div
-            class="talon-item"
-            class:active={searchOpen || searchText}
-            on:click={openSearch}>
-            <span class="talon-text" />
-            <input
-                placeholder="Search..."
-                bind:this={searchInput}
-                bind:value={searchText}
+{#if sidebarShown}
+    <nav class:talon-hide={!sidebarShown}>
+        <div>
+            <MenuItemInput
+                active={searchOpen || searchText}
+                on:click={openSearch}
                 on:focusout={closeSearch}
                 on:keyup={searchKeypress}
-                use:selectTextOnFocus />
-            <Icon iconName="search" size="40" scale="0.6" />
+                bind:input={searchInput}
+                bind:text={searchText} />
         </div>
-    </div>
-    <div class="talon-nav-inner" style="flex: 2 1 auto">
-        {#each displayedPages as page, i}
-            <MenuItem
-                {page}
-                rootPath={talonData.root_path}
-                active={searchOpen && searchText && i === 0} />
-        {/each}
-    </div>
-    <div class="talon-nav-inner" style="flex: 0 0 auto">
-        {#if currentPage.source}
-            <a
-                class="talon-item"
-                href={currentPage.source.url}
-                target="_blank"
-                referrerpolicy="no-referrer">
-                <span class="talon-text">View source</span>
-                <Icon
-                    iconName={currentPage.source.type}
-                    size="40"
-                    scale="0.6" />
-            </a>
-        {/if}
-        <div class="talon-item" on:click={openInfo}>
-            <span class="talon-text">Info</span>
-            <PageIcon page={currentPage} />
+        <div>
+            {#each displayedPages as page, i}
+                <MenuItemPage
+                    {page}
+                    rootPath={talonData.root_path}
+                    active={searchOpen && searchText && i === 0} />
+            {/each}
         </div>
-        <div class="talon-item" on:click={hideSidebar}>
-            <span class="talon-text">Hide sidebar</span>
-            <Icon iconName="arrowRight" size="40" scale="0.6" />
+        <div>
+            {#if currentPage.source}
+                <MenuItem
+                    text="View source"
+                    link={currentPage.source.url}
+                    newTab="true"
+                    privacy="true">
+                    <Icon
+                        iconName={currentPage.source.type}
+                        size="40"
+                        scale="0.6" />
+                </MenuItem>
+            {/if}
+            <MenuItem text="Info" on:click={openInfo}>
+                <PageIcon page={currentPage} />
+            </MenuItem>
+            <MenuItem text="Hide sidebar" on:click={hideSidebar}>
+                <Icon iconName="arrowRight" size="40" scale="0.6" />
+            </MenuItem>
         </div>
-    </div>
-</div>
+    </nav>
+{/if}
 
 <FloatingButton hide={sidebarShown} on:click={showSidebar} />
-
-<Modals>
-    <div slot="backdrop" class="backdrop" on:click={closeModal} />
-</Modals>

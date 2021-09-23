@@ -68,6 +68,9 @@
     {
       "type": "object",
       "properties": {
+        "talon_version": {
+          "type": "string"
+        },
         "root_path": {
           "type": "string"
         },
@@ -91,6 +94,7 @@
         }
       },
       "required": [
+        "talon_version",
         "root_path",
         "current_page",
         "current_version",

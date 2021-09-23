@@ -14,22 +14,19 @@
 <style lang="sass">
     @use "../style/values"
 
-    .talon-icon
-        position: relative
-        // background: values.$color-primary
-
-    .talon-placeholder
-        background: values.$color-primary
-        border-radius: 50%
-
+    span
         display: flex
         align-items: center
         justify-content: center
+
+        >span
+            background: values.$color-primary
+            border-radius: 50%
 </style>
 
-<span class="talon-icon" style="width: {size}px; height: {size}px;">
+<span style="width: {size}px; height: {size}px;">
     {#if icon}
-        <span class="talon-placeholder" style="width: 32px; height: 32px">
+        <span style="width: 32px; height: 32px">
             <svg
                 aria-hidden="true"
                 focusable="false"

@@ -1,4 +1,5 @@
 export interface TalonData {
+    talon_version: string
     root_path: string
     current_page: string
     current_version: string
@@ -40,4 +41,9 @@ export interface TalonVersion {
     date: Date
     user: string
     tags: object
+}
+
+export interface Focusable {
+    focus(): void
+    blur(): void
 }
