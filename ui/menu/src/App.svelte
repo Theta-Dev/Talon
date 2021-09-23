@@ -2,10 +2,12 @@
     import {Modals, closeModal} from "svelte-modals"
 
     import Menu from "./components/Menu.svelte"
+    import type {TalonData} from "./util/types"
 
-    const talonData = JSON.parse(
+    const talonData: TalonData = JSON.parse(
+        /* global document */
         document.getElementById("talon-data").textContent
-    )
+    ) as TalonData
 
 </script>
 

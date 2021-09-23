@@ -1,9 +1,9 @@
 <script lang="ts">
     export let imageSrc: string
-    export let size: number = 32
-    export let scale: number = 1
-    export let alt: string = "??"
-    export let color: string = "#4b228a"
+    export let size = 32
+    export let scale = 1
+    export let alt = "??"
+    export let color = "#4b228a"
 
 </script>
 

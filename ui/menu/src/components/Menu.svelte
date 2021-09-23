@@ -21,6 +21,7 @@
     }
 
     function isMobile(): boolean {
+        /* global window */
         return window.innerWidth < 768
     }
 
@@ -42,7 +43,7 @@
                 if (!searchText) {
                     closeSearch()
                 } else if (displayedPages.length) {
-                    window.location =
+                    window.location.href =
                         talonData.root_path + displayedPages[0].path
                 } else {
                     closeSearch()
@@ -62,10 +63,10 @@
 
     export let talonData: TalonData
 
-    let sidebarShown: boolean = !isMobile()
+    let sidebarShown = !isMobile()
     let searchInput: Focusable
-    let searchOpen: boolean = false
-    let searchText: string = ""
+    let searchOpen = false
+    let searchText = ""
 
     let currentPage: TalonPage
     $: currentPage = talonData.pages[talonData.current_page]
@@ -91,7 +92,6 @@
     @use "../style/values"
     @use "../style/mixin"
 
-
     nav
         position: fixed
         top: 0
@@ -114,21 +114,13 @@
                 flex: 0 0 auto
 
             +mixin.hideScrollbar
-
-    .talon-backdrop
-        position: fixed
-        top: 0
-        bottom: 0
-        right: 0
-        left: 0
-        background: rgba(0, 0, 0, 0.6)
 </style>
 
 {#if sidebarShown}
     <nav class:talon-hide={!sidebarShown}>
         <div>
             <MenuItemInput
-                active={searchOpen || searchText}
+                active={searchOpen || Boolean(searchText).valueOf()}
                 on:click={openSearch}
                 on:focusout={closeSearch}
                 on:keyup={searchKeypress}
@@ -148,19 +140,19 @@
                 <MenuItem
                     text="View source"
                     link={currentPage.source.url}
-                    newTab="true"
-                    privacy="true">
+                    newTab={true}
+                    privacy={true}>
                     <Icon
                         iconName={currentPage.source.type}
-                        size="40"
-                        scale="0.6" />
+                        size={40}
+                        scale={0.6} />
                 </MenuItem>
             {/if}
             <MenuItem text="Info" on:click={openInfo}>
                 <PageIcon page={currentPage} />
             </MenuItem>
             <MenuItem text="Hide sidebar" on:click={hideSidebar}>
-                <Icon iconName="arrowRight" size="40" scale="0.6" />
+                <Icon iconName="arrowRight" size={40} scale={0.6} />
             </MenuItem>
         </div>
     </nav>

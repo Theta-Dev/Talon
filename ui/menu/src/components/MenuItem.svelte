@@ -1,19 +1,9 @@
 <script lang="ts">
-    let hovering
-
-    function enter() {
-        hovering = true
-    }
-
-    function leave() {
-        hovering = false
-    }
-
     export let link: string = null
-    export let text: string = ""
-    export let active: boolean = false
-    export let newTab: boolean = false
-    export let privacy: boolean = false
+    export let text = ""
+    export let active = false
+    export let newTab = false
+    export let privacy = false
 
 </script>
 
@@ -53,9 +43,7 @@
 
 <a
     class="talon-item"
-    class:active={active || hovering}
-    on:mouseenter={enter}
-    on:mouseleave={leave}
+    class:active
     href={link}
     target={newTab ? '_blank' : null}
     rel={privacy ? 'noopener noreferrer' : null}

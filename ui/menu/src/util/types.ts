@@ -40,10 +40,16 @@ export interface TalonVersion {
     id: number
     date: Date
     user: string
-    tags: object
+    tags: {[key: string]: string}
 }
 
 export interface Focusable {
     focus(): void
     blur(): void
+}
+
+export interface SvelteActionRes {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    update?: (parameters: any) => void
+    destroy?: () => void
 }

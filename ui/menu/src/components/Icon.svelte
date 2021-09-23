@@ -2,9 +2,9 @@
     import icons from "../assets/icons"
 
     export let iconName: string
-    export let color: string = "#fff"
-    export let size: number = 32
-    export let scale: number = 1
+    export let color = "#fff"
+    export let size = 32
+    export let scale = 1
 
     let icon: [number, number, string]
     $: icon = icons[iconName] ?? [0, 0, ""]

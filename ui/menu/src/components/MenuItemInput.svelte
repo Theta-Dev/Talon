@@ -7,8 +7,8 @@
 
     let inputElm: HTMLInputElement
 
-    export let active: boolean = false
-    export let text: string = ""
+    export let active = false
+    export let text = ""
 
     export const input: Focusable = {
         focus() {
@@ -23,8 +23,6 @@
 
 <style lang="sass">
     input
-        pointer-events: auto
-
         background: none
         border: none
         outline: none
@@ -33,11 +31,7 @@
 
         display: none
 
-        .active
-            display: flex
-
         &:focus
-            opacity: 1
             border-bottom: solid #fff 2px
 </style>
 
@@ -49,5 +43,5 @@
         on:focusout
         on:keyup
         use:selectTextOnFocus />
-    <Icon iconName="search" size="40" scale="0.6" />
+    <Icon iconName="search" size={40} scale={0.6} />
 </MenuItem>

@@ -1,6 +1,8 @@
 /** Selects the text inside a text node when the node is focused */
-export function selectTextOnFocus(node: HTMLInputElement) {
-    const handleFocus = (event) => {
+import type {SvelteActionRes} from "./types"
+
+export function selectTextOnFocus(node: HTMLInputElement): SvelteActionRes {
+    const handleFocus = () => {
         node && typeof node.select === "function" && node.select()
     }
 

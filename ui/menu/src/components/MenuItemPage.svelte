@@ -4,8 +4,8 @@
     import MenuItem from "./MenuItem.svelte"
 
     export let page: TalonPage
-    export let rootPath: string = "/"
-    export let active: boolean = false
+    export let rootPath = "/"
+    export let active = false
 
     const MAX_TEXT_LEN = 20
 

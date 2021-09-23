@@ -1,7 +1,7 @@
 <script lang="ts">
     import Icon from "./Icon.svelte"
 
-    export let hide: boolean = false
+    export let hide = false
 
 </script>
 
@@ -33,5 +33,5 @@
 </style>
 
 <button class:talon-hide={hide} on:click>
-    <Icon iconName="menu" size="25" />
+    <Icon iconName="menu" size={25} />
 </button>
