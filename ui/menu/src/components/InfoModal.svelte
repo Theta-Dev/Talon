@@ -69,6 +69,9 @@
             font-size: 2em
             margin-left: 0.25em
 
+    talon-p
+        white-space: nowrap
+
     talon-button
         position: absolute
         right: 5px
@@ -104,7 +107,7 @@
 
             <talon-hr />
 
-            <talon-p>
+            <talon-div>
                 This site is powered by
                 <a
                     href="https://github.com/Theta-Dev/Talon/tree/{data.talon_version}"
@@ -116,7 +119,7 @@
                     href="https://thetadev.de"
                     target="_blank"
                     referrerpolicy="no-referrer">ThetaDev</a>
-            </talon-p>
+            </talon-div>
             <talon-p>
                 <a href={data.root_path + 'int/license'} target="_blank">View
                     licenses</a>
