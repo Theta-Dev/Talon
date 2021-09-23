@@ -23,16 +23,16 @@
 
 <style lang="sass">
     input
-        background: none
-        border: none
-        outline: none
-        text-align: right
-        width: 10em
+        background: none !important
+        border: none !important
+        outline: none !important
+        text-align: right !important
+        width: 10em !important
 
-        display: none
+        display: none !important
 
         &:focus
-            border-bottom: solid #fff 2px
+            border-bottom: solid #fff 2px !important
 </style>
 
 <MenuItem {active} on:click>

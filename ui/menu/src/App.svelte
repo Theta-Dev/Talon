@@ -12,7 +12,7 @@
 </script>
 
 <style lang="sass">
-    div
+    talon-div
         position: fixed
         top: 0
         bottom: 0
@@ -21,12 +21,12 @@
         background: rgba(0, 0, 0, 0.6)
 </style>
 
-<talon-sidebar id="talon-sidebar">
+<talon-sidebar>
     {#if talonData}
         <Menu {talonData} />
     {/if}
 
     <Modals>
-        <div slot="backdrop" on:click={closeModal} />
+        <talon-div slot="backdrop" on:click={closeModal} />
     </Modals>
 </talon-sidebar>

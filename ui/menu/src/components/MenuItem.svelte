@@ -11,18 +11,20 @@
     @use "../style/values"
 
     a
-        display: flex
-        flex-direction: row-reverse
-        align-items: center
+        all: unset !important
 
-        text-align: right
-        margin-bottom: 0.2em
+        display: flex !important
+        flex-direction: row-reverse !important
+        align-items: center !important
 
-        border-radius: 20px
+        text-align: right !important
+        margin-bottom: 0.2em !important
 
-        cursor: pointer
+        border-radius: 20px !important
 
-        >span
+        cursor: pointer !important
+
+        >talon-span
             font-size: 1.1em
             font-weight: bold
 
@@ -33,21 +35,19 @@
             pointer-events: none
 
         &:hover, &.active
-            pointer-events: auto
-            background-color: values.$color-primary
-            text-decoration: none
+            pointer-events: auto !important
+            background-color: values.$color-primary !important
 
-            >span, >:global(*)
-                display: flex
+            >talon-span, >:global(*)
+                display: flex !important
 </style>
 
 <a
-    class="talon-item"
     class:active
     href={link}
     target={newTab ? '_blank' : null}
     rel={privacy ? 'noopener noreferrer' : null}
     on:click>
-    <span>{text}</span>
+    <talon-span>{text}</talon-span>
     <slot />
 </a>

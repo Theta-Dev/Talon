@@ -92,7 +92,7 @@
     @use "../style/values"
     @use "../style/mixin"
 
-    nav
+    talon-nav
         position: fixed
         top: 0
         right: 0
@@ -105,7 +105,7 @@
         justify-content: space-between
         overflow: hidden
 
-        >div
+        >talon-div
             flex: 2 1 auto
             overflow-x: hidden
             overflow-y: auto
@@ -117,8 +117,8 @@
 </style>
 
 {#if sidebarShown}
-    <nav class:talon-hide={!sidebarShown}>
-        <div>
+    <talon-nav class:talon-hide={!sidebarShown}>
+        <talon-div>
             <MenuItemInput
                 active={searchOpen || Boolean(searchText).valueOf()}
                 on:click={openSearch}
@@ -126,16 +126,16 @@
                 on:keyup={searchKeypress}
                 bind:input={searchInput}
                 bind:text={searchText} />
-        </div>
-        <div>
+        </talon-div>
+        <talon-div>
             {#each displayedPages as page, i}
                 <MenuItemPage
                     {page}
                     rootPath={talonData.root_path}
                     active={searchOpen && searchText && i === 0} />
             {/each}
-        </div>
-        <div>
+        </talon-div>
+        <talon-div>
             {#if currentPage.source}
                 <MenuItem
                     text="View source"
@@ -154,8 +154,8 @@
             <MenuItem text="Hide sidebar" on:click={hideSidebar}>
                 <Icon iconName="arrowRight" size={40} scale={0.6} />
             </MenuItem>
-        </div>
-    </nav>
+        </talon-div>
+    </talon-nav>
 {/if}
 
 <FloatingButton hide={sidebarShown} on:click={showSidebar} />

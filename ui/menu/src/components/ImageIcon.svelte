@@ -10,29 +10,27 @@
 <style lang="sass">
     @use "../style/values"
 
-    span
+    talon-span
         display: flex
         align-items: center
         justify-content: center
 
-        >img
-            object-fit: cover
-
-        >span
+        >talon-span
+            background-position: center
+            background-repeat: no-repeat
+            background-size: cover
             text-transform: uppercase
             border-radius: 50%
 </style>
 
-<span style="width: {size}px; height: {size}px;">
+<talon-span style="width: {size}px; height: {size}px;">
     {#if imageSrc}
-        <img
-            src={imageSrc}
-            {alt}
-            style="width: {size * scale}px; height: {size * scale}px" />
+        <talon-span
+            style="width: {size * scale}px; height: {size * scale}px; background-image: url('{imageSrc}')" />
     {:else}
-        <span
+        <talon-span
             style="width: {size * scale}px; height: {size * scale}px; font-size: {size * scale * 0.55}px; background: {color}">
             {alt}
-        </span>
+        </talon-span>
     {/if}
-</span>
+</talon-span>

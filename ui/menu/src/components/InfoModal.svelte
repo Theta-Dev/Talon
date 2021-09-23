@@ -35,7 +35,7 @@
 <style lang="sass">
     @use "../style/values"
 
-    .talon-modal
+    talon-modal
         position: fixed
         top: 0
         bottom: 0
@@ -46,30 +46,30 @@
         align-items: center
         pointer-events: none
 
-    .talon-contents
-        position: relative
-        overflow: auto
+        >talon-div
+            position: relative
+            overflow: auto
 
-        margin: 75px auto
-        padding: 20px
-        width: 600px
-        max-width: 90%
+            margin: 75px auto
+            padding: 20px
+            width: 600px
+            max-width: 90%
 
-        background: values.$color-base
-        border-radius: 15px
-        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5)
+            background: values.$color-base
+            border-radius: 15px
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5)
 
-        pointer-events: auto
+            pointer-events: auto
 
     .talon-tag
         display: flex
         align-items: center
 
-        .talon-text
+        talon-span
             font-size: 2em
             margin-left: 0.25em
 
-    .talon-close
+    talon-button
         position: absolute
         right: 5px
         top: 5px
@@ -79,29 +79,31 @@
 <Keydown paused={!isOpen} on:Escape={closeModal} />
 
 {#if isOpen}
-    <div
+    <talon-modal
         role="dialog"
-        class="talon-modal"
         transition:fly={{y: 50}}
         on:introstart
         on:outroend>
-        <div class="talon-contents">
-            <div class="talon-tag">
+        <talon-div>
+            <talon-div class="talon-tag">
                 <PageIcon page={currentPage} size={60} scale={0.8} />
-                <span class="talon-text"> {currentPage.name} </span>
-            </div>
-            <p>Upload date: {uploadDate}</p>
-            <p>Uploaded by: {currentVersion.user}</p>
+                <talon-span>{currentPage.name}</talon-span>
+            </talon-div>
+            <talon-p>Upload date: {uploadDate}</talon-p>
+            <talon-p>Uploaded by: {currentVersion.user}</talon-p>
 
             {#if currentVersion.tags}
                 {#each pageTags as [key, val]}
-                    <p>{key}:<code>{val}</code></p>
+                    <talon-p>
+                        {key}:
+                        <talon-code>{val}</talon-code>
+                    </talon-p>
                 {/each}
             {/if}
 
-            <hr />
+            <talon-hr />
 
-            <p>
+            <talon-p>
                 This site is powered by
                 <a
                     href="https://github.com/Theta-Dev/Talon/tree/{data.talon_version}"
@@ -113,14 +115,18 @@
                     href="https://thetadev.de"
                     target="_blank"
                     referrerpolicy="no-referrer">ThetaDev</a>
-            </p>
-            <p>
+            </talon-p>
+            <talon-p>
                 <a href={data.root_path + 'int/license'} target="_blank">View
                     licenses</a>
-            </p>
-            <button class="talon-close" on:click={closeModal}>
-                <Icon iconName="close" size={40} scale={0.6} />
-            </button>
-        </div>
-    </div>
+            </talon-p>
+            <talon-button on:click={closeModal}>
+                <Icon
+                    iconName="close"
+                    size={40}
+                    scale={0.6}
+                    transparent={true} />
+            </talon-button>
+        </talon-div>
+    </talon-modal>
 {/if}
