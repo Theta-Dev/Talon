@@ -37,6 +37,11 @@
         if (displayedPages.length === 0) searchText = ""
     }
 
+    function clearSearch() {
+        searchText = ""
+        closeSearch()
+    }
+
     function searchKeypress(e: KeyboardEvent) {
         switch (e.key) {
             case "Enter":
@@ -50,7 +55,7 @@
                 }
                 break
             case "Escape":
-                closeSearch()
+                clearSearch()
                 break
         }
     }
