@@ -21,10 +21,9 @@
         justify-content: center
 
         border-radius: 50%
+        background: values.$var-primary
 
-        background: values.$color-primary
         opacity: 1
-
         transition: bottom 0.5s, opacity 0.5s
 
         &.talon-hide

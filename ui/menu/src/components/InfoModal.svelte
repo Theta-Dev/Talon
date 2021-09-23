@@ -96,6 +96,7 @@
                 {#each pageTags as [key, val]}
                     <talon-p>
                         {key}:
+
                         <talon-code>{val}</talon-code>
                     </talon-p>
                 {/each}

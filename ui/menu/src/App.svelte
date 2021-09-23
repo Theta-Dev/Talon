@@ -2,12 +2,15 @@
     import {Modals, closeModal} from "svelte-modals"
 
     import Menu from "./components/Menu.svelte"
-    import type {TalonData} from "./util/types"
+    import type {TalonData, TalonPage} from "./util/types"
 
     const talonData: TalonData = JSON.parse(
         /* global document */
         document.getElementById("talon-data").textContent
     ) as TalonData
+
+    let currentPage: TalonPage
+    $: currentPage = talonData.pages[talonData.current_page]
 
 </script>
 
@@ -21,7 +24,7 @@
         background: rgba(0, 0, 0, 0.6)
 </style>
 
-<talon-sidebar>
+<talon-sidebar style="--talon-color: {currentPage.color}">
     {#if talonData}
         <Menu {talonData} />
     {/if}

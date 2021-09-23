@@ -36,7 +36,7 @@
 
         &:hover, &.active
             pointer-events: auto !important
-            background-color: values.$color-primary !important
+            background-color: values.$var-primary !important
 
             >talon-span, >:global(*)
                 display: flex !important

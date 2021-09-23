@@ -21,7 +21,7 @@
         justify-content: center
 
         >talon-span
-            background: values.$color-primary
+            background: values.$var-primary
             border-radius: 50%
 
             &.talon-transparent
