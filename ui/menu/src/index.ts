@@ -1,8 +1,4 @@
-import App from "./App.svelte"
-import "./style/main.sass"
+const sidebar = document.createElement("talon-sidebar")
+document.body.append(sidebar)
 
-const app = new App({
-    target: document.body,
-})
-
-export default app
+export {default as default} from "./App.svelte"

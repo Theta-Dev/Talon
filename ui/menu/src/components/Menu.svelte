@@ -21,7 +21,6 @@
     }
 
     function isMobile(): boolean {
-        /* global window */
         return window.innerWidth < 768
     }
 
@@ -97,7 +96,7 @@
     @use "../style/values"
     @use "../style/mixin"
 
-    talon-nav
+    nav
         position: fixed
         top: 0
         right: 0
@@ -109,8 +108,12 @@
         flex-direction: column
         justify-content: space-between
         overflow: hidden
+        box-sizing: border-box
 
-        >talon-div
+        &.hide
+            display: none
+
+        > div
             flex: 2 1 auto
             overflow-x: hidden
             overflow-y: auto
@@ -121,46 +124,44 @@
             +mixin.hideScrollbar
 </style>
 
-{#if sidebarShown}
-    <talon-nav class:talon-hide={!sidebarShown}>
-        <talon-div>
-            <MenuItemInput
-                active={searchOpen || Boolean(searchText).valueOf()}
-                on:click={openSearch}
-                on:focusout={closeSearch}
-                on:keyup={searchKeypress}
-                bind:input={searchInput}
-                bind:text={searchText} />
-        </talon-div>
-        <talon-div>
-            {#each displayedPages as page, i}
-                <MenuItemPage
-                    {page}
-                    rootPath={talonData.root_path}
-                    active={searchOpen && searchText && i === 0} />
-            {/each}
-        </talon-div>
-        <talon-div>
-            {#if currentPage.source}
-                <MenuItem
-                    text="View source"
-                    link={currentPage.source.url}
-                    newTab={true}
-                    privacy={true}>
-                    <Icon
-                        iconName={currentPage.source.type}
-                        size={40}
-                        scale={0.6} />
-                </MenuItem>
-            {/if}
-            <MenuItem text="Info" on:click={openInfo}>
-                <PageIcon page={currentPage} />
+<nav class:hide={!sidebarShown}>
+    <div>
+        <MenuItemInput
+            active={searchOpen || Boolean(searchText).valueOf()}
+            on:click={openSearch}
+            on:focusout={closeSearch}
+            on:keyup={searchKeypress}
+            bind:input={searchInput}
+            bind:text={searchText} />
+    </div>
+    <div>
+        {#each displayedPages as page, i}
+            <MenuItemPage
+                {page}
+                rootPath={talonData.root_path}
+                active={searchOpen && searchText && i === 0} />
+        {/each}
+    </div>
+    <div>
+        {#if currentPage.source}
+            <MenuItem
+                text="View source"
+                link={currentPage.source.url}
+                newTab={true}
+                privacy={true}>
+                <Icon
+                    iconName={currentPage.source.type}
+                    size={40}
+                    scale={0.6} />
             </MenuItem>
-            <MenuItem text="Hide sidebar" on:click={hideSidebar}>
-                <Icon iconName="arrowRight" size={40} scale={0.6} />
-            </MenuItem>
-        </talon-div>
-    </talon-nav>
-{/if}
+        {/if}
+        <MenuItem text="Info" on:click={openInfo}>
+            <PageIcon page={currentPage} />
+        </MenuItem>
+        <MenuItem text="Hide sidebar" on:click={hideSidebar}>
+            <Icon iconName="arrowRight" size={40} scale={0.6} />
+        </MenuItem>
+    </div>
+</nav>
 
 <FloatingButton hide={sidebarShown} on:click={showSidebar} />

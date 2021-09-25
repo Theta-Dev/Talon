@@ -6,17 +6,22 @@
     import type {TalonData, TalonPage, TalonVersion} from "../util/types"
     import PageIcon from "./PageIcon.svelte"
     import Icon from "./Icon.svelte"
-    import {formatDate} from "../util/functions";
+    import {formatDate} from "../util/functions"
 
     export let isOpen: boolean
     export let data: TalonData
 
     function getVersionName(versionId: string, version: TalonVersion): string {
-        return version.name ? version.name : '#' + versionId
+        return version.name ? version.name : "#" + versionId
     }
 
     function getVersionUrl(versionId: string, version: TalonVersion): string {
-        return data.root_path + (currentPage && version.name ? currentPage.path + '@' + version.name : '&v/' + versionId)
+        return (
+            data.root_path +
+            (currentPage && version.name
+                ? currentPage.path + "@" + version.name
+                : "&v/" + versionId)
+        )
     }
 
     let currentPage: TalonPage
@@ -48,7 +53,7 @@
         .map(([key, version]) => [
             formatDate(version.date),
             getVersionName(key, version),
-            getVersionUrl(key, version)
+            getVersionUrl(key, version),
         ])
 
 </script>
@@ -56,7 +61,7 @@
 <style lang="sass">
     @use "../style/values"
 
-    talon-modal
+    .modal
         position: fixed
         top: 0
         bottom: 0
@@ -67,7 +72,7 @@
         align-items: center
         pointer-events: none
 
-        >talon-div
+        >div
             position: relative
             overflow: auto
 
@@ -82,65 +87,81 @@
 
             pointer-events: auto
 
-    .talon-tag
+    .tag
         display: flex
         align-items: center
 
-        talon-span
+        span
             font-size: 2em
             margin-left: 0.25em
 
-    talon-p
-        white-space: nowrap
-
-    talon-button
+    button
         position: absolute
         right: 5px
         top: 5px
+        background: none
+        border: none
+
+    p
+        margin: 0.8em 0
+        white-space: nowrap
+
+    code
+        font-family: monospace
+        background-color: values.$color-base-1
+        border-radius: 0.3em
+        padding: 0.1em 0.3em
+
+    hr
+        width: 100%
+        height: 2px
+        margin: 1.6em 0
+        border: none
+        background-image: linear-gradient(to right, values.$color-base-1, values.$color-base-2, values.$color-base-1)
+
+    a
+        display: inline
+        color: values.$color-primary-light
+        text-decoration: none
+
+        &:hover
+            text-decoration: underline
 
 </style>
 
 <Keydown paused={!isOpen} on:Escape={closeModal} />
 
 {#if isOpen}
-    <talon-modal
+    <div
+        class="modal"
         role="dialog"
         transition:fly={{y: 50}}
         on:introstart
         on:outroend>
-        <talon-div>
-            <talon-div class="talon-tag">
+        <div>
+            <div class="tag">
                 <PageIcon page={currentPage} size={60} scale={0.8} />
-                <talon-span>{currentPage.name}</talon-span>
-            </talon-div>
-            <talon-p>Version:
-                <a href={versionUrl}>{versionName}</a>
-            </talon-p>
-            <talon-p>Upload date: {uploadDate}</talon-p>
-            <talon-p>Uploaded by: {currentVersion.user}</talon-p>
+                <span>{currentPage.name}</span>
+            </div>
+            <p>Version: <a href={versionUrl}>{versionName}</a></p>
+            <p>Upload date: {uploadDate}</p>
+            <p>Uploaded by: {currentVersion.user}</p>
 
             {#if currentVersion.tags}
                 {#each pageTags as [key, val]}
-                    <talon-p>
-                        {key}:
-                        <talon-code>{val}</talon-code>
-                    </talon-p>
+                    <p>{key}: <code>{val}</code></p>
                 {/each}
             {/if}
 
-            <talon-hr />
+            <hr />
 
             {#each history as [date, name, url]}
-                <talon-p>
-                    <a href={url}>
-                        {date}&nbsp;&nbsp;&nbsp;{name}
-                    </a>
-                </talon-p>
+                <p><a href={url}> {date}&nbsp;&nbsp;&nbsp;{name} </a></p>
             {/each}
 
-            <talon-hr />
+            <hr />
 
-            <talon-div>
+            <div>
                 This site is powered by
                 <a
                     href="https://github.com/Theta-Dev/Talon/tree/{data.talon_version}"
@@ -152,18 +173,18 @@
                     href="https://thetadev.de"
                     target="_blank"
                     referrerpolicy="no-referrer">ThetaDev</a>
-            </talon-div>
-            <talon-p>
+            </div>
+            <p>
                 <a href={data.root_path + 'int/license'} target="_blank">View
                     licenses</a>
-            </talon-p>
-            <talon-button on:click={closeModal}>
+            </p>
+            <button on:click={closeModal}>
                 <Icon
                     iconName="close"
                     size={40}
                     scale={0.6}
                     transparent={true} />
-            </talon-button>
-        </talon-div>
-    </talon-modal>
+            </button>
+        </div>
+    </div>
 {/if}

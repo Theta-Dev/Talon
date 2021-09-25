@@ -15,24 +15,19 @@
 <style lang="sass">
     @use "../style/values"
 
-    talon-span
-        display: flex
-        align-items: center
-        justify-content: center
+    .icon > span
+        background: values.$var-primary
+        border-radius: 50%
 
-        >talon-span
-            background: values.$var-primary
-            border-radius: 50%
-
-            &.talon-transparent
-                background: none
+        &.transparent
+            background: none
 </style>
 
-<talon-span style="width: {size}px; height: {size}px;">
+<span class="icon" style="width: {size}px; height: {size}px;">
     {#if icon}
-        <talon-span
+        <span
             style="width: {(size * scale * 4) / 3}px; height: {(size * scale * 4) / 3}px"
-            class:talon-transparent={transparent}>
+            class:transparent>
             <svg
                 aria-hidden="true"
                 focusable="false"
@@ -43,6 +38,6 @@
                 viewBox="0 0 {icon[0]} {icon[1]}">
                 <path d={icon[2]} fill={color} />
             </svg>
-        </talon-span>
+        </span>
     {/if}
-</talon-span>
+</span>

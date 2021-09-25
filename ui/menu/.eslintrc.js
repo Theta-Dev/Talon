@@ -1,25 +1,40 @@
 module.exports = {
-    parser: "@typescript-eslint/parser",
+    extends: ["eslint:recommended"],
+    env: {browser: true, es6: true, node: true},
     parserOptions: {
-        tsconfigRootDir: __dirname,
-        project: ["./tsconfig.json"],
-        extraFileExtensions: [".svelte"],
+        sourceType: "module",
     },
-    extends: [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    ],
-    plugins: ["svelte3", "@typescript-eslint"],
     overrides: [
+        {
+            files: ["*.ts", "*.svelte"],
+            extends: [
+                "eslint:recommended",
+                "plugin:@typescript-eslint/eslint-recommended",
+                "plugin:@typescript-eslint/recommended",
+            ],
+            globals: {
+                Atomics: "readonly",
+                SharedArrayBuffer: "readonly",
+            },
+            parser: "@typescript-eslint/parser",
+            parserOptions: {
+                project: "./tsconfig.json",
+            },
+            plugins: ["@typescript-eslint"],
+        },
         {
             files: ["*.svelte"],
             processor: "svelte3/svelte3",
+            parserOptions: {
+                extraFileExtensions: [".svelte"],
+            },
+            plugins: ["svelte3", "@typescript-eslint"],
+            settings: {
+                "svelte3/typescript": true,
+                "svelte3/ignore-styles": () => true,
+            },
         },
     ],
     rules: {},
-    settings: {
-        "svelte3/typescript": true,
-        "svelte3/ignore-styles": () => true,
-    },
+    ignorePatterns: [".rollup/**", "public/**", "dist/**"],
 }

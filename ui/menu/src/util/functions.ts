@@ -1,8 +1,5 @@
 function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleString(
-        /* global navigator */
-        navigator.language
-    )
+    return new Date(dateString).toLocaleString(navigator.language)
 }
 
 export {formatDate}
