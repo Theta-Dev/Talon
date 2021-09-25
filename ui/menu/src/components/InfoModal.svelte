@@ -6,9 +6,18 @@
     import type {TalonData, TalonPage, TalonVersion} from "../util/types"
     import PageIcon from "./PageIcon.svelte"
     import Icon from "./Icon.svelte"
+    import {formatDate} from "../util/functions";
 
     export let isOpen: boolean
     export let data: TalonData
+
+    function getVersionName(versionId: string, version: TalonVersion): string {
+        return version.name ? version.name : '#' + versionId
+    }
+
+    function getVersionUrl(versionId: string, version: TalonVersion): string {
+        return data.root_path + (currentPage && version.name ? currentPage.path + '@' + version.name : '&v/' + versionId)
+    }
 
     let currentPage: TalonPage
     $: currentPage = data.pages[data.current_page]
@@ -16,11 +25,14 @@
     let currentVersion: TalonVersion
     $: currentVersion = data.versions[data.current_version]
 
+    let versionName: string
+    $: versionName = getVersionName(data.current_version, currentVersion)
+
+    let versionUrl: string
+    $: versionUrl = getVersionUrl(data.current_version, currentVersion)
+
     let uploadDate: string
-    $: uploadDate = new Date(currentVersion.date).toLocaleString(
-        /* global navigator */
-        navigator.language
-    )
+    $: uploadDate = formatDate(currentVersion.date)
 
     let pageTags: [string, string][]
     $: pageTags = currentVersion.tags
@@ -29,6 +41,15 @@
               val,
           ])
         : []
+
+    let history: [string, string, string][]
+    $: history = Object.entries(data.versions)
+        .filter((e) => e[0] !== data.current_version)
+        .map(([key, version]) => [
+            formatDate(version.date),
+            getVersionName(key, version),
+            getVersionUrl(key, version)
+        ])
 
 </script>
 
@@ -92,6 +113,9 @@
                 <PageIcon page={currentPage} size={60} scale={0.8} />
                 <talon-span>{currentPage.name}</talon-span>
             </talon-div>
+            <talon-p>Version:
+                <a href={versionUrl}>{versionName}</a>
+            </talon-p>
             <talon-p>Upload date: {uploadDate}</talon-p>
             <talon-p>Uploaded by: {currentVersion.user}</talon-p>
 
@@ -99,11 +123,20 @@
                 {#each pageTags as [key, val]}
                     <talon-p>
                         {key}:
-
                         <talon-code>{val}</talon-code>
                     </talon-p>
                 {/each}
             {/if}
+
+            <talon-hr />
+
+            {#each history as [date, name, url]}
+                <talon-p>
+                    <a href={url}>
+                        {date}&nbsp;&nbsp;&nbsp;{name}
+                    </a>
+                </talon-p>
+            {/each}
 
             <talon-hr />
 

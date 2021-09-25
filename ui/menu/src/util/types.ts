@@ -38,9 +38,10 @@ export enum TalonLinkType {
 
 export interface TalonVersion {
     id: number
-    date: Date
+    date: string
+    name: string | undefined
     user: string
-    tags: {[key: string]: string}
+    tags: {[key: string]: string} | undefined
 }
 
 export interface Focusable {
