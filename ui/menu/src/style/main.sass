@@ -6,6 +6,19 @@
     font-family: sans-serif
     color: values.$color-text
 
+a
+    display: inline
+    color: var(--talon-color)
+    filter: brightness(150%)
+    text-decoration: none
+
+    &:hover
+        text-decoration: underline
+        filter: brightness(200%)
+
+p
+    margin: 0.8em 0
+
 button
     cursor: pointer
 
@@ -17,11 +30,3 @@ button
     display: flex
     align-items: center
     justify-content: center
-
-.backdrop
-    position: fixed
-    top: 0
-    bottom: 0
-    right: 0
-    left: 0
-    background: rgba(0, 0, 0, 0.6)

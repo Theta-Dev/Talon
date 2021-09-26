@@ -7,10 +7,16 @@
     import InfoModal from "./InfoModal.svelte"
     import FloatingButton from "./FloatingButton.svelte"
 
-    import type {Focusable, TalonData, TalonPage} from "../util/types"
+    import type {Focusable, TalonPage} from "../util/types"
     import {TalonVisibility} from "../util/types"
     import PageIcon from "./PageIcon.svelte"
     import MenuItemInput from "./MenuItemInput.svelte"
+    import {
+        currentPage,
+        currentPageId,
+        pages,
+        rootPath,
+    } from "../util/talonData"
 
     function showSidebar(): void {
         sidebarShown = true
@@ -47,8 +53,7 @@
                 if (!searchText) {
                     closeSearch()
                 } else if (displayedPages.length) {
-                    window.location.href =
-                        talonData.root_path + displayedPages[0].path
+                    window.location.href = rootPath + displayedPages[0].path
                 } else {
                     closeSearch()
                 }
@@ -60,25 +65,18 @@
     }
 
     function openInfo() {
-        openModal(InfoModal, {
-            data: talonData,
-        })
+        openModal(InfoModal)
     }
-
-    export let talonData: TalonData
 
     let sidebarShown = !isMobile()
     let searchInput: Focusable
     let searchOpen = false
     let searchText = ""
 
-    let currentPage: TalonPage
-    $: currentPage = talonData.pages[talonData.current_page]
-
     let displayedPages: TalonPage[]
-    $: displayedPages = Object.entries(talonData.pages)
+    $: displayedPages = Object.entries(pages)
         .filter(([id, page]) => {
-            if (id === talonData.current_page) return false
+            if (id === currentPageId) return false
 
             if (searchText) {
                 return (
@@ -138,12 +136,12 @@
         {#each displayedPages as page, i}
             <MenuItemPage
                 {page}
-                rootPath={talonData.root_path}
+                {rootPath}
                 active={searchOpen && searchText && i === 0} />
         {/each}
     </div>
     <div>
-        {#if currentPage.source}
+        {#if currentPage && currentPage.source}
             <MenuItem
                 text="View source"
                 link={currentPage.source.url}

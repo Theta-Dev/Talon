@@ -20,7 +20,7 @@ import includeSass from ".rollup/includeSass"
 const production = !process.env.ROLLUP_WATCH
 const extensions = [".svelte", ".ts", ".js", ".mjs"]
 
-const bundleName = "bundle"
+const bundleName = "talon"
 const bundleFile = `${bundleName}.js`
 const bundleDir = production ? "dist" : "public"
 

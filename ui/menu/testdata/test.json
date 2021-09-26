@@ -1,7 +1,6 @@
 {
-  "talon_version": "0.0.1",
   "root_path": "/",
-  "current_page": "1",
+  "current_page": null,
   "current_version": "6",
   "versions": {
     "3": {

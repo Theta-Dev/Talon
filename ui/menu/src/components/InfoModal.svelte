@@ -3,13 +3,21 @@
     import {closeModal} from "svelte-modals"
     import Keydown from "svelte-keydown"
 
-    import type {TalonData, TalonPage, TalonVersion} from "../util/types"
+    import type {TalonVersion} from "../util/types"
     import PageIcon from "./PageIcon.svelte"
     import Icon from "./Icon.svelte"
     import {formatDate} from "../util/functions"
+    import InlineIcon from "./InlineIcon.svelte"
+    import Tag from "./Tag.svelte"
+    import {
+        currentPage,
+        currentVersion,
+        currentVersionId,
+        rootPath,
+        versions,
+    } from "../util/talonData"
 
     export let isOpen: boolean
-    export let data: TalonData
 
     function getVersionName(versionId: string, version: TalonVersion): string {
         return version.name ? version.name : "#" + versionId
@@ -17,24 +25,18 @@
 
     function getVersionUrl(versionId: string, version: TalonVersion): string {
         return (
-            data.root_path +
+            rootPath +
             (currentPage && version.name
                 ? currentPage.path + "@" + version.name
                 : "&v/" + versionId)
         )
     }
 
-    let currentPage: TalonPage
-    $: currentPage = data.pages[data.current_page]
-
-    let currentVersion: TalonVersion
-    $: currentVersion = data.versions[data.current_version]
-
     let versionName: string
-    $: versionName = getVersionName(data.current_version, currentVersion)
+    $: versionName = getVersionName(currentVersionId, currentVersion)
 
     let versionUrl: string
-    $: versionUrl = getVersionUrl(data.current_version, currentVersion)
+    $: versionUrl = getVersionUrl(currentVersionId, currentVersion)
 
     let uploadDate: string
     $: uploadDate = formatDate(currentVersion.date)
@@ -48,8 +50,8 @@
         : []
 
     let history: [string, string, string][]
-    $: history = Object.entries(data.versions)
-        .filter((e) => e[0] !== data.current_version)
+    $: history = Object.entries(versions)
+        .filter((e) => e[0] !== currentVersionId)
         .map(([key, version]) => [
             formatDate(version.date),
             getVersionName(key, version),
@@ -72,14 +74,16 @@
         align-items: center
         pointer-events: none
 
-        >div
+        > div
             position: relative
-            overflow: auto
+            overflow-y: auto
+            overflow-x: hidden
 
             margin: 75px auto
             padding: 20px
             width: 600px
             max-width: 90%
+            max-height: 90%
 
             background: values.$color-base
             border-radius: 15px
@@ -102,30 +106,38 @@
         background: none
         border: none
 
-    p
-        margin: 0.8em 0
-        white-space: nowrap
-
-    code
-        font-family: monospace
-        background-color: values.$color-base-1
-        border-radius: 0.3em
-        padding: 0.1em 0.3em
-
-    hr
-        width: 100%
-        height: 2px
-        margin: 1.6em 0
-        border: none
-        background-image: linear-gradient(to right, values.$color-base-1, values.$color-base-2, values.$color-base-1)
-
-    a
-        display: inline
-        color: values.$color-primary-light
-        text-decoration: none
-
         &:hover
-            text-decoration: underline
+            filter: brightness(50%)
+
+    .dhead
+        width: 100%
+        font-size: 1.4em
+        border-style: solid
+        border-image-source: linear-gradient(to right, values.$color-base-1, values.$color-base-2, values.$color-base-1)
+        border-image-slice: 0 0 1 0
+        border-image-width: 2px
+
+    .smalltag
+        margin: 0.3em 0
+        display: flex
+
+        > *
+            display: flex
+
+        a
+            filter: none
+
+        a:hover
+            text-decoration: none
+            filter: brightness(130%)
+
+        span
+            padding: 0.4em
+            background-color: values.$color-base-1
+
+        span:first-child
+            font-weight: bold
+            background-color: var(--talon-color)
 
 </style>
 
@@ -141,42 +153,62 @@
         <div>
             <div class="tag">
                 <PageIcon page={currentPage} size={60} scale={0.8} />
-                <span>{currentPage.name}</span>
+                <span>{currentPage ? currentPage.name : 'v' + currentVersionId}</span>
             </div>
-            <p>Version: <a href={versionUrl}>{versionName}</a></p>
-            <p>Upload date: {uploadDate}</p>
-            <p>Uploaded by: {currentVersion.user}</p>
 
-            {#if currentVersion.tags}
-                {#each pageTags as [key, val]}
-                    <p>{key}: <code>{val}</code></p>
+            {#if !currentPage}
+                <p>
+                    This is a dangling version, i.e. it does not belong to a
+                    page. Assign it to a page or it will be purged within 24
+                    hours.
+                </p>
+            {/if}
+
+            <p class="dhead">
+                <InlineIcon iconName="question" />
+                Current version
+            </p>
+
+            <Tag key="Version" value={versionName} href={versionUrl} />
+            <Tag key="Upload date" value={uploadDate} />
+            <Tag key="Uploaded by" value={currentVersion.user} />
+
+            {#each pageTags as [key, value]}
+                <Tag {key} {value} />
+            {/each}
+
+            {#if history.length}
+                <p class="dhead">
+                    <InlineIcon iconName="history" />
+                    History
+                </p>
+
+                {#each history as [date, name, url]}
+                    <p class="smalltag">
+                        <a href={url}>
+                            <span>{name}</span>
+                            <span>{date}</span>
+                        </a>
+                    </p>
                 {/each}
             {/if}
 
-            <hr />
-
-            {#each history as [date, name, url]}
-                <p><a href={url}> {date}&nbsp;&nbsp;&nbsp;{name} </a></p>
-            {/each}
-
-            <hr />
+            <p class="dhead" />
 
             <div>
                 This site is powered by
                 <a
-                    href="https://github.com/Theta-Dev/Talon/tree/{data.talon_version}"
+                    href="https://github.com/Theta-Dev/Talon/tree/__VERSION__"
                     target="_blank"
-                    referrerpolicy="no-referrer">Talon
-                    {data.talon_version}</a>, a static site management system
-                created by
+                    referrerpolicy="no-referrer">Talon __VERSION__</a>, a
+                static site management system created by
                 <a
                     href="https://thetadev.de"
                     target="_blank"
                     referrerpolicy="no-referrer">ThetaDev</a>
             </div>
             <p>
-                <a href={data.root_path + 'int/license'} target="_blank">View
-                    licenses</a>
+                <a href={rootPath + '&credits'} target="_blank">View licenses</a>
             </p>
             <button on:click={closeModal}>
                 <Icon

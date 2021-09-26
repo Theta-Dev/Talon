@@ -1,5 +1,5 @@
 <script lang="ts">
-    import icons from "../assets/icons"
+    import icons from "../util/icons"
 
     export let iconName: string
     export let color = "#fff"
