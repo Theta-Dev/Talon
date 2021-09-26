@@ -20,7 +20,6 @@
         background: rgba(0, 0, 0, 0.6)
 </style>
 
-<svelte:options tag="talon-sidebar" />
 <div class="wrapper" style={`--talon-color: ${currentPage.color}`}>
     {#if isPresent}
         <Menu />

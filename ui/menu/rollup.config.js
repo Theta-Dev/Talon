@@ -11,11 +11,13 @@ import livereload from "rollup-plugin-livereload"
 import {terser} from "rollup-plugin-terser"
 import sveltePreprocess from "svelte-preprocess"
 import typescript from "@rollup/plugin-typescript"
-import css from ".rollup/css-only"
-import {serve} from ".rollup/serve"
 import replace from "@rollup/plugin-replace"
 import babel from "@rollup/plugin-babel"
+
+import css from ".rollup/css-only"
+import {serve} from ".rollup/serve"
 import includeSass from ".rollup/includeSass"
+import htmlMinifier from ".rollup/htmlMinifier"
 
 const production = !process.env.ROLLUP_WATCH
 const version = process.env.VERSION || "INDEV"
@@ -52,11 +54,24 @@ export default {
         },
     ],
     plugins: [
+        htmlMinifier({
+            include: "*.svelte",
+            options: {
+                stripCarriageReturns: true,
+                trimLines: true,
+                trimElements: true,
+                normalizeWhiteSpace: true,
+                stripComments: false,
+            },
+        }),
+
         svelte({
             preprocess: sveltePreprocess({sourceMap: !production}),
             compilerOptions: {
                 dev: !production,
                 customElement: true,
+                tag: "talon-sidebar",
+                preserveWhitespace: false,
             },
             emitCss: false,
             include: appFile,
@@ -66,6 +81,7 @@ export default {
             preprocess: sveltePreprocess({sourceMap: !production}),
             compilerOptions: {
                 dev: !production,
+                preserveWhitespace: false,
             },
             emitCss: true,
             exclude: appFile,
@@ -112,8 +128,8 @@ export default {
 
         // replace version placeholder
         replace({
-            "__VERSION__": version,
-            preventAssignment: true
+            __VERSION__: version,
+            preventAssignment: true,
         }),
 
         babel({
