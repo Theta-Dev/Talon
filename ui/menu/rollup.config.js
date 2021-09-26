@@ -18,7 +18,7 @@ import babel from "@rollup/plugin-babel"
 import includeSass from ".rollup/includeSass"
 
 const production = !process.env.ROLLUP_WATCH
-const extensions = [".svelte", ".ts", ".js", ".mjs"]
+const version = process.env.VERSION || "INDEV"
 
 const bundleName = "talon"
 const bundleFile = `${bundleName}.js`
@@ -26,6 +26,7 @@ const bundleDir = production ? "dist" : "public"
 
 const appFile = "src/App.svelte"
 const styleFile = "src/style/main.sass"
+const extensions = [".svelte", ".ts", ".js", ".mjs"]
 
 function includeCss(styles, bundle) {
     const match = production
@@ -108,6 +109,13 @@ export default {
             delimiters: ["", ""],
             preventAssignment: true,
         }),
+
+        // replace version placeholder
+        replace({
+            "__VERSION__": version,
+            preventAssignment: true
+        }),
+
         babel({
             extensions,
             exclude: "node_modules/**",
