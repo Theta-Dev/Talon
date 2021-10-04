@@ -18,53 +18,66 @@ Talon can be used for a lot of different purposes:
 
 ## Models
 
-### Site mark
+### Website
 
-- Mark
+- ID
 - Name
-- Logo
+- Path
+- PathLower
+- Logo (File) →
 - Color
-- **OPT:** Time to live
-- Number of kept versions
 - Visibility: Featured/Searchable/Hidden
-- List of versions
+- User
+- CreatedAt
+- MaxVersions
+- SourceURL
+- SourceType
+- Versions →[]
 
-### Site version
+### Version
 
-- Version number
+- ID
+- Name
+- User
 - Upload date
-- Map of file URIs with their hashes (see File Storage)
+- Version files →[]
+
+### File
+
+- Hash
+- Filepath
+- Version
 
 ### User
 
+- ID
 - Username
 - Password
+- Is admin
 
 ### API user
 
+- ID
 - API Key
 - Creator (User)
 
-### Access permissions
+### Permission
 
-(for users and API users)
-
-- Is admin
-- Allowed marks/markspaces
+- Allowed paths/pathspaces
 
   **Examples:**
-  - Any mark including submarks: `#`
-  - Any mark/submark under "ThetaDev": `thetadev.#`
-  - Submark "Coverage" under any mark: `*.coverage`
-  - Submark "Coverage" under the marks "thetadev" and "
+  - Any paths including subpaths: `#`
+  - Any path/subpath under "ThetaDev": `thetadev.#`
+  - Subpath "Coverage" under any path: `*.coverage`
+  - Subpath "Coverage" under the paths "thetadev" and "
     zoey": `thetadev|zoey.coverage`
   - Marks "thetadev.test" and "zoey.coverage": `thetadev.test||zoey.coverage`
 
 - Max size per uploaded website
-- Can create marks
-- **OPT:** Max TTL for created marks
-- Max versions for created marks
-- Max visibility for created marks
+- Can create websites
+- **OPT:** Max TTL for created paths
+- Max versions for created paths
+- Max visibility for created paths
 
 ### URL format
 
