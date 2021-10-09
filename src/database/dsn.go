@@ -41,8 +41,8 @@ func splitHostUrl(url string, defaultPort string) (host string, port string) {
 	return match[1], match[2]
 }
 
-func (c *Connection) prepare() (tryErr error) {
-	defer try.Returnf(&tryErr, "error with connection data")
+func (c *Connection) prepare() (caught error) {
+	defer try.Returnf(&caught, "error with connection data")
 
 	c.Dialect = strings.ToLower(c.Dialect)
 
@@ -104,8 +104,8 @@ func (c *Connection) getDsn() string {
 	return ""
 }
 
-func (c *Connection) Open() (d gorm.Dialector, tryErr error) {
-	defer try.Return(&tryErr)
+func (c *Connection) Open() (d gorm.Dialector, caught error) {
+	defer try.Return(&caught)
 
 	try.Check(c.prepare())
 	dsn := c.getDsn()

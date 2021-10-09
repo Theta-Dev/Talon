@@ -13,8 +13,8 @@ type Database struct {
 	orm  *gorm.DB
 }
 
-func Open(conn *Connection) (db Database, tryErr error) {
-	defer try.Returnf(&tryErr, "error opening db")
+func Open(conn *Connection) (db Database, caught error) {
+	defer try.Returnf(&caught, "error opening db")
 
 	db = Database{conn: conn}
 
@@ -41,62 +41,22 @@ func Open(conn *Connection) (db Database, tryErr error) {
 	return
 }
 
-func (db Database) Migrate() (tryErr error) {
-	defer try.Returnf(&tryErr, "migration error")
+func (db Database) Migrate() (caught error) {
+	defer try.Returnf(&caught, "migration error")
 
-	try.Check(db.orm.AutoMigrate(allModels...))
+	try.Check(db.orm.AutoMigrate(AllModels...))
 	return
 }
 
-func (db Database) DropAllTables() (tryErr error) {
-	defer try.Returnf(&tryErr, "drop tables error")
-
-	var queries []string
-
-	switch db.conn.Dialect {
-	case DialectMySql:
-		queries = []string{"SET FOREIGN_KEY_CHECKS = 0"}
-
-		for _, n := range tableNames {
-			queries = append(queries, "DROP TABLE IF EXISTS "+n)
-		}
-		queries = append(queries, "SET FOREIGN_KEY_CHECKS = 1")
-	case DialectPostgres:
-		queries = []string{
-			"DROP SCHEMA public CASCADE",
-			"CREATE SCHEMA public",
-			"GRANT ALL ON SCHEMA public TO test",
-		}
-	case DialectSqlite:
-		queries = []string{"PRAGMA foreign_keys = OFF"}
-
-		for _, n := range tableNames {
-			queries = append(queries, "DROP TABLE IF EXISTS "+n)
-		}
-		queries = append(queries, "PRAGMA foreign_keys = ON")
-	}
-
-	for _, q := range queries {
-		try.ORM(db.orm.Exec(q))
-	}
-	return
+func (db Database) GetDialect() string {
+	return db.conn.Dialect
 }
 
-func (db Database) EmptyAllTables() (tryErr error) {
-	defer try.Returnf(&tryErr, "empty tables error")
+func (db Database) IsDialect(dialect string) bool {
+	return db.conn.Dialect == dialect
+}
 
-	var queries []string
-
-	for _, n := range tableNames {
-		queries = append(queries, "DELETE FROM "+n)
-
-		if db.conn.Dialect != DialectSqlite {
-			queries = append(queries, "ALTER TABLE "+n+" AUTO_INCREMENT=1")
-		}
-	}
-
-	for _, q := range queries {
-		try.ORM(db.orm.Exec(q))
-	}
-	return
+func (db Database) Exec(sql string, values ...interface{}) (rows int, err error) {
+	res := db.orm.Exec(sql, values...)
+	return int(res.RowsAffected), res.Error
 }

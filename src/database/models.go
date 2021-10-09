@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var allModels = []interface{}{
+var AllModels = []interface{}{
 	&Website{},
 	&Version{},
 	&VersionFile{},
@@ -17,15 +17,15 @@ var allModels = []interface{}{
 	&TalonInfo{},
 }
 
-var tableNames = []string{
+var TableNames = []string{
 	"talon_infos",
 	"files",
 	"version_files",
 	"versions",
 	"websites",
-	"permissions",
 	"api_users",
 	"users",
+	"permissions",
 }
 
 type Website struct {
@@ -40,7 +40,7 @@ type Website struct {
 	User        *User     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	UserID      uint      ``
 	CreatedAt   time.Time ``
-	MaxVersions uint      ``
+	MaxVersions int       ``
 	SourceUrl   *string   `gorm:"type:varchar(200)"`
 	SourceType  *string   `gorm:"type:varchar(20)"`
 	Versions    []Version `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
@@ -77,18 +77,18 @@ type User struct {
 	PasswordHash string         `gorm:"type:varchar(200)"`
 	CreatedAt    time.Time      ``
 	Deleted      gorm.DeletedAt ``
-	Permission   Permission     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	Permission   *Permission    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	PermissionID uint           ``
 }
 
 type ApiUser struct {
-	ID           uint       `gorm:"primary_key;unique_index;not null;auto_increment"`
-	KeyHash      string     `gorm:"type:varchar(200)"`
-	CreatedAt    time.Time  ``
-	Creator      User       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	CreatorID    uint       ``
-	Permission   Permission `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
-	PermissionID uint       ``
+	ID           uint        `gorm:"primary_key;unique_index;not null;auto_increment"`
+	KeyHash      string      `gorm:"type:varchar(200)"`
+	CreatedAt    time.Time   ``
+	Creator      User        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	CreatorID    uint        ``
+	Permission   *Permission `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	PermissionID uint        ``
 }
 
 type Permission struct {
@@ -96,9 +96,9 @@ type Permission struct {
 	AllowedPaths  string `gorm:"type:varchar(500)"`
 	IsAdmin       bool   ``
 	CanCreate     bool   ``
-	MaxSize       uint   ``
-	MaxVersions   uint   ``
-	MaxVisibility uint   ``
+	MaxSize       int    ``
+	MaxVersions   int    ``
+	MaxVisibility int    ``
 }
 
 type TalonInfo struct {
