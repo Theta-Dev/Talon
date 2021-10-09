@@ -1,9 +1,14 @@
 package database
 
 import (
+	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
+	"strings"
 
+	"github.com/Theta-Dev/Talon/src/try"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -25,46 +30,6 @@ type Connection struct {
 	DbName  string `def:"db"`
 }
 
-func (c Connection) getDialect() string {
-	if c.Dialect != DialectSqlite && c.Dialect != DialectMySql && c.Dialect != DialectPostgres {
-		return DialectSqlite
-	}
-	return c.Dialect
-}
-
-func (c Connection) getFile() string {
-	if c.File == "" {
-		return "database.db"
-	}
-	return c.File
-}
-
-func (c Connection) getHost() string {
-	if c.Host == "" {
-		return "127.0.0.1"
-	}
-	return c.Host
-}
-func (c Connection) getUser() string {
-	if c.User == "" {
-		return "user"
-	}
-	return c.User
-}
-func (c Connection) getPass() string {
-	if c.Pass == "" {
-		return "pass"
-	}
-	return c.Pass
-}
-
-func (c Connection) getDbName() string {
-	if c.DbName == "" {
-		return "db"
-	}
-	return c.DbName
-}
-
 func splitHostUrl(url string, defaultPort string) (host string, port string) {
 	pattern := regexp.MustCompile(`(.*):(\d+)`)
 	match := pattern.FindStringSubmatch(url)
@@ -76,34 +41,82 @@ func splitHostUrl(url string, defaultPort string) (host string, port string) {
 	return match[1], match[2]
 }
 
-func (c Connection) getDsn() string {
-	switch c.getDialect() {
+func (c *Connection) prepare() (tryErr error) {
+	defer try.Returnf(&tryErr, "error with connection data")
+
+	c.Dialect = strings.ToLower(c.Dialect)
+
+	if c.Dialect == "" {
+		c.Dialect = DialectSqlite
+	} else if c.Dialect != DialectSqlite && c.Dialect != DialectMySql && c.Dialect != DialectPostgres {
+		return errors.New("unknown dialect (allowed: sqlite, mysql, postgres)")
+	}
+
+	if c.Dialect == DialectSqlite {
+		if c.File == "" {
+			c.File = "database.db"
+		}
+
+		// Create dbfile directory if nonexistant
+		if _, err := os.Stat(filepath.Dir(c.File)); os.IsNotExist(err) {
+			try.Check(os.MkdirAll(filepath.Dir(c.File), 0777))
+		}
+
+		c.Host = ""
+		c.User = ""
+		c.Pass = ""
+		c.DbName = filepath.Base(c.File)
+	} else {
+		if c.Host == "" {
+			c.Host = "127.0.0.1"
+		}
+		if c.User == "" {
+			return errors.New("empty username")
+		}
+		if c.Pass == "" {
+			return errors.New("empty password")
+		}
+		if c.DbName == "" {
+			return errors.New("empty db name")
+		}
+
+		c.File = ""
+	}
+	return
+}
+
+func (c *Connection) getDsn() string {
+	switch c.Dialect {
 	case DialectSqlite:
-		return c.getFile()
+		return c.File
 	case DialectMySql:
-		host, port := splitHostUrl(c.getHost(), "3306")
+		host, port := splitHostUrl(c.Host, "3306")
 
-		return fmt.Sprintf(`%s:"%s"@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local`,
-			c.getUser(), c.getPass(), host, port, c.getDbName())
+		return fmt.Sprintf(`%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local`,
+			c.User, c.Pass, host, port, c.DbName)
+
 	case DialectPostgres:
-		host, port := splitHostUrl(c.getHost(), "5432")
+		host, port := splitHostUrl(c.Host, "5432")
 
-		return fmt.Sprintf(`host=%s user=%s password="%s" dbname=%s port=%s sslmode=disable`,
-			host, c.getUser(), c.getPass(), c.getDbName(), port)
+		return fmt.Sprintf(`host=%s user=%s password=%s dbname=%s port=%s sslmode=disable`,
+			host, c.User, c.Pass, c.DbName, port)
 	}
 	return ""
 }
 
-func (c Connection) Open() gorm.Dialector {
+func (c *Connection) Open() (d gorm.Dialector, tryErr error) {
+	defer try.Return(&tryErr)
+
+	try.Check(c.prepare())
 	dsn := c.getDsn()
 
-	switch c.getDialect() {
+	switch c.Dialect {
 	case DialectSqlite:
-		return sqlite.Open(dsn)
+		d = sqlite.Open(dsn)
 	case DialectMySql:
-		return mysql.Open(dsn)
+		d = mysql.Open(dsn)
 	case DialectPostgres:
-		return postgres.Open(dsn)
+		d = postgres.Open(dsn)
 	}
-	return nil
+	return
 }

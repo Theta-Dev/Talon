@@ -33,6 +33,133 @@ func Test_splitHostUrl(t *testing.T) {
 	}
 }
 
+func Test_prepare(t *testing.T) {
+	params := []struct {
+		name   string
+		conn   Connection
+		expect Connection
+		err    string
+	}{
+		{
+			name:   "sqlite",
+			conn:   Connection{Dialect: DialectSqlite, File: "test.db"},
+			expect: Connection{Dialect: DialectSqlite, File: "test.db", DbName: "test.db"},
+		},
+		{
+			name:   "sqlite_default",
+			conn:   Connection{},
+			expect: Connection{Dialect: DialectSqlite, File: "database.db", DbName: "database.db"},
+		},
+		{
+			name: "mysql",
+			conn: Connection{
+				Dialect: DialectMySql,
+				Host:    "thetadev.de",
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+			expect: Connection{
+				Dialect: DialectMySql,
+				Host:    "thetadev.de",
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+		},
+		{
+			name: "mysql_default",
+			conn: Connection{
+				Dialect: DialectMySql,
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+			expect: Connection{
+				Dialect: DialectMySql,
+				Host:    "127.0.0.1",
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+		},
+		{
+			name: "mysql_no_db",
+			conn: Connection{
+				Dialect: DialectMySql,
+				User:    "test",
+				Pass:    "1234",
+			},
+			err: "error with connection data: empty db name",
+		},
+		{
+			name: "mysql_no_user",
+			conn: Connection{
+				Dialect: DialectMySql,
+				DbName:  "talon",
+				Pass:    "1234",
+			},
+			err: "error with connection data: empty username",
+		},
+		{
+			name: "mysql_no_pw",
+			conn: Connection{
+				Dialect: DialectMySql,
+				DbName:  "talon",
+				User:    "test",
+			},
+			err: "error with connection data: empty password",
+		},
+		{
+			name: "postgres",
+			conn: Connection{
+				Dialect: DialectPostgres,
+				Host:    "thetadev.de",
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+			expect: Connection{
+				Dialect: DialectPostgres,
+				Host:    "thetadev.de",
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+		},
+		{
+			name: "postgres_default",
+			conn: Connection{
+				Dialect: DialectPostgres,
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+			expect: Connection{
+				Dialect: DialectPostgres,
+				Host:    "127.0.0.1",
+				DbName:  "talon",
+				User:    "test",
+				Pass:    "1234",
+			},
+		},
+	}
+
+	for _, p := range params {
+		t.Run(p.name, func(t *testing.T) {
+			c := &p.conn
+			err := c.prepare()
+
+			if p.err == "" {
+				assert.Nil(t, err)
+				assert.Equal(t, *c, p.expect)
+			} else {
+				assert.Equal(t, p.err, err.Error())
+			}
+		})
+	}
+}
+
 func Test_getDsn(t *testing.T) {
 	params := []struct {
 		name   string
@@ -45,11 +172,6 @@ func Test_getDsn(t *testing.T) {
 			"test.db",
 		},
 		{
-			"sqlite_default",
-			Connection{Dialect: DialectSqlite},
-			"database.db",
-		},
-		{
 			"mysql",
 			Connection{
 				Dialect: DialectMySql,
@@ -58,7 +180,7 @@ func Test_getDsn(t *testing.T) {
 				User:    "test",
 				Pass:    "1234",
 			},
-			`test:"1234"@tcp(thetadev.de:3306)/talon?charset=utf8&parseTime=True&loc=Local`,
+			`test:1234@tcp(thetadev.de:3306)/talon?charset=utf8&parseTime=True&loc=Local`,
 		},
 		{
 			"mysql_port",
@@ -69,12 +191,7 @@ func Test_getDsn(t *testing.T) {
 				User:    "test",
 				Pass:    "1234",
 			},
-			`test:"1234"@tcp(thetadev.de:100)/talon?charset=utf8&parseTime=True&loc=Local`,
-		},
-		{
-			"mysql_default",
-			Connection{Dialect: DialectMySql},
-			`user:"pass"@tcp(127.0.0.1:3306)/db?charset=utf8&parseTime=True&loc=Local`,
+			`test:1234@tcp(thetadev.de:100)/talon?charset=utf8&parseTime=True&loc=Local`,
 		},
 		{
 			"postgres",
@@ -85,7 +202,7 @@ func Test_getDsn(t *testing.T) {
 				User:    "test",
 				Pass:    "1234",
 			},
-			`host=thetadev.de user=test password="1234" dbname=talon port=5432 sslmode=disable`,
+			`host=thetadev.de user=test password=1234 dbname=talon port=5432 sslmode=disable`,
 		},
 		{
 			"postgres_port",
@@ -96,12 +213,7 @@ func Test_getDsn(t *testing.T) {
 				User:    "test",
 				Pass:    "1234",
 			},
-			`host=thetadev.de user=test password="1234" dbname=talon port=100 sslmode=disable`,
-		},
-		{
-			"postgres_default",
-			Connection{Dialect: DialectPostgres},
-			`host=127.0.0.1 user=user password="pass" dbname=db port=5432 sslmode=disable`,
+			`host=thetadev.de user=test password=1234 dbname=talon port=100 sslmode=disable`,
 		},
 	}
 

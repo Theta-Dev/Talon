@@ -9,6 +9,7 @@ import (
 var allModels = []interface{}{
 	&Website{},
 	&Version{},
+	&VersionFile{},
 	&File{},
 	&User{},
 	&ApiUser{},
@@ -17,13 +18,14 @@ var allModels = []interface{}{
 }
 
 var tableNames = []string{
-	"websites",
-	"versions",
-	"files",
-	"users",
-	"api_users",
-	"permissions",
 	"talon_infos",
+	"files",
+	"version_files",
+	"versions",
+	"websites",
+	"permissions",
+	"api_users",
+	"users",
 }
 
 type Website struct {
@@ -31,11 +33,11 @@ type Website struct {
 	Name        string    `gorm:"type:varchar(100);not null"`
 	Path        string    `gorm:"type:varchar(200);not null"`
 	PathLower   string    `gorm:"type:varchar(200);not null;unique_index"`
-	Logo        *File     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	LogoID      *uint     ``
+	Logo        *File     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	LogoID      uint      ``
 	Color       *string   `gorm:"type:varchar(20)"`
 	Visibility  uint      ``
-	User        User      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	User        *User     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	UserID      uint      ``
 	CreatedAt   time.Time ``
 	MaxVersions uint      ``
@@ -45,22 +47,28 @@ type Website struct {
 }
 
 type Version struct {
-	ID        uint      `gorm:"primary_key;unique_index;not null;auto_increment"`
-	Name      string    `gorm:"type:varchar(100);not null"`
-	Website   Website   ``
-	WebsiteID uint      ``
-	User      User      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
-	UserID    uint      ``
-	CreatedAt time.Time ``
-	Files     []File    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	ID        uint          `gorm:"primary_key;unique_index;not null;auto_increment"`
+	Name      string        `gorm:"type:varchar(100);not null"`
+	Website   *Website      ``
+	WebsiteID uint          ``
+	User      User          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	UserID    uint          ``
+	CreatedAt time.Time     ``
+	Files     []VersionFile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+}
+
+type VersionFile struct {
+	ID        uint     `gorm:"primary_key;unique_index;not null;auto_increment"`
+	Path      string   `gorm:"type:varchar(200)"`
+	Version   *Version `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	VersionID uint     ``
+	File      File     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	FileID    uint     ``
 }
 
 type File struct {
-	ID        uint    `gorm:"primary_key;unique_index;not null;auto_increment"`
-	Path      string  `gorm:"type:varchar(200)"`
-	Hash      string  `gorm:"type:varchar(64)"`
-	Version   Version ``
-	VersionID uint    ``
+	ID   uint   `gorm:"primary_key;unique_index;not null;auto_increment"`
+	Hash string `gorm:"type:varchar(64)"`
 }
 
 type User struct {
@@ -86,6 +94,7 @@ type ApiUser struct {
 type Permission struct {
 	ID            uint   `gorm:"primary_key;unique_index;not null;auto_increment"`
 	AllowedPaths  string `gorm:"type:varchar(500)"`
+	IsAdmin       bool   ``
 	CanCreate     bool   ``
 	MaxSize       uint   ``
 	MaxVersions   uint   ``
