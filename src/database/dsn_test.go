@@ -46,9 +46,13 @@ func Test_prepare(t *testing.T) {
 			expect: Connection{Dialect: DialectSqlite, File: "test.db", DbName: "test.db"},
 		},
 		{
-			name:   "sqlite_default",
-			conn:   Connection{},
-			expect: Connection{Dialect: DialectSqlite, File: "database.db", DbName: "database.db"},
+			name: "sqlite_default",
+			conn: Connection{},
+			expect: Connection{
+				Dialect: DialectSqlite,
+				File:    "database.db",
+				DbName:  "database.db",
+			},
 		},
 		{
 			name: "mysql",

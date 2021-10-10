@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/Theta-Dev/Talon/src/try"
+	"github.com/Theta-Dev/Talon/src/util"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -48,41 +49,56 @@ func (c *Connection) prepare() (caught error) {
 
 	if c.Dialect == "" {
 		c.Dialect = DialectSqlite
-	} else if c.Dialect != DialectSqlite && c.Dialect != DialectMySql && c.Dialect != DialectPostgres {
-		return errors.New("unknown dialect (allowed: sqlite, mysql, postgres)")
+	} else if c.Dialect != DialectSqlite &&
+		c.Dialect != DialectMySql && c.Dialect != DialectPostgres {
+		return util.ErrUnknownSqlDialect
 	}
 
 	if c.Dialect == DialectSqlite {
-		if c.File == "" {
-			c.File = "database.db"
-		}
-
-		// Create dbfile directory if nonexistant
-		if _, err := os.Stat(filepath.Dir(c.File)); os.IsNotExist(err) {
-			try.Check(os.MkdirAll(filepath.Dir(c.File), 0777))
-		}
-
-		c.Host = ""
-		c.User = ""
-		c.Pass = ""
-		c.DbName = filepath.Base(c.File)
+		try.Check(c.prepareFileDB())
 	} else {
-		if c.Host == "" {
-			c.Host = "127.0.0.1"
-		}
-		if c.User == "" {
-			return errors.New("empty username")
-		}
-		if c.Pass == "" {
-			return errors.New("empty password")
-		}
-		if c.DbName == "" {
-			return errors.New("empty db name")
-		}
-
-		c.File = ""
+		try.Check(c.prepareExternalDB())
 	}
 	return
+}
+
+func (c *Connection) prepareFileDB() (caught error) {
+	defer try.Return(&caught)
+
+	if c.File == "" {
+		c.File = "database.db"
+	}
+
+	// Create dbfile directory if nonexistant
+	if _, err := os.Stat(filepath.Dir(c.File)); os.IsNotExist(err) {
+		try.Check(os.MkdirAll(filepath.Dir(c.File), 0o777))
+	}
+
+	c.Host = ""
+	c.User = ""
+	c.Pass = ""
+	c.DbName = filepath.Base(c.File)
+
+	return
+}
+
+func (c *Connection) prepareExternalDB() error {
+	if c.Host == "" {
+		c.Host = "127.0.0.1"
+	}
+	if c.User == "" {
+		return errors.New("empty username")
+	}
+	if c.Pass == "" {
+		return errors.New("empty password")
+	}
+	if c.DbName == "" {
+		return errors.New("empty db name")
+	}
+
+	c.File = ""
+
+	return nil
 }
 
 func (c *Connection) getDsn() string {

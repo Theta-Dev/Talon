@@ -12,7 +12,7 @@ import (
 	"runtime/debug"
 )
 
-// Empty is a helper method to handle errors of func() (string, error) functions
+// Empty is a helper method to handle errors of func() (string, error) functions.
 func Empty(_ interface{}, err error) {
 	Check(err)
 }

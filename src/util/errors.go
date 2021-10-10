@@ -3,5 +3,6 @@ package util
 import "errors"
 
 var (
-	ErrWrongUserPass = errors.New("username/password wrong")
+	ErrUnknownSqlDialect = errors.New("unknown dialect (allowed: sqlite, mysql, postgres)")
+	ErrWrongUserPass     = errors.New("username/password wrong")
 )

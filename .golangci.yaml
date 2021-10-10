@@ -1,0 +1,30 @@
+run:
+  modules-download-mode: readonly
+
+linters:
+  presets:
+    - bugs
+    - unused
+    - import
+    - module
+
+  enable:
+    - gofumpt
+    - godot
+    - lll
+    - predeclared
+    - gocognit
+    - nestif
+
+  disable:
+    - scopelint
+
+linters-settings:
+  godot:
+    capital: true
+  lll:
+    line-length: 88
+  gocognit:
+    min-complexity: 10
+  nestif:
+    min-complexity: 3
