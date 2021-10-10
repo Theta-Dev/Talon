@@ -1,0 +1,16 @@
+repos:
+- repo: https://github.com/tekwizely/pre-commit-golang
+  rev: v1.0.0-beta.4
+  hooks:
+  - id: golangci-lint-repo-mod
+    name: GolangCI Lint
+
+- repo: local
+  hooks:
+  - id: test
+    name: Test
+    entry: scripts/test_run.sh
+    language: script
+    description: "Run Talon's tests"
+    types: [go]
+    pass_filenames: false

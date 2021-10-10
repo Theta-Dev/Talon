@@ -1,3 +1,5 @@
 #!/bin/bash
+set -e
 
-docker kill mariadb postgres
+docker kill talon_mariadb talon_postgres
+echo "containers stopped"

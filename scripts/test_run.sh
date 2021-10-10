@@ -4,6 +4,8 @@ dialects=("sqlite" "mysql" "postgres")
 
 cd -- "$( dirname -- "${BASH_SOURCE[0]}" )/../src"
 
+../scripts/test_up.sh wait
+
 go get ./...
 
 printBlue() {

@@ -2,7 +2,6 @@ package testdb
 
 import (
 	"os"
-	"path"
 
 	"github.com/Theta-Dev/Talon/src/database"
 	"github.com/Theta-Dev/Talon/src/fixtures"
@@ -11,7 +10,7 @@ import (
 
 func Open() database.Database {
 	dialect := os.Getenv("DIALECT")
-	dbfile := path.Join("tmp", "test.db")
+	dbfile := "test.db"
 
 	if dialect == "" || dialect == database.DialectSqlite {
 		fixtures.CdProjectRoot()
