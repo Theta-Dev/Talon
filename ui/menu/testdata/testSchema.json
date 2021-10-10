@@ -93,13 +93,7 @@
           }
         }
       },
-      "required": [
-        "root_path",
-        "current_page",
-        "current_version",
-        "versions",
-        "pages"
-      ]
+      "required": ["root_path", "current_page", "current_version", "versions", "pages"]
     }
   ]
 }

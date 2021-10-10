@@ -1,4 +1,5 @@
 {
+  "useTabs": true,
   "tabWidth": 4,
   "semi": false,
   "bracketSpacing": false,
@@ -6,6 +7,7 @@
     {
       "files": ["*.json", "*.md", "*.rst", "*.ini", "*.yml", "*.yaml"],
       "options": {
+        "useTabs": false,
         "tabWidth": 2
       }
     }

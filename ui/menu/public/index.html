@@ -1,316 +1,296 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-        />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <meta name="title" content="Talon" />
-        <meta name="description" content="Talon menu development page" />
+		<meta name="title" content="Talon" />
+		<meta name="description" content="Talon menu development page" />
 
-        <style>
-            body {
-                background-color: #161b22;
-                font-family: sans-serif;
-                color: #fff;
-            }
+		<style>
+			body {
+				background-color: #161b22;
+				font-family: sans-serif;
+				color: #fff;
+			}
 
-            h1 {
-                color: #7935df;
-                font-size: 3em;
-                font-weight: lighter;
-                text-shadow: 0 0 30px #7935df, 0 0 40px #7935df;
-            }
+			h1 {
+				color: #7935df;
+				font-size: 3em;
+				font-weight: lighter;
+				text-shadow: 0 0 30px #7935df, 0 0 40px #7935df;
+			}
 
-            #main {
-                text-align: center;
-                margin: 0 10%;
-            }
+			#main {
+				text-align: center;
+				margin: 0 10%;
+			}
 
-            #main p {
-                text-align: justify;
-                background-color: #1f242b;
-                padding: 20px;
-                border-radius: 15px;
-            }
-        </style>
+			#main p {
+				text-align: justify;
+				background-color: #1f242b;
+				padding: 20px;
+				border-radius: 15px;
+			}
+		</style>
 
-        <title>Talon</title>
-    </head>
-    <body>
-        <div id="main">
-            <div style="width: 100%; max-width: 450px; display: inline-block">
-                <svg
-                    version="1.1"
-                    viewBox="0 0 119.06 34.396"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-label="Talon"
-                >
-                    <defs>
-                        <filter
-                            id="filter106970"
-                            x="-.069601"
-                            y="-.32851"
-                            width="1.1682"
-                            height="1.7939"
-                            color-interpolation-filters="sRGB"
-                        >
-                            <feOffset dx="3" dy="3" />
-                            <feGaussianBlur result="blur" stdDeviation="3" />
-                            <feFlood
-                                flood-color="rgb(121,53,223)"
-                                result="flood"
-                            />
-                            <feComposite
-                                in="flood"
-                                in2="SourceGraphic"
-                                operator="in"
-                                result="composite"
-                            />
-                            <feBlend in="blur" in2="composite" />
-                        </filter>
-                    </defs>
-                    <g transform="translate(-5.1682 -.21323)">
-                        <text
-                            transform="scale(.26458)"
-                            fill="#000000"
-                            font-family="sans-serif"
-                            font-size="40px"
-                            style="
-                                line-height: 1.25;
-                                shape-inside: url(#rect3620);
-                                white-space: pre;
-                            "
-                            xml:space="preserve"
-                        />
-                        <g
-                            fill="#7935df"
-                            filter="url(#filter106970)"
-                            stroke-width=".72282"
-                            aria-label="Talon"
-                        >
-                            <path
-                                d="m11.476 6.1383q2.9788 0.11294 8.7599 0.23294 6.1905-0.12 9.6282-0.23294v1.6165q-1.327-0.05647-4.1647-0.05647-1.4188-0.05647-4.1929-0.05647 0.05647 2.9506 0.05647 4.9411 0 2.0259 0.03529 4.8353 0 2.8023 0.05647 5.0541 0.02824 2.287 0.0847 3.8188h-2.0823q0.17647-5.4352 0.17647-13.56v-5.0894q-1.3623 0.028235-3.8188 0.028235t-4.5388 0.084705z"
-                            />
-                            <path
-                                d="m30.323 25.945q0.89646-1.7365 2.4282-4.8 1.5035-3.0353 2.8094-5.6682 1.2988-2.6047 2.5976-5.2305 1.2706-2.6329 2.5764-5.2376h0.05647q1.6165 2.9788 2.9506 5.4988 1.2988 2.5412 2.6894 5.1741 1.3835 2.6612 2.9435 5.5764 1.5388 2.9223 2.4917 4.567l-1.6518 1.0447-4.1294-7.807-10.673 0.34588q-0.60705 1.2423-1.7365 3.7341-1.1223 2.4847-1.7012 3.727zm5.7811-7.8917 9.374-0.35294q-2.4635-4.7082-4.7435-9.4235-1.1294 2.3153-2.52 5.3505-1.4118 3.0635-2.1106 4.4258z"
-                            />
-                            <path
-                                d="m66.005 26.58q-2.6612-0.11294-4.7153-0.17647-2.0753-0.02824-4.4188-0.11294 0.16941-3.9882 0.16941-8.4705 0-2.9506-0.11294-11.739h1.9623q-0.11294 5.407-0.14118 8.2376 0.02824 3.5011 0.02824 10.553 2.4 0 3.6141 0.05647 1.2423-0.05647 3.6141-0.05647z"
-                            />
-                            <path
-                                d="m79.65 7.0348q-2.4282 0.17647-4.3341 1.5882-1.9341 1.4188-2.9506 3.5859-1.0094 2.167-1.0094 4.4823 0 3.7623 2.1953 6.247 2.0823 2.4 5.7529 2.4 0.17647 0 0.34588 0 3.6141-0.0847 5.9858-2.5694 2.3717-2.4917 2.6047-6.0776 0.02823-0.43058 0.02823-0.86823 0-2.5694-0.89646-4.4823-1.0376-2.1953-2.9506-3.2611-1.9341-1.0447-4.2211-1.0447zm0-1.4188h1.0729q1.8494 0 2.8659 0.35294 2.0188 0.54352 3.5788 1.8776 1.567 1.3553 2.3435 3.5576 0.60705 1.7576 0.60705 4.0447 0 0.60705-0.02823 1.2423-0.2047 2.4-1.5953 4.8564-1.3835 2.4565-3.84 3.847-1.9059 1.1859-5.0047 1.3623-0.25412 0-0.51529 0-2.4564 0-4.567-1.0165-2.3435-1.1294-3.7341-3.4094-1.3835-2.2588-1.4188-5.3505 0.06353-0.16941 0.06353-0.28941 0.02824-2.9223 1.4118-5.407 1.3906-2.4564 3.7059-3.9882 2.3082-1.5035 5.0541-1.68z"
-                            />
-                            <path
-                                d="m96.739 4.9524h0.11294q2.6612 3.007 5.2941 5.9576 2.6047 2.9506 3.4094 3.8188 0.78352 0.89646 2.9788 3.3811 2.167 2.5129 4.1364 4.9129h0.0565q0-0.95293 0-1.9059-0.0282-0.98117 0-1.9694 0.0282-1.9623 0.17647-6.6494 0.14117-4.6517 0.16941-6.4729h1.8494q-0.0847 2.3082-0.28941 6.6776-0.22588 4.3906-0.34588 7.9482-0.14117 3.5576-0.19764 6.2188h-0.0635q-1.7294-2.0259-5.407-6.127-3.6988-4.1082-5.6894-6.3952-2.0259-2.28-4.8353-5.6047h-0.05647l-0.37412 17.661-1.8776-0.05647z"
-                            />
-                        </g>
-                    </g>
-                </svg>
-            </div>
-            <h1>development</h1>
-            <p>
-                Carrot cake biscuit icing pudding danish topping powder.
-                Croissant sugar plum pudding halvah chocolate. Cotton candy
-                tart cake bonbon tart. Shortbread jelly fruitcake icing pastry.
-                Dragée dessert cupcake cake sesame snaps toffee pie. Sweet roll
-                sweet roll chupa chups jelly-o gummies tootsie roll sweet
-                halvah oat cake. Carrot cake carrot cake muffin bonbon sesame
-                snaps brownie. Bonbon candy macaroon fruitcake candy canes.
-                Cake pudding danish liquorice cupcake jelly-o ice cream.
-                Liquorice lollipop danish tootsie roll toffee. Gingerbread
-                chocolate candy canes donut lemon drops apple pie danish bear
-                claw. Caramels cake jelly jelly sweet chocolate bar gingerbread
-                icing. Cake soufflé lollipop pudding marshmallow candy canes
-                tootsie roll danish.
-            </p>
-            <p>
-                Carrot cake biscuit icing pudding danish topping powder.
-                Croissant sugar plum pudding halvah chocolate. Cotton candy
-                tart cake bonbon tart. Shortbread jelly fruitcake icing pastry.
-                Dragée dessert cupcake cake sesame snaps toffee pie. Sweet roll
-                sweet roll chupa chups jelly-o gummies tootsie roll sweet
-                halvah oat cake. Carrot cake carrot cake muffin bonbon sesame
-                snaps brownie. Bonbon candy macaroon fruitcake candy canes.
-                Cake pudding danish liquorice cupcake jelly-o ice cream.
-                Liquorice lollipop danish tootsie roll toffee. Gingerbread
-                chocolate candy canes donut lemon drops apple pie danish bear
-                claw. Caramels cake jelly jelly sweet chocolate bar gingerbread
-                icing. Cake soufflé lollipop pudding marshmallow candy canes
-                tootsie roll danish.
-            </p>
-            <p>
-                Carrot cake biscuit icing pudding danish topping powder.
-                Croissant sugar plum pudding halvah chocolate. Cotton candy
-                tart cake bonbon tart. Shortbread jelly fruitcake icing pastry.
-                Dragée dessert cupcake cake sesame snaps toffee pie. Sweet roll
-                sweet roll chupa chups jelly-o gummies tootsie roll sweet
-                halvah oat cake. Carrot cake carrot cake muffin bonbon sesame
-                snaps brownie. Bonbon candy macaroon fruitcake candy canes.
-                Cake pudding danish liquorice cupcake jelly-o ice cream.
-                Liquorice lollipop danish tootsie roll toffee. Gingerbread
-                chocolate candy canes donut lemon drops apple pie danish bear
-                claw. Caramels cake jelly jelly sweet chocolate bar gingerbread
-                icing. Cake soufflé lollipop pudding marshmallow candy canes
-                tootsie roll danish.
-            </p>
-            <p>
-                Carrot cake biscuit icing pudding danish topping powder.
-                Croissant sugar plum pudding halvah chocolate. Cotton candy
-                tart cake bonbon tart. Shortbread jelly fruitcake icing pastry.
-                Dragée dessert cupcake cake sesame snaps toffee pie. Sweet roll
-                sweet roll chupa chups jelly-o gummies tootsie roll sweet
-                halvah oat cake. Carrot cake carrot cake muffin bonbon sesame
-                snaps brownie. Bonbon candy macaroon fruitcake candy canes.
-                Cake pudding danish liquorice cupcake jelly-o ice cream.
-                Liquorice lollipop danish tootsie roll toffee. Gingerbread
-                chocolate candy canes donut lemon drops apple pie danish bear
-                claw. Caramels cake jelly jelly sweet chocolate bar gingerbread
-                icing. Cake soufflé lollipop pudding marshmallow candy canes
-                tootsie roll danish.
-            </p>
-            <p>
-                Carrot cake biscuit icing pudding danish topping powder.
-                Croissant sugar plum pudding halvah chocolate. Cotton candy
-                tart cake bonbon tart. Shortbread jelly fruitcake icing pastry.
-                Dragée dessert cupcake cake sesame snaps toffee pie. Sweet roll
-                sweet roll chupa chups jelly-o gummies tootsie roll sweet
-                halvah oat cake. Carrot cake carrot cake muffin bonbon sesame
-                snaps brownie. Bonbon candy macaroon fruitcake candy canes.
-                Cake pudding danish liquorice cupcake jelly-o ice cream.
-                Liquorice lollipop danish tootsie roll toffee. Gingerbread
-                chocolate candy canes donut lemon drops apple pie danish bear
-                claw. Caramels cake jelly jelly sweet chocolate bar gingerbread
-                icing. Cake soufflé lollipop pudding marshmallow candy canes
-                tootsie roll danish.
-            </p>
-            <p>
-                Carrot cake biscuit icing pudding danish topping powder.
-                Croissant sugar plum pudding halvah chocolate. Cotton candy
-                tart cake bonbon tart. Shortbread jelly fruitcake icing pastry.
-                Dragée dessert cupcake cake sesame snaps toffee pie. Sweet roll
-                sweet roll chupa chups jelly-o gummies tootsie roll sweet
-                halvah oat cake. Carrot cake carrot cake muffin bonbon sesame
-                snaps brownie. Bonbon candy macaroon fruitcake candy canes.
-                Cake pudding danish liquorice cupcake jelly-o ice cream.
-                Liquorice lollipop danish tootsie roll toffee. Gingerbread
-                chocolate candy canes donut lemon drops apple pie danish bear
-                claw. Caramels cake jelly jelly sweet chocolate bar gingerbread
-                icing. Cake soufflé lollipop pudding marshmallow candy canes
-                tootsie roll danish.
-            </p>
-            <p>
-                Carrot cake biscuit icing pudding danish topping powder.
-                Croissant sugar plum pudding halvah chocolate. Cotton candy
-                tart cake bonbon tart. Shortbread jelly fruitcake icing pastry.
-                Dragée dessert cupcake cake sesame snaps toffee pie. Sweet roll
-                sweet roll chupa chups jelly-o gummies tootsie roll sweet
-                halvah oat cake. Carrot cake carrot cake muffin bonbon sesame
-                snaps brownie. Bonbon candy macaroon fruitcake candy canes.
-                Cake pudding danish liquorice cupcake jelly-o ice cream.
-                Liquorice lollipop danish tootsie roll toffee. Gingerbread
-                chocolate candy canes donut lemon drops apple pie danish bear
-                claw. Caramels cake jelly jelly sweet chocolate bar gingerbread
-                icing. Cake soufflé lollipop pudding marshmallow candy canes
-                tootsie roll danish.
-            </p>
-        </div>
-    </body>
+		<title>Talon</title>
+	</head>
+	<body>
+		<div id="main">
+			<div style="width: 100%; max-width: 450px; display: inline-block">
+				<svg
+					version="1.1"
+					viewBox="0 0 119.06 34.396"
+					xmlns="http://www.w3.org/2000/svg"
+					aria-label="Talon"
+				>
+					<defs>
+						<filter
+							id="filter106970"
+							x="-.069601"
+							y="-.32851"
+							width="1.1682"
+							height="1.7939"
+							color-interpolation-filters="sRGB"
+						>
+							<feOffset dx="3" dy="3" />
+							<feGaussianBlur result="blur" stdDeviation="3" />
+							<feFlood flood-color="rgb(121,53,223)" result="flood" />
+							<feComposite
+								in="flood"
+								in2="SourceGraphic"
+								operator="in"
+								result="composite"
+							/>
+							<feBlend in="blur" in2="composite" />
+						</filter>
+					</defs>
+					<g transform="translate(-5.1682 -.21323)">
+						<text
+							transform="scale(.26458)"
+							fill="#000000"
+							font-family="sans-serif"
+							font-size="40px"
+							style="
+								line-height: 1.25;
+								shape-inside: url(#rect3620);
+								white-space: pre;
+							"
+							xml:space="preserve"
+						/>
+						<g
+							fill="#7935df"
+							filter="url(#filter106970)"
+							stroke-width=".72282"
+							aria-label="Talon"
+						>
+							<path
+								d="m11.476 6.1383q2.9788 0.11294 8.7599 0.23294 6.1905-0.12 9.6282-0.23294v1.6165q-1.327-0.05647-4.1647-0.05647-1.4188-0.05647-4.1929-0.05647 0.05647 2.9506 0.05647 4.9411 0 2.0259 0.03529 4.8353 0 2.8023 0.05647 5.0541 0.02824 2.287 0.0847 3.8188h-2.0823q0.17647-5.4352 0.17647-13.56v-5.0894q-1.3623 0.028235-3.8188 0.028235t-4.5388 0.084705z"
+							/>
+							<path
+								d="m30.323 25.945q0.89646-1.7365 2.4282-4.8 1.5035-3.0353 2.8094-5.6682 1.2988-2.6047 2.5976-5.2305 1.2706-2.6329 2.5764-5.2376h0.05647q1.6165 2.9788 2.9506 5.4988 1.2988 2.5412 2.6894 5.1741 1.3835 2.6612 2.9435 5.5764 1.5388 2.9223 2.4917 4.567l-1.6518 1.0447-4.1294-7.807-10.673 0.34588q-0.60705 1.2423-1.7365 3.7341-1.1223 2.4847-1.7012 3.727zm5.7811-7.8917 9.374-0.35294q-2.4635-4.7082-4.7435-9.4235-1.1294 2.3153-2.52 5.3505-1.4118 3.0635-2.1106 4.4258z"
+							/>
+							<path
+								d="m66.005 26.58q-2.6612-0.11294-4.7153-0.17647-2.0753-0.02824-4.4188-0.11294 0.16941-3.9882 0.16941-8.4705 0-2.9506-0.11294-11.739h1.9623q-0.11294 5.407-0.14118 8.2376 0.02824 3.5011 0.02824 10.553 2.4 0 3.6141 0.05647 1.2423-0.05647 3.6141-0.05647z"
+							/>
+							<path
+								d="m79.65 7.0348q-2.4282 0.17647-4.3341 1.5882-1.9341 1.4188-2.9506 3.5859-1.0094 2.167-1.0094 4.4823 0 3.7623 2.1953 6.247 2.0823 2.4 5.7529 2.4 0.17647 0 0.34588 0 3.6141-0.0847 5.9858-2.5694 2.3717-2.4917 2.6047-6.0776 0.02823-0.43058 0.02823-0.86823 0-2.5694-0.89646-4.4823-1.0376-2.1953-2.9506-3.2611-1.9341-1.0447-4.2211-1.0447zm0-1.4188h1.0729q1.8494 0 2.8659 0.35294 2.0188 0.54352 3.5788 1.8776 1.567 1.3553 2.3435 3.5576 0.60705 1.7576 0.60705 4.0447 0 0.60705-0.02823 1.2423-0.2047 2.4-1.5953 4.8564-1.3835 2.4565-3.84 3.847-1.9059 1.1859-5.0047 1.3623-0.25412 0-0.51529 0-2.4564 0-4.567-1.0165-2.3435-1.1294-3.7341-3.4094-1.3835-2.2588-1.4188-5.3505 0.06353-0.16941 0.06353-0.28941 0.02824-2.9223 1.4118-5.407 1.3906-2.4564 3.7059-3.9882 2.3082-1.5035 5.0541-1.68z"
+							/>
+							<path
+								d="m96.739 4.9524h0.11294q2.6612 3.007 5.2941 5.9576 2.6047 2.9506 3.4094 3.8188 0.78352 0.89646 2.9788 3.3811 2.167 2.5129 4.1364 4.9129h0.0565q0-0.95293 0-1.9059-0.0282-0.98117 0-1.9694 0.0282-1.9623 0.17647-6.6494 0.14117-4.6517 0.16941-6.4729h1.8494q-0.0847 2.3082-0.28941 6.6776-0.22588 4.3906-0.34588 7.9482-0.14117 3.5576-0.19764 6.2188h-0.0635q-1.7294-2.0259-5.407-6.127-3.6988-4.1082-5.6894-6.3952-2.0259-2.28-4.8353-5.6047h-0.05647l-0.37412 17.661-1.8776-0.05647z"
+							/>
+						</g>
+					</g>
+				</svg>
+			</div>
+			<h1>development</h1>
+			<p>
+				Carrot cake biscuit icing pudding danish topping powder. Croissant sugar
+				plum pudding halvah chocolate. Cotton candy tart cake bonbon tart.
+				Shortbread jelly fruitcake icing pastry. Dragée dessert cupcake cake
+				sesame snaps toffee pie. Sweet roll sweet roll chupa chups jelly-o
+				gummies tootsie roll sweet halvah oat cake. Carrot cake carrot cake
+				muffin bonbon sesame snaps brownie. Bonbon candy macaroon fruitcake
+				candy canes. Cake pudding danish liquorice cupcake jelly-o ice cream.
+				Liquorice lollipop danish tootsie roll toffee. Gingerbread chocolate
+				candy canes donut lemon drops apple pie danish bear claw. Caramels cake
+				jelly jelly sweet chocolate bar gingerbread icing. Cake soufflé lollipop
+				pudding marshmallow candy canes tootsie roll danish.
+			</p>
+			<p>
+				Carrot cake biscuit icing pudding danish topping powder. Croissant sugar
+				plum pudding halvah chocolate. Cotton candy tart cake bonbon tart.
+				Shortbread jelly fruitcake icing pastry. Dragée dessert cupcake cake
+				sesame snaps toffee pie. Sweet roll sweet roll chupa chups jelly-o
+				gummies tootsie roll sweet halvah oat cake. Carrot cake carrot cake
+				muffin bonbon sesame snaps brownie. Bonbon candy macaroon fruitcake
+				candy canes. Cake pudding danish liquorice cupcake jelly-o ice cream.
+				Liquorice lollipop danish tootsie roll toffee. Gingerbread chocolate
+				candy canes donut lemon drops apple pie danish bear claw. Caramels cake
+				jelly jelly sweet chocolate bar gingerbread icing. Cake soufflé lollipop
+				pudding marshmallow candy canes tootsie roll danish.
+			</p>
+			<p>
+				Carrot cake biscuit icing pudding danish topping powder. Croissant sugar
+				plum pudding halvah chocolate. Cotton candy tart cake bonbon tart.
+				Shortbread jelly fruitcake icing pastry. Dragée dessert cupcake cake
+				sesame snaps toffee pie. Sweet roll sweet roll chupa chups jelly-o
+				gummies tootsie roll sweet halvah oat cake. Carrot cake carrot cake
+				muffin bonbon sesame snaps brownie. Bonbon candy macaroon fruitcake
+				candy canes. Cake pudding danish liquorice cupcake jelly-o ice cream.
+				Liquorice lollipop danish tootsie roll toffee. Gingerbread chocolate
+				candy canes donut lemon drops apple pie danish bear claw. Caramels cake
+				jelly jelly sweet chocolate bar gingerbread icing. Cake soufflé lollipop
+				pudding marshmallow candy canes tootsie roll danish.
+			</p>
+			<p>
+				Carrot cake biscuit icing pudding danish topping powder. Croissant sugar
+				plum pudding halvah chocolate. Cotton candy tart cake bonbon tart.
+				Shortbread jelly fruitcake icing pastry. Dragée dessert cupcake cake
+				sesame snaps toffee pie. Sweet roll sweet roll chupa chups jelly-o
+				gummies tootsie roll sweet halvah oat cake. Carrot cake carrot cake
+				muffin bonbon sesame snaps brownie. Bonbon candy macaroon fruitcake
+				candy canes. Cake pudding danish liquorice cupcake jelly-o ice cream.
+				Liquorice lollipop danish tootsie roll toffee. Gingerbread chocolate
+				candy canes donut lemon drops apple pie danish bear claw. Caramels cake
+				jelly jelly sweet chocolate bar gingerbread icing. Cake soufflé lollipop
+				pudding marshmallow candy canes tootsie roll danish.
+			</p>
+			<p>
+				Carrot cake biscuit icing pudding danish topping powder. Croissant sugar
+				plum pudding halvah chocolate. Cotton candy tart cake bonbon tart.
+				Shortbread jelly fruitcake icing pastry. Dragée dessert cupcake cake
+				sesame snaps toffee pie. Sweet roll sweet roll chupa chups jelly-o
+				gummies tootsie roll sweet halvah oat cake. Carrot cake carrot cake
+				muffin bonbon sesame snaps brownie. Bonbon candy macaroon fruitcake
+				candy canes. Cake pudding danish liquorice cupcake jelly-o ice cream.
+				Liquorice lollipop danish tootsie roll toffee. Gingerbread chocolate
+				candy canes donut lemon drops apple pie danish bear claw. Caramels cake
+				jelly jelly sweet chocolate bar gingerbread icing. Cake soufflé lollipop
+				pudding marshmallow candy canes tootsie roll danish.
+			</p>
+			<p>
+				Carrot cake biscuit icing pudding danish topping powder. Croissant sugar
+				plum pudding halvah chocolate. Cotton candy tart cake bonbon tart.
+				Shortbread jelly fruitcake icing pastry. Dragée dessert cupcake cake
+				sesame snaps toffee pie. Sweet roll sweet roll chupa chups jelly-o
+				gummies tootsie roll sweet halvah oat cake. Carrot cake carrot cake
+				muffin bonbon sesame snaps brownie. Bonbon candy macaroon fruitcake
+				candy canes. Cake pudding danish liquorice cupcake jelly-o ice cream.
+				Liquorice lollipop danish tootsie roll toffee. Gingerbread chocolate
+				candy canes donut lemon drops apple pie danish bear claw. Caramels cake
+				jelly jelly sweet chocolate bar gingerbread icing. Cake soufflé lollipop
+				pudding marshmallow candy canes tootsie roll danish.
+			</p>
+			<p>
+				Carrot cake biscuit icing pudding danish topping powder. Croissant sugar
+				plum pudding halvah chocolate. Cotton candy tart cake bonbon tart.
+				Shortbread jelly fruitcake icing pastry. Dragée dessert cupcake cake
+				sesame snaps toffee pie. Sweet roll sweet roll chupa chups jelly-o
+				gummies tootsie roll sweet halvah oat cake. Carrot cake carrot cake
+				muffin bonbon sesame snaps brownie. Bonbon candy macaroon fruitcake
+				candy canes. Cake pudding danish liquorice cupcake jelly-o ice cream.
+				Liquorice lollipop danish tootsie roll toffee. Gingerbread chocolate
+				candy canes donut lemon drops apple pie danish bear claw. Caramels cake
+				jelly jelly sweet chocolate bar gingerbread icing. Cake soufflé lollipop
+				pudding marshmallow candy canes tootsie roll danish.
+			</p>
+		</div>
+	</body>
 
-    <script id="talon-data" type="application/json">
-        {
-            "root_path": "/",
-            "current_page": "2",
-            "current_version": "6",
-            "versions": {
-                "3": {
-                    "date": "2021-06-15T11:12:21+00:00",
-                    "name": "0.1.0",
-                    "user": "ThetaDev",
-                    "tags": {
-                        "commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489"
-                    }
-                },
-                "4": {
-                    "date": "2021-06-20T16:48:21+00:00",
-                    "name": "0.1.1",
-                    "user": "ThetaDev",
-                    "tags": {
-                        "commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489"
-                    }
-                },
-                "5": {
-                    "date": "2021-06-22T12:08:21+00:00",
-                    "name": "0.1.2",
-                    "user": "ThetaDev",
-                    "tags": {
-                        "commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489"
-                    }
-                },
-                "6": {
-                    "date": "2021-07-02T16:12:40+00:00",
-                    "name": "0.1.3",
-                    "user": "ThetaDev",
-                    "tags": {
-                        "commit": "bbc7342580b48433481857bfe95e58784a508275"
-                    }
-                }
-            },
-            "pages": {
-                "1": {
-                    "name": "ThetaDev",
-                    "path": "",
-                    "color": "#1f91ee",
-                    "visibility": "featured",
-                    "source": {
-                        "url": "https://github.com/Theta-Dev",
-                        "type": "github"
-                    }
-                },
-                "2": {
-                    "name": "Talon",
-                    "path": "Talon",
-                    "color": "#4b228a",
-                    "visibility": "featured",
-                    "source": {
-                        "url": "https://github.com/Theta-Dev/Talon",
-                        "type": "github"
-                    }
-                },
-                "3": {
-                    "name": "Spotify-Gender-Ex",
-                    "path": "Spotify-Gender-Ex",
-                    "color": "#1DB954",
-                    "image": "https://raw.githubusercontent.com/Theta-Dev/Spotify-Gender-Ex/master/assets/logo_square.svg",
-                    "visibility": "featured",
-                    "source": {
-                        "url": "https://github.com/Theta-Dev/Spotify-Gender-Ex",
-                        "type": "github"
-                    }
-                },
-                "4": {
-                    "name": "A1",
-                    "path": "tests/a1",
-                    "color": "#ff0000",
-                    "visibility": "searchable"
-                },
-                "5": {
-                    "name": "B1",
-                    "path": "tests/b1",
-                    "color": "#00ff00",
-                    "visibility": "searchable"
-                },
-                "6": {
-                    "name": "C1",
-                    "path": "tests/c1",
-                    "color": "#0000ff",
-                    "visibility": "searchable"
-                }
-            }
-        }
-    </script>
+	<script id="talon-data" type="application/json">
+		{
+			"root_path": "/",
+			"current_page": "2",
+			"current_version": "6",
+			"versions": {
+				"3": {
+					"date": "2021-06-15T11:12:21+00:00",
+					"name": "0.1.0",
+					"user": "ThetaDev",
+					"tags": {
+						"commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489"
+					}
+				},
+				"4": {
+					"date": "2021-06-20T16:48:21+00:00",
+					"name": "0.1.1",
+					"user": "ThetaDev",
+					"tags": {
+						"commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489"
+					}
+				},
+				"5": {
+					"date": "2021-06-22T12:08:21+00:00",
+					"name": "0.1.2",
+					"user": "ThetaDev",
+					"tags": {
+						"commit": "ec55eba5ae45640c3d225c2471920fd3c9a36489"
+					}
+				},
+				"6": {
+					"date": "2021-07-02T16:12:40+00:00",
+					"name": "0.1.3",
+					"user": "ThetaDev",
+					"tags": {
+						"commit": "bbc7342580b48433481857bfe95e58784a508275"
+					}
+				}
+			},
+			"pages": {
+				"1": {
+					"name": "ThetaDev",
+					"path": "",
+					"color": "#1f91ee",
+					"visibility": "featured",
+					"source": {
+						"url": "https://github.com/Theta-Dev",
+						"type": "github"
+					}
+				},
+				"2": {
+					"name": "Talon",
+					"path": "Talon",
+					"color": "#4b228a",
+					"visibility": "featured",
+					"source": {
+						"url": "https://github.com/Theta-Dev/Talon",
+						"type": "github"
+					}
+				},
+				"3": {
+					"name": "Spotify-Gender-Ex",
+					"path": "Spotify-Gender-Ex",
+					"color": "#1DB954",
+					"image": "https://raw.githubusercontent.com/Theta-Dev/Spotify-Gender-Ex/master/assets/logo_square.svg",
+					"visibility": "featured",
+					"source": {
+						"url": "https://github.com/Theta-Dev/Spotify-Gender-Ex",
+						"type": "github"
+					}
+				},
+				"4": {
+					"name": "A1",
+					"path": "tests/a1",
+					"color": "#ff0000",
+					"visibility": "searchable"
+				},
+				"5": {
+					"name": "B1",
+					"path": "tests/b1",
+					"color": "#00ff00",
+					"visibility": "searchable"
+				},
+				"6": {
+					"name": "C1",
+					"path": "tests/c1",
+					"color": "#0000ff",
+					"visibility": "searchable"
+				}
+			}
+		}
+	</script>
 
-    <script src="./talon.js"></script>
+	<script src="./talon.js"></script>
 </html>

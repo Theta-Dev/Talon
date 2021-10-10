@@ -1,24 +1,35 @@
 # Talon Menu
 
-> ✨ Bootstrapped with Create Snowpack App (CSA).
+This is the sidebar menu that Talon injects into any page it displays.
+It was created using [Svelte](https://svelte.deb).
 
 ## Available Scripts
 
-### npm start
+### npm run dev
 
 Runs the app in the development mode.
-Open http://localhost:8080 to view it in the browser.
+Open http://localhost:5000 to view it in the browser.
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+### npm run pc
+
+(Pre-commit): Lint and format.
 
 ### npm run build
 
-Builds a static copy of your site to the `build/` folder.
-Your app is ready to be deployed!
+Builds the application and outputs a `dist/talon.js` file,
+ready to be deployed!
 
-**For the best production performance:** Add a build bundler plugin like [@snowpack/plugin-webpack](https://github.com/snowpackjs/snowpack/tree/main/plugins/plugin-webpack) or [snowpack-plugin-rollup-bundle](https://github.com/ParamagicDev/snowpack-plugin-rollup-bundle) to your `snowpack.config.mjs` config file.
+The menu can be injected by adding these tags to the bottom of any
+html document:
 
-### Q: What about Eject?
-
-No eject needed! Snowpack guarantees zero lock-in, and CSA strives for the same.
+```html
+<script id="talon-data" type="application/json">
+  {
+    "root_path": "/",
+    "current_page": "1",
+    "current_version": "5",
+    ...
+  }
+</script>
+<script src="talon.js"></script>
+```

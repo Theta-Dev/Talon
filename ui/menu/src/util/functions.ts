@@ -1,5 +1,5 @@
 function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleString(navigator.language)
+	return new Date(dateString).toLocaleString(navigator.language)
 }
 
 export {formatDate}
