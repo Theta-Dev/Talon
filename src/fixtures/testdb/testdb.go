@@ -83,18 +83,30 @@ func EmptyAllTables(db database.Database) {
 }
 
 func InsertTestData(db database.Database) {
-	try.X(db.AddUser("ThetaDev", "1234", &database.Permission{
-		AllowedPaths: "#",
-		IsAdmin:      true,
-		CanCreate:    true,
+	try.Check(db.UserAdd(&database.User{
+		Name: "ThetaDev",
+		PasswordHash: "$2a$10$psQvPDk7kDGBf5khGTohRuQajdmwGrY1OFb9c2b5pNiexuII.HMyO", // 1234
+		Permission: &database.Permission{
+			AllowedPaths: "#",
+			IsAdmin:      true,
+			CanCreate:    true,
+		},
 	}))
 
-	try.X(db.AddUser("Zoey", "5678", &database.Permission{
-		AllowedPaths: "Talon/#",
-		CanCreate:    true,
+	try.Check(db.UserAdd(&database.User{
+		Name: "Zoey",
+		PasswordHash: "$2a$10$732AemL9NzKCqT/QrJvpx.3UD/v/YmdM9aY.YjohgmgzAB70k0Jx6", // 5678
+		Permission: &database.Permission{
+			AllowedPaths: "Talon/#",
+			CanCreate:    true,
+		},
 	}))
 
-	try.X(db.AddUser("Izzy", "2020", &database.Permission{
-		AllowedPaths: "Talon/#",
+	try.Check(db.UserAdd(&database.User{
+		Name: "Izzy",
+		PasswordHash: "$2a$10$AsSei6htRq68e4U3x3sni.QwMUTtYIrz7qgdEKX2nm79.Or8HtIii", // 2020
+		Permission: &database.Permission{
+			AllowedPaths: "Talon/#",
+		},
 	}))
 }

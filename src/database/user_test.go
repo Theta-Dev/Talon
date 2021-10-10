@@ -9,97 +9,89 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAddUser(t *testing.T) {
+func TestUserAdd(t *testing.T) {
 	db := testdb.Open()
 
-	createdUser := try.X(db.AddUser("Tris", "mypw", &database.Permission{
-		CanCreate:     true,
-		AllowedPaths:  "/dauntless",
-		MaxSize:       5,
-		MaxVersions:   3,
-		MaxVisibility: 1,
-	})).(*database.User)
+	params := []struct {
+		name string
+		user *database.User
+	}{
+		{
+			name: "with_perm",
+			user: &database.User{
+				Name:         "Tris",
+				PasswordHash: "xhashx",
+				Permission: &database.Permission{
+					IsAdmin:       false,
+					CanCreate:     true,
+					AllowedPaths:  "Talon",
+					MaxSize:       5,
+					MaxVersions:   3,
+					MaxVisibility: 1,
+				},
+			},
+		},
+		{
+			name: "empty_perm",
+			user: &database.User{
+				Name:         "Tris",
+				PasswordHash: "xhashx",
+				Permission:   &database.Permission{},
+			},
+		},
+		{
+			name: "nil_perm",
+			user: &database.User{
+				Name:         "Tris",
+				PasswordHash: "xhashx",
+			},
+		},
+	}
 
-	assert.EqualValues(t, 4, createdUser.ID)
+	for i, p := range params {
+		t.Run(p.name, func(t *testing.T) {
+			try.Check(db.UserAdd(p.user))
 
-	gotUser := try.X(db.GetUserByID(createdUser.ID)).(*database.User)
+			assert.EqualValues(t, 4+i, p.user.ID)
 
-	assert.EqualValues(t, 4, gotUser.ID)
-	assert.Equal(t, "Tris", gotUser.Name)
+			gotUser := try.X(db.UserByID(p.user.ID)).(*database.User)
+
+			assert.EqualValues(t, 4+i, gotUser.ID)
+			assert.Equal(t, "Tris", gotUser.Name)
+			assert.Equal(t, "xhashx", gotUser.PasswordHash)
+			assert.EqualValues(t, p.user.Permission, gotUser.Permission)
+		})
+	}
 }
 
-func TestGetUserByID(t *testing.T) {
+func TestUserByID(t *testing.T) {
 	db := testdb.Open()
 
 	t.Run("found", func(t *testing.T) {
-		user := try.X(db.GetUserByID(1)).(*database.User)
+		user := try.X(db.UserByID(1)).(*database.User)
 
 		assert.EqualValues(t, 1, user.ID)
 		assert.Equal(t, "ThetaDev", user.Name)
 	})
 
 	t.Run("not_found", func(t *testing.T) {
-		noUser, err := db.GetUserByID(0)
+		noUser := try.X(db.UserByID(0)).(*database.User)
 		assert.Nil(t, noUser)
-		assert.Equal(t, "error getting user: record not found", err.Error())
 	})
 }
 
-func TestGetUserByName(t *testing.T) {
+func TestUserByName(t *testing.T) {
 	db := testdb.Open()
 
 	t.Run("found", func(t *testing.T) {
-		user := try.X(db.GetUserByName("ThetaDev")).(*database.User)
+		user := try.X(db.UserByName("ThetaDev")).(*database.User)
 
 		assert.EqualValues(t, 1, user.ID)
 		assert.Equal(t, "ThetaDev", user.Name)
 	})
 
 	t.Run("not_found", func(t *testing.T) {
-		noUser := try.X(db.GetUserByName("XYZ")).(*database.User)
+		noUser := try.X(db.UserByName("XYZ")).(*database.User)
 		assert.Nil(t, noUser)
-	})
-}
-
-func TestLoginUser(t *testing.T) {
-	db := testdb.Open()
-
-	t.Run("success", func(t *testing.T) {
-		user := try.X(db.LoginUser("ThetaDev", "1234")).(*database.User)
-
-		assert.EqualValues(t, 1, user.ID)
-		assert.Equal(t, "ThetaDev", user.Name)
-	})
-
-	t.Run("wrong_username", func(t *testing.T) {
-		user, err := db.LoginUser("XYZ", "1234")
-
-		assert.Nil(t, user)
-		assert.Equal(t, "error logging in: username/password wrong", err.Error())
-	})
-
-	t.Run("wrong_password", func(t *testing.T) {
-		user, err := db.LoginUser("ThetaDev", "bananas")
-
-		assert.Nil(t, user)
-		assert.Equal(t, "error logging in: username/password wrong", err.Error())
-	})
-}
-
-func TestUpdateUserPassword(t *testing.T) {
-	db := testdb.Open()
-
-	t.Run("success", func(t *testing.T) {
-		try.Check(db.UpdateUserPassword(1, "1234", "bananas"))
-
-		user, _ := db.LoginUser("ThetaDev", "1234")
-		assert.Nil(t, user)
-		user = try.X(db.LoginUser("ThetaDev", "bananas")).(*database.User)
-		assert.EqualValues(t, 1, user.ID)
-	})
-
-	t.Run("fail", func(t *testing.T) {
-		err := db.UpdateUserPassword(1, "1234", "bananas")
-		assert.EqualValues(t, "error changing password: username/password wrong", err.Error())
 	})
 }
