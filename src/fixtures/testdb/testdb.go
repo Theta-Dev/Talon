@@ -72,8 +72,12 @@ func EmptyAllTables(db database.Database) {
 	for _, n := range database.TableNames {
 		queries = append(queries, "DELETE FROM "+n)
 
-		if !db.IsDialect(database.DialectSqlite) {
-			queries = append(queries, "ALTER TABLE "+n+" AUTO_INCREMENT=1")
+		if n != "talon_infos" {
+			if db.IsDialect(database.DialectMySql) {
+				queries = append(queries, "ALTER TABLE "+n+" AUTO_INCREMENT=1")
+			} else if db.IsDialect(database.DialectPostgres) {
+				queries = append(queries, "ALTER SEQUENCE "+n+"_id_seq RESTART WITH 1")
+			}
 		}
 	}
 

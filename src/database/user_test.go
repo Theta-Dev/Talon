@@ -20,7 +20,7 @@ func TestUserAdd(t *testing.T) {
 			name: "with_perm",
 			user: &database.User{
 				Name:         "Tris",
-				PasswordHash: "xhashx",
+				PasswordHash: "hash",
 				Permission: &database.Permission{
 					IsAdmin:       false,
 					CanCreate:     true,
@@ -35,7 +35,7 @@ func TestUserAdd(t *testing.T) {
 			name: "empty_perm",
 			user: &database.User{
 				Name:         "Tris",
-				PasswordHash: "xhashx",
+				PasswordHash: "hash",
 				Permission:   &database.Permission{},
 			},
 		},
@@ -43,7 +43,7 @@ func TestUserAdd(t *testing.T) {
 			name: "nil_perm",
 			user: &database.User{
 				Name:         "Tris",
-				PasswordHash: "xhashx",
+				PasswordHash: "hash",
 			},
 		},
 	}
@@ -58,7 +58,7 @@ func TestUserAdd(t *testing.T) {
 
 			assert.EqualValues(t, 4+i, gotUser.ID)
 			assert.Equal(t, "Tris", gotUser.Name)
-			assert.Equal(t, "xhashx", gotUser.PasswordHash)
+			assert.Equal(t, "hash", gotUser.PasswordHash)
 			assert.EqualValues(t, p.user.Permission, gotUser.Permission)
 		})
 	}
