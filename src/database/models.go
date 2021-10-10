@@ -2,8 +2,6 @@ package database
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 var AllModels = []interface{}{
@@ -37,7 +35,7 @@ type Website struct {
 	LogoID      uint      ``
 	Color       *string   `gorm:"type:varchar(20)"`
 	Visibility  uint      ``
-	User        *User     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	User        *User     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 	UserID      uint      ``
 	CreatedAt   time.Time ``
 	MaxVersions int       ``
@@ -51,7 +49,7 @@ type Version struct {
 	Name      string        `gorm:"type:varchar(100);not null"`
 	Website   *Website      ``
 	WebsiteID uint          ``
-	User      User          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	User      *User         `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 	UserID    uint          ``
 	CreatedAt time.Time     ``
 	Files     []VersionFile `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
@@ -72,20 +70,19 @@ type File struct {
 }
 
 type User struct {
-	ID           uint           `gorm:"primary_key;unique_index;not null;auto_increment"`
-	Name         string         `gorm:"type:varchar(50)"`
-	PasswordHash string         `gorm:"type:varchar(200)"`
-	CreatedAt    time.Time      ``
-	Deleted      gorm.DeletedAt ``
-	Permission   *Permission    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
-	PermissionID uint           ``
+	ID           uint        `gorm:"primary_key;unique_index;not null;auto_increment"`
+	Name         string      `gorm:"type:varchar(50)"`
+	PasswordHash string      `gorm:"type:varchar(200)"`
+	CreatedAt    time.Time   ``
+	Permission   *Permission `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	PermissionID uint        ``
 }
 
 type ApiUser struct {
 	ID           uint        `gorm:"primary_key;unique_index;not null;auto_increment"`
 	KeyHash      string      `gorm:"type:varchar(200)"`
 	CreatedAt    time.Time   ``
-	Creator      User        `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Creator      *User       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	CreatorID    uint        ``
 	Permission   *Permission `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 	PermissionID uint        ``

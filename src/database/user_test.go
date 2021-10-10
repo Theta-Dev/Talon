@@ -64,6 +64,18 @@ func TestUserAdd(t *testing.T) {
 	}
 }
 
+func TestUserUpdate(t *testing.T) {
+	db := testdb.Open()
+
+	user := try.X(db.UserByID(1)).(*database.User)
+	user.Name = "Eric"
+	try.Check(db.UserUpdate(user))
+
+	gotUser := try.X(db.UserByName("Eric")).(*database.User)
+	assert.EqualValues(t, 1, gotUser.ID)
+	assert.Equal(t, "Eric", gotUser.Name)
+}
+
 func TestUserByID(t *testing.T) {
 	db := testdb.Open()
 
@@ -94,4 +106,27 @@ func TestUserByName(t *testing.T) {
 		noUser := try.X(db.UserByName("XYZ")).(*database.User)
 		assert.Nil(t, noUser)
 	})
+}
+
+func TestUsersGetAll(t *testing.T) {
+	db := testdb.Open()
+
+	users := try.X(db.UsersGetAll()).([]*database.User)
+
+	assert.Equal(t, "ThetaDev", users[0].Name)
+	assert.Equal(t, "Zoey", users[1].Name)
+	assert.Equal(t, "Izzy", users[2].Name)
+
+	assert.Equal(t, "#", users[0].Permission.AllowedPaths)
+	assert.Equal(t, "Talon/#", users[1].Permission.AllowedPaths)
+	assert.Equal(t, "Talon", users[2].Permission.AllowedPaths)
+}
+
+func TestUserDeleteByID(t *testing.T) {
+	db := testdb.Open()
+
+	try.Check(db.UserDeleteByID(2))
+
+	gotUser := try.X(db.UserByID(2)).(*database.User)
+	assert.Nil(t, gotUser)
 }

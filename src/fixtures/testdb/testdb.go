@@ -88,7 +88,7 @@ func EmptyAllTables(db database.Database) {
 
 func InsertTestData(db database.Database) {
 	try.Check(db.UserAdd(&database.User{
-		Name: "ThetaDev",
+		Name:         "ThetaDev",
 		PasswordHash: "$2a$10$psQvPDk7kDGBf5khGTohRuQajdmwGrY1OFb9c2b5pNiexuII.HMyO", // 1234
 		Permission: &database.Permission{
 			AllowedPaths: "#",
@@ -98,7 +98,7 @@ func InsertTestData(db database.Database) {
 	}))
 
 	try.Check(db.UserAdd(&database.User{
-		Name: "Zoey",
+		Name:         "Zoey",
 		PasswordHash: "$2a$10$732AemL9NzKCqT/QrJvpx.3UD/v/YmdM9aY.YjohgmgzAB70k0Jx6", // 5678
 		Permission: &database.Permission{
 			AllowedPaths: "Talon/#",
@@ -107,10 +107,10 @@ func InsertTestData(db database.Database) {
 	}))
 
 	try.Check(db.UserAdd(&database.User{
-		Name: "Izzy",
+		Name:         "Izzy",
 		PasswordHash: "$2a$10$AsSei6htRq68e4U3x3sni.QwMUTtYIrz7qgdEKX2nm79.Or8HtIii", // 2020
 		Permission: &database.Permission{
-			AllowedPaths: "Talon/#",
+			AllowedPaths: "Talon",
 		},
 	}))
 }
