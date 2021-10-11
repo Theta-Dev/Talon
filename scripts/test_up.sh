@@ -11,7 +11,10 @@ else
     echo "containers started"
 
     if [[ "$1" == "wait" ]]; then
-        echo "waiting 15s for startup"
-        sleep 15
+        echo "waiting for startup"
+
+        while ! curl localhost:3306 --http0.9 --output - &> /dev/null; do
+        	sleep 1
+        done
     fi
 fi
