@@ -23,12 +23,12 @@ const (
 )
 
 type Connection struct {
-	Dialect string `def:"sqlite"`
-	File    string `def:"database.db"`
-	Host    string `def:"127.0.0.1"`
-	User    string `def:"user"`
-	Pass    string `def:"pass"`
-	DbName  string `def:"db"`
+	Dialect string
+	File    string
+	Host    string
+	User    string
+	Pass    string
+	DbName  string
 }
 
 func splitHostUrl(url string, defaultPort string) (host string, port string) {

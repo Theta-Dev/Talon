@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
 
-dialects=("sqlite" "mysql" "postgres")
+dialects=${@:1}
+
+if [ -z $dialects ]; then
+	dialects=("sqlite" "mysql" "postgres")
+fi
 
 cd -- "$( dirname -- "${BASH_SOURCE[0]}" )/../src"
 
@@ -21,6 +25,7 @@ printRed() {
     echo -e "\e[30;41m ${1} \e[0m ${@:2}"
 }
 
+successes=""
 failures=""
 
 for dialect in "${dialects[@]}" ; do
@@ -30,6 +35,7 @@ for dialect in "${dialects[@]}" ; do
 
     if DIALECT=${dialect} GOFLAGS="-count=1" go test -v -p 1 -timeout 1m ./...; then
         printGreen "PASS" $dialect
+		successes+=${dialect}" "
     else
         printRed "FAIL" $dialect
         failures+=${dialect}" "
@@ -38,7 +44,7 @@ done
 
 echo "------------------------"
 if [ -z "$failures" ]; then
-    printGreen "ALL GOOD"
+    printGreen "ALL GOOD" $successes
 else
     printRed "FAILED TESTS" $failures
     exit 1

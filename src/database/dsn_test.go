@@ -147,6 +147,14 @@ func Test_prepare(t *testing.T) {
 				Pass:    "1234",
 			},
 		},
+		{
+			name: "invalid",
+			conn: Connection{
+				Dialect: "XYZ",
+			},
+			err: "error with connection data: unknown dialect " +
+				"(allowed: sqlite, mysql, postgres)",
+		},
 	}
 
 	for _, p := range params {
@@ -158,7 +166,7 @@ func Test_prepare(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, *c, p.expect)
 			} else {
-				assert.Equal(t, p.err, err.Error())
+				assert.EqualError(t, err, p.err)
 			}
 		})
 	}

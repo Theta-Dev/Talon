@@ -1,6 +1,7 @@
 package testdb
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/Theta-Dev/Talon/src/database"
@@ -8,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestOpenDB(t *testing.T) {
+func TestEmptyAllTables(t *testing.T) {
 	db := Open()
 	u1 := &database.User{
 		Name:         "Katniss",
@@ -23,7 +24,22 @@ func TestOpenDB(t *testing.T) {
 	EmptyAllTables(db)
 	try.Check(db.UserAdd(u2))
 
-	assert.EqualValues(t, 4, u1.ID)
+	assert.EqualValues(t, len(Users)+1, u1.ID)
 	// After emptying the table, IDs should start with 1 again
 	assert.EqualValues(t, 1, u2.ID)
+}
+
+func TestExec(t *testing.T) {
+	db := Open()
+
+	n := try.Int(db.Exec("DELETE FROM users"))
+	assert.Equal(t, len(Users), n)
+}
+
+func TestGetVersion(t *testing.T) {
+	db := Open()
+
+	v := try.String(db.GetVersion())
+	reg := regexp.MustCompile(`\d\.\d`)
+	assert.Regexp(t, reg, v)
 }

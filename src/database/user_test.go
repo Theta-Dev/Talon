@@ -14,11 +14,11 @@ func TestUserAdd(t *testing.T) {
 
 	params := []struct {
 		name string
-		user *database.User
+		user database.User
 	}{
 		{
 			name: "with_perm",
-			user: &database.User{
+			user: database.User{
 				Name:         "Tris",
 				PasswordHash: "hash",
 				Permission: &database.Permission{
@@ -33,16 +33,16 @@ func TestUserAdd(t *testing.T) {
 		},
 		{
 			name: "empty_perm",
-			user: &database.User{
-				Name:         "Tris",
+			user: database.User{
+				Name:         "Max",
 				PasswordHash: "hash",
 				Permission:   &database.Permission{},
 			},
 		},
 		{
 			name: "nil_perm",
-			user: &database.User{
-				Name:         "Tris",
+			user: database.User{
+				Name:         "Lynn",
 				PasswordHash: "hash",
 			},
 		},
@@ -50,30 +50,49 @@ func TestUserAdd(t *testing.T) {
 
 	for i, p := range params {
 		t.Run(p.name, func(t *testing.T) {
-			try.Check(db.UserAdd(p.user))
+			try.Check(db.UserAdd(&p.user))
 
-			assert.EqualValues(t, 4+i, p.user.ID)
+			assert.EqualValues(t, len(testdb.Users)+1+i, p.user.ID)
 
 			gotUser := try.X(db.UserByID(p.user.ID)).(*database.User)
 
-			assert.EqualValues(t, 4+i, gotUser.ID)
-			assert.Equal(t, "Tris", gotUser.Name)
+			assert.EqualValues(t, p.user.ID, gotUser.ID)
+			assert.Equal(t, p.user.Name, gotUser.Name)
 			assert.Equal(t, "hash", gotUser.PasswordHash)
 			assert.EqualValues(t, p.user.Permission, gotUser.Permission)
 		})
 	}
+
+	t.Run("duplicate_username", func(t *testing.T) {
+		u := &database.User{
+			Name:         "ThetaDev",
+			PasswordHash: "hash",
+		}
+
+		err := db.UserAdd(u)
+		assert.EqualError(t, err, "error adding user: username ThetaDev already exists")
+	})
 }
 
 func TestUserUpdate(t *testing.T) {
 	db := testdb.Open()
 
 	user := try.X(db.UserByID(1)).(*database.User)
-	user.Name = "Eric"
-	try.Check(db.UserUpdate(user))
 
-	gotUser := try.X(db.UserByName("Eric")).(*database.User)
-	assert.EqualValues(t, 1, gotUser.ID)
-	assert.Equal(t, "Eric", gotUser.Name)
+	t.Run("ok", func(t *testing.T) {
+		user.Name = "Eric"
+		try.Check(db.UserUpdate(user))
+
+		gotUser := try.X(db.UserByName("Eric")).(*database.User)
+		assert.EqualValues(t, 1, gotUser.ID)
+		assert.Equal(t, "Eric", gotUser.Name)
+	})
+
+	t.Run("duplicate_name", func(t *testing.T) {
+		user.Name = "Izzy"
+		err := db.UserUpdate(user)
+		assert.EqualError(t, err, "error updating user 1: username Izzy already exists")
+	})
 }
 
 func TestUserByID(t *testing.T) {
@@ -108,18 +127,53 @@ func TestUserByName(t *testing.T) {
 	})
 }
 
-func TestUsersGetAll(t *testing.T) {
+func TestUserNameExists(t *testing.T) {
 	db := testdb.Open()
 
-	users := try.X(db.UsersGetAll()).([]*database.User)
+	t.Run("found", func(t *testing.T) {
+		found := try.Bool(db.UserNameExists("ThetaDev"))
+		assert.True(t, found)
+	})
 
-	assert.Equal(t, "ThetaDev", users[0].Name)
-	assert.Equal(t, "Zoey", users[1].Name)
-	assert.Equal(t, "Izzy", users[2].Name)
+	t.Run("not_found", func(t *testing.T) {
+		found := try.Bool(db.UserNameExists("XYZ"))
+		assert.False(t, found)
+	})
+}
 
-	assert.Equal(t, "#", users[0].Permission.AllowedPaths)
-	assert.Equal(t, "Talon/#", users[1].Permission.AllowedPaths)
-	assert.Equal(t, "Talon", users[2].Permission.AllowedPaths)
+func TestUsersGet(t *testing.T) {
+	db := testdb.Open()
+
+	t.Run("all", func(t *testing.T) {
+		users := try.X(db.UsersGet()).([]*database.User)
+
+		for _, u := range users {
+			i := u.ID - 1
+			assert.Equal(t, testdb.Users[i].Name, u.Name)
+			assert.Equal(t, testdb.Users[i].Permission.AllowedPaths, u.Permission.AllowedPaths)
+		}
+	})
+
+	t.Run("with_name", func(t *testing.T) {
+		users := try.X(db.UsersGet("name = ?", "Izzy")).([]*database.User)
+		assert.Len(t, users, 1)
+		assert.Equal(t, "Izzy", users[0].Name)
+		assert.Equal(t, "tests/*", users[0].Permission.AllowedPaths)
+	})
+}
+
+func TestUsersCount(t *testing.T) {
+	db := testdb.Open()
+
+	t.Run("all", func(t *testing.T) {
+		count := try.Int(db.UsersCount())
+		assert.Equal(t, len(testdb.Users), count)
+	})
+
+	t.Run("with_name", func(t *testing.T) {
+		count := try.Int(db.UsersCount("name = ?", "Izzy"))
+		assert.Equal(t, 1, count)
+	})
 }
 
 func TestUserDeleteByID(t *testing.T) {
