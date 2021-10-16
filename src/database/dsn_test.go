@@ -38,7 +38,7 @@ func Test_prepare(t *testing.T) {
 		name   string
 		conn   Connection
 		expect Connection
-		err    string
+		err    error
 	}{
 		{
 			name:   "sqlite",
@@ -94,7 +94,7 @@ func Test_prepare(t *testing.T) {
 				User:    "test",
 				Pass:    "1234",
 			},
-			err: "error with connection data: empty db name",
+			err: ErrEmptyDbName,
 		},
 		{
 			name: "mysql_no_user",
@@ -103,7 +103,7 @@ func Test_prepare(t *testing.T) {
 				DbName:  "talon",
 				Pass:    "1234",
 			},
-			err: "error with connection data: empty username",
+			err: ErrEmptyDbUsername,
 		},
 		{
 			name: "mysql_no_pw",
@@ -112,7 +112,7 @@ func Test_prepare(t *testing.T) {
 				DbName:  "talon",
 				User:    "test",
 			},
-			err: "error with connection data: empty password",
+			err: ErrEmptyDbPassword,
 		},
 		{
 			name: "postgres",
@@ -152,8 +152,7 @@ func Test_prepare(t *testing.T) {
 			conn: Connection{
 				Dialect: "XYZ",
 			},
-			err: "error with connection data: unknown dialect " +
-				"(allowed: sqlite, mysql, postgres)",
+			err: ErrUnknownSqlDialect,
 		},
 	}
 
@@ -162,11 +161,11 @@ func Test_prepare(t *testing.T) {
 			c := &p.conn
 			err := c.prepare()
 
-			if p.err == "" {
+			if p.err == nil {
 				assert.Nil(t, err)
 				assert.Equal(t, *c, p.expect)
 			} else {
-				assert.EqualError(t, err, p.err)
+				assert.ErrorIs(t, err, p.err)
 			}
 		})
 	}

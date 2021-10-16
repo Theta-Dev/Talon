@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/Theta-Dev/Talon/src/try"
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -16,8 +16,8 @@ type Database struct {
 	orm  *gorm.DB
 }
 
-func Open(conn *Connection, lgr *log.Logger) (db *Database, caught error) {
-	defer try.Returnf(&caught, "error opening db")
+func Open(conn *Connection, lgr *log.Logger) (db *Database, caught try.Err) {
+	defer try.Annotate(&caught, "error opening db")
 
 	db = &Database{conn: conn}
 
@@ -34,7 +34,7 @@ func Open(conn *Connection, lgr *log.Logger) (db *Database, caught error) {
 	}
 
 	dialector := try.X(conn.Open()).(gorm.Dialector)
-	db.orm = try.DB(gorm.Open(dialector, &cfg))
+	db.orm = tryGormDB(gorm.Open(dialector, &cfg))
 
 	sqldb := try.X(db.orm.DB()).(*sql.DB)
 
@@ -55,8 +55,8 @@ func Open(conn *Connection, lgr *log.Logger) (db *Database, caught error) {
 	return
 }
 
-func (db *Database) Migrate(printCmds bool) (caught error) {
-	defer try.Returnf(&caught, "migration error")
+func (db *Database) Migrate(printCmds bool) (caught try.Err) {
+	defer try.Annotate(&caught, "migration error")
 
 	oldLogger := db.orm.Config.Logger
 
@@ -83,8 +83,8 @@ func (db *Database) Exec(sql string, values ...interface{}) (rows int, err error
 	return int(res.RowsAffected), res.Error
 }
 
-func (db *Database) GetVersion() (version string, caught error) {
-	defer try.Returnf(&caught, "error getting version")
+func (db *Database) GetVersion() (version string, caught try.Err) {
+	defer try.Annotate(&caught, "error getting version")
 
 	var query, v string
 

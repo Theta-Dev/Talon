@@ -3,9 +3,9 @@ package database_test
 import (
 	"testing"
 
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/Theta-Dev/Talon/src/database"
 	"github.com/Theta-Dev/Talon/src/fixtures/testdb"
-	"github.com/Theta-Dev/Talon/src/try"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,7 +24,7 @@ func TestFileAdd(t *testing.T) {
 	t.Run("duplicate", func(t *testing.T) {
 		file := &database.File{Hash: "testHash"}
 		err := db.FileAdd(file)
-		assert.EqualError(t, err, "error adding file: file hash testHash already exists")
+		assert.ErrorIs(t, err, database.ErrFileHashAlreadyExists)
 	})
 }
 

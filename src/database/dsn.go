@@ -1,15 +1,13 @@
 package database
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 
-	"github.com/Theta-Dev/Talon/src/try"
-	"github.com/Theta-Dev/Talon/src/util"
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -42,8 +40,8 @@ func splitHostUrl(url string, defaultPort string) (host string, port string) {
 	return match[1], match[2]
 }
 
-func (c *Connection) prepare() (caught error) {
-	defer try.Returnf(&caught, "error with connection data")
+func (c *Connection) prepare() (caught try.Err) {
+	defer try.Annotate(&caught, "error with connection data")
 
 	c.Dialect = strings.ToLower(c.Dialect)
 
@@ -51,7 +49,7 @@ func (c *Connection) prepare() (caught error) {
 		c.Dialect = DialectSqlite
 	} else if c.Dialect != DialectSqlite &&
 		c.Dialect != DialectMySql && c.Dialect != DialectPostgres {
-		return util.ErrUnknownSqlDialect
+		return newErrUnknownSqlDialect(c.Dialect)
 	}
 
 	if c.Dialect == DialectSqlite {
@@ -62,7 +60,7 @@ func (c *Connection) prepare() (caught error) {
 	return
 }
 
-func (c *Connection) prepareFileDB() (caught error) {
+func (c *Connection) prepareFileDB() (caught try.Err) {
 	defer try.Return(&caught)
 
 	if c.File == "" {
@@ -87,13 +85,13 @@ func (c *Connection) prepareExternalDB() error {
 		c.Host = "127.0.0.1"
 	}
 	if c.User == "" {
-		return errors.New("empty username")
+		return ErrEmptyDbUsername
 	}
 	if c.Pass == "" {
-		return errors.New("empty password")
+		return ErrEmptyDbPassword
 	}
 	if c.DbName == "" {
-		return errors.New("empty db name")
+		return ErrEmptyDbName
 	}
 
 	c.File = ""
@@ -120,7 +118,7 @@ func (c *Connection) getDsn() string {
 	return ""
 }
 
-func (c *Connection) Open() (d gorm.Dialector, caught error) {
+func (c *Connection) Open() (d gorm.Dialector, caught try.Err) {
 	defer try.Return(&caught)
 
 	try.Check(c.prepare())

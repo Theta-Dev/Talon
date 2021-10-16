@@ -3,9 +3,9 @@ package database_test
 import (
 	"testing"
 
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/Theta-Dev/Talon/src/database"
 	"github.com/Theta-Dev/Talon/src/fixtures/testdb"
-	"github.com/Theta-Dev/Talon/src/try"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -70,7 +70,7 @@ func TestUserAdd(t *testing.T) {
 		}
 
 		err := db.UserAdd(u)
-		assert.EqualError(t, err, "error adding user: username ThetaDev already exists")
+		assert.ErrorIs(t, err, database.ErrUsernameAlreadyExists)
 	})
 }
 
@@ -91,7 +91,7 @@ func TestUserUpdate(t *testing.T) {
 	t.Run("duplicate_name", func(t *testing.T) {
 		user.Name = "Izzy"
 		err := db.UserUpdate(user)
-		assert.EqualError(t, err, "error updating user 1: username Izzy already exists")
+		assert.ErrorIs(t, err, database.ErrUsernameAlreadyExists)
 	})
 }
 

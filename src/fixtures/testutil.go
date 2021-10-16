@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/Theta-Dev/Talon/src/try"
+	"code.thetadev.de/ThetaDev/gotry/try"
 )
 
 func doesFileExist(filepath string) bool {

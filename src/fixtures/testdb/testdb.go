@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/Theta-Dev/Talon/src/database"
 	"github.com/Theta-Dev/Talon/src/fixtures"
-	"github.com/Theta-Dev/Talon/src/try"
 )
 
 var Users []*database.User = []*database.User{

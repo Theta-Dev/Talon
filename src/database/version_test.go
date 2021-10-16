@@ -3,9 +3,9 @@ package database_test
 import (
 	"testing"
 
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/Theta-Dev/Talon/src/database"
 	"github.com/Theta-Dev/Talon/src/fixtures/testdb"
-	"github.com/Theta-Dev/Talon/src/try"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,8 +39,7 @@ func TestVersionAdd(t *testing.T) {
 		}
 		err := db.VersionAdd(version)
 
-		assert.EqualError(t, err,
-			"error adding version: version name v0.1.1 already exists in website 1")
+		assert.ErrorIs(t, err, database.ErrVersionNameAlreadyExists)
 	})
 
 	t.Run("no_user", func(t *testing.T) {
@@ -50,7 +49,7 @@ func TestVersionAdd(t *testing.T) {
 		}
 		err := db.VersionAdd(version)
 
-		assert.EqualError(t, err, "error adding version: no user")
+		assert.ErrorIs(t, err, database.ErrEmptyUser)
 	})
 
 	t.Run("no_website", func(t *testing.T) {
@@ -60,7 +59,7 @@ func TestVersionAdd(t *testing.T) {
 		}
 		err := db.VersionAdd(version)
 
-		assert.EqualError(t, err, "error adding version: no website")
+		assert.ErrorIs(t, err, database.ErrEmptyWebsite)
 	})
 }
 
@@ -81,8 +80,7 @@ func TestVersionUpdate(t *testing.T) {
 	t.Run("duplicate_name", func(t *testing.T) {
 		version.Name = "v0.1.1"
 		err := db.VersionUpdate(version)
-		assert.EqualError(t, err,
-			"error updating version 1: version name v0.1.1 already exists in website 1")
+		assert.ErrorIs(t, err, database.ErrVersionNameAlreadyExists)
 	})
 }
 

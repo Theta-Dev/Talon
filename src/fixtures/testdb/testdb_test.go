@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"testing"
 
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/Theta-Dev/Talon/src/database"
-	"github.com/Theta-Dev/Talon/src/try"
 	"github.com/stretchr/testify/assert"
 )
 

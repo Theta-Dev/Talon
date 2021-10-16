@@ -3,9 +3,9 @@ package database_test
 import (
 	"testing"
 
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/Theta-Dev/Talon/src/database"
 	"github.com/Theta-Dev/Talon/src/fixtures/testdb"
-	"github.com/Theta-Dev/Talon/src/try"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,7 +36,7 @@ func TestVersionFileAdd(t *testing.T) {
 		}
 
 		err := db.VersionFileAdd(vf)
-		assert.EqualError(t, err, "error adding versionfile: no version")
+		assert.ErrorIs(t, err, database.ErrEmptyVersion)
 	})
 
 	t.Run("no_file", func(t *testing.T) {
@@ -46,7 +46,7 @@ func TestVersionFileAdd(t *testing.T) {
 		}
 
 		err := db.VersionFileAdd(vf)
-		assert.EqualError(t, err, "error adding versionfile: no file")
+		assert.ErrorIs(t, err, database.ErrEmptyFile)
 	})
 }
 

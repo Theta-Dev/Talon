@@ -5,7 +5,7 @@ import (
 	"path"
 	"testing"
 
-	"github.com/Theta-Dev/Talon/src/try"
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/stretchr/testify/assert"
 )
 

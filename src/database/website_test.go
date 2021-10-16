@@ -3,9 +3,9 @@ package database_test
 import (
 	"testing"
 
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"github.com/Theta-Dev/Talon/src/database"
 	"github.com/Theta-Dev/Talon/src/fixtures/testdb"
-	"github.com/Theta-Dev/Talon/src/try"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -51,8 +51,7 @@ func TestWebsiteAdd(t *testing.T) {
 		}
 
 		err := db.WebsiteAdd(ws)
-		assert.EqualError(t, err,
-			"error adding website: website path test/keeptalking already exists")
+		assert.ErrorIs(t, err, database.ErrSitePathAlreadyExists)
 	})
 
 	t.Run("no_user", func(t *testing.T) {
@@ -62,7 +61,7 @@ func TestWebsiteAdd(t *testing.T) {
 		}
 
 		err := db.WebsiteAdd(ws)
-		assert.EqualError(t, err, "error adding website: no user")
+		assert.ErrorIs(t, err, database.ErrEmptyUser)
 	})
 }
 

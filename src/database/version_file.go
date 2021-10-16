@@ -3,54 +3,55 @@ package database
 import (
 	"fmt"
 
-	"github.com/Theta-Dev/Talon/src/try"
+	"code.thetadev.de/ThetaDev/gotry/try"
 	"gorm.io/gorm"
 )
 
-func (db *Database) VersionFileAdd(versionFile *VersionFile) (caught error) {
-	defer try.Returnf(&caught, "error adding versionfile")
+func (db *Database) VersionFileAdd(versionFile *VersionFile) (caught try.Err) {
+	defer try.Annotate(&caught, "error adding versionfile")
 
 	versionFile.ID = 0
 	try.Check(versionFile.check())
-	try.ORM(db.orm.Create(&versionFile))
+	tryORM(db.orm.Create(&versionFile))
 	return
 }
 
-func (db *Database) VersionFileByID(id uint) (versionFile *VersionFile, caught error) {
-	defer try.Returnf(&caught, "error getting versionfile %d", id)
+func (db *Database) VersionFileByID(id uint) (
+	versionFile *VersionFile, caught try.Err) {
+	defer try.Annotate(&caught, fmt.Sprintf("error getting versionfile %d", id))
 
 	var f VersionFile
-	if try.ORMIsEmpty(db.orm.Scopes(versionFileFetchScope).First(&f, id)) {
+	if tryORMIsEmpty(db.orm.Scopes(versionFileFetchScope).First(&f, id)) {
 		return nil, nil
 	}
 	return &f, nil
 }
 
 func (db *Database) VersionFilesGet(query ...interface{}) (
-	versionFiles []*VersionFile, caught error) {
+	versionFiles []*VersionFile, caught try.Err) {
 
-	defer try.Returnf(&caught, "error getting versionfiles")
+	defer try.Annotate(&caught, "error getting versionfiles")
 
 	var vfs []*VersionFile
 	if len(query) > 0 {
-		try.ORM(db.orm.Scopes(versionFileFetchScope).Where(query[0], query[1:]...).Find(&vfs))
+		tryORM(db.orm.Scopes(versionFileFetchScope).Where(query[0], query[1:]...).Find(&vfs))
 	} else {
-		try.ORM(db.orm.Scopes(versionFileFetchScope).Find(&vfs))
+		tryORM(db.orm.Scopes(versionFileFetchScope).Find(&vfs))
 	}
 	return vfs, nil
 }
 
 func (db *Database) VersionFilesCount(query ...interface{}) (
-	count int, caught error) {
+	count int, caught try.Err) {
 
-	defer try.Returnf(&caught, "error counting versionfiles")
+	defer try.Annotate(&caught, "error counting versionfiles")
 
 	var c int64
 	if len(query) > 0 {
-		try.ORM(db.orm.Model(VersionFile{}).Where(
+		tryORM(db.orm.Model(VersionFile{}).Where(
 			query[0], query[1:]...).Count(&c))
 	} else {
-		try.ORM(db.orm.Model(VersionFile{}).Count(&c))
+		tryORM(db.orm.Model(VersionFile{}).Count(&c))
 	}
 	return int(c), nil
 }
@@ -61,11 +62,11 @@ func versionFileFetchScope(db *gorm.DB) *gorm.DB {
 
 func (vf *VersionFile) check() error {
 	if !isRelSet(vf.VersionID, vf.Version) {
-		return fmt.Errorf("no version")
+		return ErrEmptyVersion
 	}
 
 	if !isRelSet(vf.FileID, vf.File) {
-		return fmt.Errorf("no file")
+		return ErrEmptyFile
 	}
 	return nil
 }
