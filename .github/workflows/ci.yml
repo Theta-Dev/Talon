@@ -20,8 +20,8 @@ jobs:
 
       - name: project setup
         run: |
-        make setup
-        scripts/check_go_mod.sh
+          make setup
+          scripts/check_go_mod.sh
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
