@@ -1,4 +1,4 @@
-name: ci
+name: CI
 on:
   push:
     tags:
@@ -18,18 +18,18 @@ jobs:
         with:
           node-version: '16'
 
-      - name: project setup
+      - name: 🪄 Setup project
         run: |
           make setup
           scripts/check_go_mod.sh
 
-      - name: golangci-lint
+      - name: 💙 golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.42.1
 
-      - name: js-lint
+      - name: 💄 js-lint
         run: make js-lint
 
-      - name: test
+      - name: 🧪 Run tests
         run: make test
