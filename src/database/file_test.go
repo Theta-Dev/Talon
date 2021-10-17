@@ -91,19 +91,24 @@ func TestFilesGet(t *testing.T) {
 		assert.Len(t, files, 1)
 		assert.Equal(t, testdb.Files[0].Hash, files[0].Hash)
 	})
+
+	t.Run("none", func(t *testing.T) {
+		files := try.X(db.FilesGet("id = 0")).([]*database.File)
+		assert.Empty(t, files)
+	})
 }
 
 func TestFilesCount(t *testing.T) {
 	db := testdb.Open()
 
 	t.Run("all", func(t *testing.T) {
-		count := try.Int(db.FilesCount())
-		assert.Equal(t, len(testdb.Files), count)
+		count := try.Int64(db.FilesCount())
+		assert.EqualValues(t, len(testdb.Files), count)
 	})
 
 	t.Run("with_hash", func(t *testing.T) {
-		count := try.Int(db.FilesCount("hash = ?", testdb.Files[0].Hash))
-		assert.Equal(t, 1, count)
+		count := try.Int64(db.FilesCount("hash = ?", testdb.Files[0].Hash))
+		assert.EqualValues(t, 1, count)
 	})
 }
 
@@ -122,7 +127,7 @@ func TestFilesDeleteOrphans(t *testing.T) {
 	db := testdb.Open()
 
 	try.Check(db.FilesDeleteOrphans())
-	assert.Equal(t, len(testdb.Files)-2, try.Int(db.FilesCount()))
+	assert.EqualValues(t, len(testdb.Files)-2, try.Int64(db.FilesCount()))
 
 	orphans := try.X(db.FilesGetOrphans()).([]*database.File)
 	assert.Len(t, orphans, 0)

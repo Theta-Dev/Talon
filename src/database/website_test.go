@@ -29,7 +29,7 @@ func TestWebsiteAdd(t *testing.T) {
 		id := len(testdb.Websites) + 1
 		assert.EqualValues(t, id, ws.ID)
 
-		gotWs := try.X(db.WebsiteByID(uint(id))).(*database.Website)
+		gotWs := try.X(db.WebsiteByID(uint(id), true)).(*database.Website)
 
 		assert.Equal(t, "KeepTalking", gotWs.Name)
 		assert.Equal(t, "Test/KeepTalking", gotWs.Path)
@@ -68,11 +68,11 @@ func TestWebsiteAdd(t *testing.T) {
 func TestWebsiteUpdate(t *testing.T) {
 	db := testdb.Open()
 
-	ws := try.X(db.WebsiteByID(1)).(*database.Website)
+	ws := try.X(db.WebsiteByID(1, true)).(*database.Website)
 	ws.Name = "KeepTalking"
 	try.Check(db.WebsiteUpdate(ws))
 
-	gotWs := try.X(db.WebsiteByID(1)).(*database.Website)
+	gotWs := try.X(db.WebsiteByID(1, true)).(*database.Website)
 	assert.Equal(t, "KeepTalking", gotWs.Name)
 }
 
@@ -80,14 +80,14 @@ func TestWebsiteByID(t *testing.T) {
 	db := testdb.Open()
 
 	t.Run("found", func(t *testing.T) {
-		ws := try.X(db.WebsiteByID(1)).(*database.Website)
+		ws := try.X(db.WebsiteByID(1, false)).(*database.Website)
 
 		assert.EqualValues(t, 1, ws.ID)
 		assert.Equal(t, "ThetaDev", ws.Name)
 	})
 
 	t.Run("not_found", func(t *testing.T) {
-		noWs := try.X(db.WebsiteByID(0)).(*database.Website)
+		noWs := try.X(db.WebsiteByID(0, false)).(*database.Website)
 		assert.Nil(t, noWs)
 	})
 }
@@ -95,7 +95,7 @@ func TestWebsiteByID(t *testing.T) {
 func TestWebsiteByPath(t *testing.T) {
 	db := testdb.Open()
 
-	params := []struct {
+	tests := []struct {
 		name   string
 		path   string
 		expect string
@@ -117,17 +117,17 @@ func TestWebsiteByPath(t *testing.T) {
 		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			ws := try.X(db.WebsiteByPath(p.path)).(*database.Website)
-			assert.Equal(t, p.expect, ws.Name)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ws := try.X(db.WebsiteByPath(tt.path, true)).(*database.Website)
+			assert.Equal(t, tt.expect, ws.Name)
 			assert.NotNil(t, ws.User)
 			assert.NotEmpty(t, ws.Versions)
 		})
 	}
 
 	t.Run("not_found", func(t *testing.T) {
-		ws := try.X(db.WebsiteByPath("XYZ")).(*database.Website)
+		ws := try.X(db.WebsiteByPath("XYZ", false)).(*database.Website)
 		assert.Nil(t, ws)
 	})
 }
@@ -135,7 +135,7 @@ func TestWebsiteByPath(t *testing.T) {
 func TestWebsitePathExists(t *testing.T) {
 	db := testdb.Open()
 
-	params := []struct {
+	tests := []struct {
 		name   string
 		path   string
 		expect bool
@@ -157,10 +157,10 @@ func TestWebsitePathExists(t *testing.T) {
 		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			exists := try.Bool(db.WebsitePathExists(p.path))
-			assert.Equal(t, p.expect, exists)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			exists := try.Bool(db.WebsitePathExists(tt.path))
+			assert.Equal(t, tt.expect, exists)
 		})
 	}
 }
@@ -175,7 +175,7 @@ func TestWebsitesGet(t *testing.T) {
 		{},
 	}
 
-	params := []struct {
+	tests := []struct {
 		name   string
 		query  []interface{}
 		expect []int
@@ -194,16 +194,21 @@ func TestWebsitesGet(t *testing.T) {
 			query:  []interface{}{"visibility >= ?", database.VISIBILITY_VISIBLE},
 			expect: []int{0, 1},
 		},
+		{
+			name:   "none",
+			query:  []interface{}{"websites.id = 0"},
+			expect: nil,
+		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			sites := try.X(db.WebsitesGet(p.query...)).([]*database.Website)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			sites := try.X(db.WebsitesGet(true, tt.query...)).([]*database.Website)
 
 			for _, s := range sites {
 				i := s.ID - 1
-				expSite := testdb.Websites[p.expect[i]]
-				expVersions := expectedVersionsMap[p.expect[i]]
+				expSite := testdb.Websites[tt.expect[i]]
+				expVersions := expectedVersionsMap[tt.expect[i]]
 
 				assert.Equal(t, expSite.Name, s.Name)
 
@@ -218,7 +223,7 @@ func TestWebsitesGet(t *testing.T) {
 func TestWebsitesCount(t *testing.T) {
 	db := testdb.Open()
 
-	params := []struct {
+	tests := []struct {
 		name   string
 		query  []interface{}
 		expect int
@@ -240,10 +245,10 @@ func TestWebsitesCount(t *testing.T) {
 		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			count := try.Int(db.WebsitesCount(p.query...))
-			assert.Equal(t, p.expect, count)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			count := try.Int(db.WebsitesCount(tt.query...))
+			assert.Equal(t, tt.expect, count)
 		})
 	}
 }
@@ -253,6 +258,6 @@ func TestWebsiteDeleteByID(t *testing.T) {
 
 	try.Check(db.WebsiteDeleteByID(2))
 
-	gotSite := try.X(db.WebsiteByID(2)).(*database.Website)
+	gotSite := try.X(db.WebsiteByID(2, false)).(*database.Website)
 	assert.Nil(t, gotSite)
 }

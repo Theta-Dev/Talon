@@ -2,7 +2,7 @@ package fixtures
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 
 	"code.thetadev.de/ThetaDev/gotry/try"
@@ -11,16 +11,16 @@ import (
 
 func TestGetProjectRoot(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
-		root := GetProjectRoot()
-		assert.True(t, doesFileExist(path.Join(root, "go.sum")))
+		root := getProjectRoot()
+		assert.True(t, doesFileExist(filepath.Join(root, "go.sum")))
 	})
 
 	t.Run("subdir", func(t *testing.T) {
-		root1 := GetProjectRoot()
-		try.Check(os.Chdir(path.Join(root1, "src/database")))
+		root1 := getProjectRoot()
+		try.Check(os.Chdir(filepath.Join(root1, "src/database")))
 
-		root := GetProjectRoot()
-		assert.True(t, doesFileExist(path.Join(root, "go.sum")))
+		root := getProjectRoot()
+		assert.True(t, doesFileExist(filepath.Join(root, "go.sum")))
 	})
 }
 

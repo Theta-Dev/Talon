@@ -7,7 +7,7 @@ import (
 )
 
 func Test_splitHostUrl(t *testing.T) {
-	params := []struct {
+	tests := []struct {
 		name    string
 		url     string
 		expHost string
@@ -23,18 +23,18 @@ func Test_splitHostUrl(t *testing.T) {
 		{"str_port", "thetadev.de:abc", "thetadev.de:abc", "3306"},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			host, port := splitHostUrl(p.url, "3306")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			host, port := splitHostUrl(tt.url, "3306")
 
-			assert.Equal(t, p.expHost, host)
-			assert.Equal(t, p.expPort, port)
+			assert.Equal(t, tt.expHost, host)
+			assert.Equal(t, tt.expPort, port)
 		})
 	}
 }
 
 func Test_prepare(t *testing.T) {
-	params := []struct {
+	tests := []struct {
 		name   string
 		conn   Connection
 		expect Connection
@@ -156,23 +156,23 @@ func Test_prepare(t *testing.T) {
 		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			c := &p.conn
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &tt.conn
 			err := c.prepare()
 
-			if p.err == nil {
+			if tt.err == nil {
 				assert.Nil(t, err)
-				assert.Equal(t, *c, p.expect)
+				assert.Equal(t, *c, tt.expect)
 			} else {
-				assert.ErrorIs(t, err, p.err)
+				assert.ErrorIs(t, err, tt.err)
 			}
 		})
 	}
 }
 
 func Test_getDsn(t *testing.T) {
-	params := []struct {
+	tests := []struct {
 		name   string
 		conn   Connection
 		expect string
@@ -228,10 +228,10 @@ func Test_getDsn(t *testing.T) {
 		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			dsn := p.conn.getDsn()
-			assert.Equal(t, p.expect, dsn)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dsn := tt.conn.getDsn()
+			assert.Equal(t, tt.expect, dsn)
 		})
 	}
 }

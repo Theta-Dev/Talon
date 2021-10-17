@@ -11,62 +11,88 @@ func (db *Database) VersionFileAdd(versionFile *VersionFile) (caught try.Err) {
 	defer try.Annotate(&caught, "error adding versionfile")
 
 	versionFile.ID = 0
-	try.Check(versionFile.check())
+	try.Check(versionFile.check(db))
 	tryORM(db.orm.Create(&versionFile))
 	return
 }
 
-func (db *Database) VersionFileByID(id uint) (
+func (db *Database) VersionFileByID(id uint, deep bool) (
 	versionFile *VersionFile, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting versionfile %d", id))
 
-	var f VersionFile
-	if tryORMIsEmpty(db.orm.Scopes(versionFileFetchScope).First(&f, id)) {
+	orm := db.orm
+	if deep {
+		orm = orm.Scopes(versionFileFetchScope)
+	}
+
+	if tryORMIsEmpty(orm.First(&versionFile, id)) {
 		return nil, nil
 	}
-	return &f, nil
+	return
 }
 
-func (db *Database) VersionFilesGet(query ...interface{}) (
+func (db *Database) VersionFileByPath(versionId uint, filePath string) (
+	versionFile *VersionFile, caught try.Err) {
+
+	defer try.Annotate(&caught, fmt.Sprintf("error getting version file %s for version %d",
+		filePath, versionId))
+
+	if tryORMIsEmpty(db.orm.Joins("File").
+		Where("version_id = ? AND path = ?", versionId, filePath).First(&versionFile)) {
+		return nil, nil
+	}
+	return
+}
+
+func (db *Database) VersionFilesGet(deep bool, query ...interface{}) (
 	versionFiles []*VersionFile, caught try.Err) {
 
 	defer try.Annotate(&caught, "error getting versionfiles")
 
-	var vfs []*VersionFile
-	if len(query) > 0 {
-		tryORM(db.orm.Scopes(versionFileFetchScope).Where(query[0], query[1:]...).Find(&vfs))
-	} else {
-		tryORM(db.orm.Scopes(versionFileFetchScope).Find(&vfs))
+	orm := db.orm
+	if deep {
+		orm = orm.Scopes(versionFileFetchScope)
 	}
-	return vfs, nil
+
+	if len(query) > 0 {
+		tryORMIsEmpty(orm.Where(query[0], query[1:]...).Find(&versionFiles))
+	} else {
+		tryORMIsEmpty(orm.Find(&versionFiles))
+	}
+	return
 }
 
 func (db *Database) VersionFilesCount(query ...interface{}) (
-	count int, caught try.Err) {
+	count int64, caught try.Err) {
 
 	defer try.Annotate(&caught, "error counting versionfiles")
 
-	var c int64
 	if len(query) > 0 {
 		tryORM(db.orm.Model(VersionFile{}).Where(
-			query[0], query[1:]...).Count(&c))
+			query[0], query[1:]...).Count(&count))
 	} else {
-		tryORM(db.orm.Model(VersionFile{}).Count(&c))
+		tryORM(db.orm.Model(VersionFile{}).Count(&count))
 	}
-	return int(c), nil
+	return
 }
 
 func versionFileFetchScope(db *gorm.DB) *gorm.DB {
 	return db.Joins("Version").Joins("File")
 }
 
-func (vf *VersionFile) check() error {
-	if !isRelSet(vf.VersionID, vf.Version) {
-		return ErrEmptyVersion
+func (vf *VersionFile) check(db *Database) try.Err {
+	vid := getRelId(vf.VersionID, vf.Version)
+	if vid == 0 {
+		return try.FromErr(ErrEmptyVersion)
 	}
 
 	if !isRelSet(vf.FileID, vf.File) {
-		return ErrEmptyFile
+		return try.FromErr(ErrEmptyFile)
+	}
+
+	if try.Int64(db.VersionFilesCount("version_id = ? AND path = ? AND id <> ?",
+		vid, vf.Path, vf.ID)) > 0 {
+		return newErrVersionFileAlreadyExists(vf.Path, vid)
 	}
 	return nil
 }

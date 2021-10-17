@@ -35,52 +35,49 @@ func (db *Database) UserUpdate(user *User) (caught try.Err) {
 func (db *Database) UserByID(id uint) (user *User, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting user %d", id))
 
-	var u User
-	if tryORMIsEmpty(db.orm.Scopes(userFetchScope).First(&u, id)) {
+	if tryORMIsEmpty(db.orm.Scopes(userFetchScope).First(&user, id)) {
 		return nil, nil
 	}
-	return &u, nil
+	return
 }
 
 func (db *Database) UserByName(name string) (user *User, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting user with name %s", name))
 
-	var u User
-	if tryORMIsEmpty(db.orm.Scopes(userFetchScope).Where("name = ?", name).First(&u)) {
+	if tryORMIsEmpty(db.orm.Scopes(userFetchScope).Where("name = ?", name).First(&user)) {
 		return nil, nil
 	}
-	return &u, nil
+	return
 }
 
 func (db *Database) UserNameExists(name string) (exists bool, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error checking username %s", name))
 
-	c := try.Int(db.UsersCount("name = ?", name))
+	c := try.Int64(db.UsersCount("name = ?", name))
 	return c > 0, nil
 }
 
 func (db *Database) UsersGet(query ...interface{}) (users []*User, caught try.Err) {
 	defer try.Annotate(&caught, "error getting users")
 
-	var us []*User
 	if len(query) > 0 {
-		tryORM(db.orm.Scopes(userFetchScope).Where(query[0], query[1:]...).Find(&us))
+		tryORMIsEmpty(
+			db.orm.Scopes(userFetchScope).Where(query[0], query[1:]...).Find(&users))
 	} else {
-		tryORM(db.orm.Scopes(userFetchScope).Find(&us))
+		tryORMIsEmpty(db.orm.Scopes(userFetchScope).Find(&users))
 	}
-	return us, nil
+	return
 }
 
-func (db *Database) UsersCount(query ...interface{}) (count int, caught try.Err) {
+func (db *Database) UsersCount(query ...interface{}) (count int64, caught try.Err) {
 	defer try.Annotate(&caught, "error counting files")
 
-	var c int64
 	if len(query) > 0 {
-		tryORM(db.orm.Model(User{}).Where(query[0], query[1:]...).Count(&c))
+		tryORM(db.orm.Model(User{}).Where(query[0], query[1:]...).Count(&count))
 	} else {
-		tryORM(db.orm.Model(User{}).Count(&c))
+		tryORM(db.orm.Model(User{}).Count(&count))
 	}
-	return int(c), nil
+	return
 }
 
 func (db *Database) UserDeleteByID(id uint) (caught try.Err) {
@@ -95,7 +92,7 @@ func userFetchScope(db *gorm.DB) *gorm.DB {
 }
 
 func (u *User) check(db *Database) try.Err {
-	if try.Int(db.UsersCount("name = ? AND id <> ?", u.Name, u.ID)) > 0 {
+	if try.Int64(db.UsersCount("name = ? AND id <> ?", u.Name, u.ID)) > 0 {
 		return newErrUsernameAlreadyExists(u.Name)
 	}
 

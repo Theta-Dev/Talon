@@ -2,12 +2,12 @@ package database
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 
 	"code.thetadev.de/ThetaDev/gotry/try"
+	"github.com/Theta-Dev/Talon/src/util"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -67,10 +67,7 @@ func (c *Connection) prepareFileDB() (caught try.Err) {
 		c.File = "database.db"
 	}
 
-	// Create dbfile directory if nonexistant
-	if _, err := os.Stat(filepath.Dir(c.File)); os.IsNotExist(err) {
-		try.Check(os.MkdirAll(filepath.Dir(c.File), 0o777))
-	}
+	try.Check(util.CreateDirIfNotExists(filepath.Dir(c.File)))
 
 	c.Host = ""
 	c.User = ""

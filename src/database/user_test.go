@@ -12,7 +12,7 @@ import (
 func TestUserAdd(t *testing.T) {
 	db := testdb.Open()
 
-	params := []struct {
+	tests := []struct {
 		name string
 		user database.User
 	}{
@@ -48,7 +48,7 @@ func TestUserAdd(t *testing.T) {
 		},
 	}
 
-	for i, p := range params {
+	for i, p := range tests {
 		t.Run(p.name, func(t *testing.T) {
 			try.Check(db.UserAdd(&p.user))
 
@@ -160,19 +160,24 @@ func TestUsersGet(t *testing.T) {
 		assert.Equal(t, "Izzy", users[0].Name)
 		assert.Equal(t, "tests/*", users[0].Permission.AllowedPaths)
 	})
+
+	t.Run("none", func(t *testing.T) {
+		users := try.X(db.UsersGet("Name = 'XYZ'")).([]*database.User)
+		assert.Empty(t, users)
+	})
 }
 
 func TestUsersCount(t *testing.T) {
 	db := testdb.Open()
 
 	t.Run("all", func(t *testing.T) {
-		count := try.Int(db.UsersCount())
-		assert.Equal(t, len(testdb.Users), count)
+		count := try.Int64(db.UsersCount())
+		assert.EqualValues(t, len(testdb.Users), count)
 	})
 
 	t.Run("with_name", func(t *testing.T) {
-		count := try.Int(db.UsersCount("name = ?", "Izzy"))
-		assert.Equal(t, 1, count)
+		count := try.Int64(db.UsersCount("name = ?", "Izzy"))
+		assert.EqualValues(t, 1, count)
 	})
 }
 

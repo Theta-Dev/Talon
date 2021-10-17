@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetRelId(t *testing.T) {
-	params := []struct {
+	tests := []struct {
 		name     string
 		idParam  uint
 		sctParam interface{}
@@ -34,10 +34,10 @@ func TestGetRelId(t *testing.T) {
 		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			assert.Equal(t, p.expect, getRelId(p.idParam, p.sctParam))
-			assert.Equal(t, p.expect > 0, isRelSet(p.idParam, p.sctParam))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.expect, getRelId(tt.idParam, tt.sctParam))
+			assert.Equal(t, tt.expect > 0, isRelSet(tt.idParam, tt.sctParam))
 		})
 	}
 }

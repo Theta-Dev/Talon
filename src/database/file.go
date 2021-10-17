@@ -21,52 +21,48 @@ func (db *Database) FileAdd(file *File) (caught try.Err) {
 func (db *Database) FileByID(id uint) (file *File, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting file %d", id))
 
-	var f File
-	if tryORMIsEmpty(db.orm.First(&f, id)) {
+	if tryORMIsEmpty(db.orm.First(&file, id)) {
 		return nil, nil
 	}
-	return &f, nil
+	return
 }
 
 func (db *Database) FileByHash(hash string) (file *File, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting file with hash %s", hash))
 
-	var f File
-	if tryORMIsEmpty(db.orm.Where("hash = ?", hash).First(&f)) {
+	if tryORMIsEmpty(db.orm.Where("hash = ?", hash).First(&file)) {
 		return nil, nil
 	}
-	return &f, nil
+	return
 }
 
 func (db *Database) FileHashExists(hash string) (exists bool, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error checking file hash %s", hash))
 
-	c := try.Int(db.FilesCount("hash = ?", hash))
+	c := try.Int64(db.FilesCount("hash = ?", hash))
 	return c > 0, nil
 }
 
 func (db *Database) FilesGet(query ...interface{}) (files []*File, caught try.Err) {
 	defer try.Annotate(&caught, "error getting files")
 
-	var fs []*File
 	if len(query) > 0 {
-		tryORM(db.orm.Where(query[0], query[1:]...).Find(&fs))
+		tryORMIsEmpty(db.orm.Where(query[0], query[1:]...).Find(&files))
 	} else {
-		tryORM(db.orm.Find(&fs))
+		tryORMIsEmpty(db.orm.Find(&files))
 	}
-	return fs, nil
+	return
 }
 
-func (db *Database) FilesCount(query ...interface{}) (count int, caught try.Err) {
+func (db *Database) FilesCount(query ...interface{}) (count int64, caught try.Err) {
 	defer try.Annotate(&caught, "error counting files")
 
-	var c int64
 	if len(query) > 0 {
-		tryORM(db.orm.Model(File{}).Where(query[0], query[1:]...).Count(&c))
+		tryORM(db.orm.Model(File{}).Where(query[0], query[1:]...).Count(&count))
 	} else {
-		tryORM(db.orm.Model(File{}).Count(&c))
+		tryORM(db.orm.Model(File{}).Count(&count))
 	}
-	return int(c), nil
+	return
 }
 
 func (db *Database) FilesGetOrphans() (files []*File, caught try.Err) {

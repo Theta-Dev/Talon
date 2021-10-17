@@ -2,7 +2,7 @@ package fixtures
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 
 	"code.thetadev.de/ThetaDev/gotry/try"
 )
@@ -12,20 +12,31 @@ func doesFileExist(filepath string) bool {
 	return !os.IsNotExist(err)
 }
 
-func GetProjectRoot() string {
+func getProjectRoot() string {
 	p := try.String(os.Getwd())
 
 	for i := 0; i < 10; i++ {
-		if doesFileExist(path.Join(p, "go.mod")) {
+		if doesFileExist(filepath.Join(p, "go.mod")) {
 			return p
 		}
-		p = path.Join(p, "..")
+		p = filepath.Join(p, "..")
 	}
 
 	panic("Could not find project root")
 }
 
 func CdProjectRoot() {
-	root := GetProjectRoot()
+	root := getProjectRoot()
 	try.Check(os.Chdir(root))
+}
+
+func GetTestfilesDir() string {
+	CdProjectRoot()
+	return filepath.Join("src", "fixtures", "testfiles")
+}
+
+func WriteTestfile(tfile string) {
+	f := try.File(os.Create(tfile))
+	defer f.Close()
+	try.Int(f.WriteString("HelloTST"))
 }

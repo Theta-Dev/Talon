@@ -1,5 +1,5 @@
-code.thetadev.de/ThetaDev/gotry v0.3.1 h1:9M630EH5u2R3WyTbZDdMEPjJXrZ2bAowwFic9s3QwMw=
-code.thetadev.de/ThetaDev/gotry v0.3.1/go.mod h1:lKo6abOTMy5uO25ifG7JsGG3DYZd0XZd0xqa6y41BoU=
+code.thetadev.de/ThetaDev/gotry v0.3.2 h1:x5JOBszLbCo4FDe9V8ynHsV6EfvALV7wUqnJ/5vtjbw=
+code.thetadev.de/ThetaDev/gotry v0.3.2/go.mod h1:lKo6abOTMy5uO25ifG7JsGG3DYZd0XZd0xqa6y41BoU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Masterminds/semver/v3 v3.1.1 h1:hLg3sBzpNErnxhQtUy/mmLR2I9foDujNK030IGemrRc=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=

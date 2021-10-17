@@ -24,42 +24,66 @@ func (db *Database) VersionUpdate(version *Version) (caught try.Err) {
 	return
 }
 
-func (db *Database) VersionByID(id uint) (version *Version, caught try.Err) {
+func (db *Database) VersionByID(id uint, deep bool) (version *Version, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting version %d", id))
 
-	var f Version
-	if tryORMIsEmpty(db.orm.Scopes(versionFetchScope).First(&f, id)) {
+	orm := db.orm
+	if deep {
+		orm = orm.Scopes(versionFetchScope)
+	}
+
+	if tryORMIsEmpty(orm.First(&version, id)) {
 		return nil, nil
 	}
-	return &f, nil
+	return
 }
 
-func (db *Database) VersionsGet(query ...interface{}) (
+func (db *Database) VersionIDByWebsite(websiteId uint, versionName string) (
+	versionId uint, caught try.Err) {
+
+	defer try.Annotate(&caught, fmt.Sprintf("error getting version %s from website %d",
+		versionName, websiteId))
+
+	cond := "website_id = ?"
+	if versionName != "" {
+		cond += " AND name = ?"
+	}
+
+	tryORM(db.orm.Model(&Version{}).Select("id").
+		Where(cond, websiteId, versionName).
+		Order("id DESC").Limit(1).Scan(&versionId))
+	return
+}
+
+func (db *Database) VersionsGet(deep bool, query ...interface{}) (
 	versions []*Version, caught try.Err) {
 
-	defer try.Annotate(&caught, "error getting websites")
+	defer try.Annotate(&caught, "error getting versions")
 
-	var vs []*Version
-	if len(query) > 0 {
-		tryORM(db.orm.Scopes(versionFetchScope).Where(query[0], query[1:]...).Find(&vs))
-	} else {
-		tryORM(db.orm.Scopes(versionFetchScope).Find(&vs))
+	orm := db.orm
+	if deep {
+		orm = orm.Scopes(versionFetchScope)
 	}
-	return vs, nil
+
+	if len(query) > 0 {
+		tryORMIsEmpty(orm.Where(query[0], query[1:]...).Find(&versions))
+	} else {
+		tryORMIsEmpty(orm.Find(&versions))
+	}
+	return
 }
 
 func (db *Database) VersionsCount(query ...interface{}) (
-	count int, caught try.Err) {
+	count int64, caught try.Err) {
 
 	defer try.Annotate(&caught, "error counting versions")
 
-	var c int64
 	if len(query) > 0 {
-		tryORM(db.orm.Model(Version{}).Where(query[0], query[1:]...).Count(&c))
+		tryORM(db.orm.Model(Version{}).Where(query[0], query[1:]...).Count(&count))
 	} else {
-		tryORM(db.orm.Model(Version{}).Count(&c))
+		tryORM(db.orm.Model(Version{}).Count(&count))
 	}
-	return int(c), nil
+	return
 }
 
 func (db *Database) VersionDeleteByID(id uint) (caught try.Err) {
@@ -83,7 +107,7 @@ func (v *Version) check(db *Database) try.Err {
 		return try.FromErr(ErrEmptyWebsite)
 	}
 
-	if try.Int(db.VersionsCount(
+	if try.Int64(db.VersionsCount(
 		"name = ? AND id <> ? AND website_id = ?", v.Name, v.ID, wsid)) > 0 {
 		return newErrVersionNameAlreadyExists(v.Name, wsid)
 	}

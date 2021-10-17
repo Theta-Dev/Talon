@@ -24,11 +24,11 @@ func TestVersionAdd(t *testing.T) {
 		id := len(testdb.Versions) + 1
 		assert.EqualValues(t, id, version.ID)
 
-		gotV := try.X(db.VersionByID(uint(id))).(*database.Version)
-		assert.Equal(t, "#2", gotV.Name)
-		assert.Equal(t, `{"test": {"v": "1"}}`, gotV.Tags)
-		assert.EqualValues(t, 2, gotV.Website.ID)
-		assert.EqualValues(t, 2, gotV.User.ID)
+		gotVDeep := try.X(db.VersionByID(uint(id), true)).(*database.Version)
+		assert.Equal(t, "#2", gotVDeep.Name)
+		assert.Equal(t, `{"test": {"v": "1"}}`, gotVDeep.Tags)
+		assert.EqualValues(t, 2, gotVDeep.Website.ID)
+		assert.EqualValues(t, 2, gotVDeep.User.ID)
 	})
 
 	t.Run("duplicate_name", func(t *testing.T) {
@@ -66,13 +66,13 @@ func TestVersionAdd(t *testing.T) {
 func TestVersionUpdate(t *testing.T) {
 	db := testdb.Open()
 
-	version := try.X(db.VersionByID(1)).(*database.Version)
+	version := try.X(db.VersionByID(1, false)).(*database.Version)
 
 	t.Run("ok", func(t *testing.T) {
 		version.Name = "TestV"
 		try.Check(db.VersionUpdate(version))
 
-		gotVersion := try.X(db.VersionByID(1)).(*database.Version)
+		gotVersion := try.X(db.VersionByID(1, false)).(*database.Version)
 		assert.EqualValues(t, 1, gotVersion.ID)
 		assert.Equal(t, "TestV", gotVersion.Name)
 	})
@@ -87,8 +87,8 @@ func TestVersionUpdate(t *testing.T) {
 func TestVersionByID(t *testing.T) {
 	db := testdb.Open()
 
-	t.Run("found", func(t *testing.T) {
-		v := try.X(db.VersionByID(1)).(*database.Version)
+	t.Run("found_deep", func(t *testing.T) {
+		v := try.X(db.VersionByID(1, true)).(*database.Version)
 
 		assert.EqualValues(t, 1, v.ID)
 		assert.Equal(t, "v0.1.0", v.Name)
@@ -97,8 +97,17 @@ func TestVersionByID(t *testing.T) {
 		assert.Len(t, v.Files, 2)
 	})
 
+	t.Run("found", func(t *testing.T) {
+		v := try.X(db.VersionByID(1, false)).(*database.Version)
+
+		assert.EqualValues(t, 1, v.ID)
+		assert.Equal(t, "v0.1.0", v.Name)
+		assert.Nil(t, v.Website)
+		assert.Nil(t, v.User)
+	})
+
 	t.Run("not_found", func(t *testing.T) {
-		noWs := try.X(db.VersionByID(0)).(*database.Version)
+		noWs := try.X(db.VersionByID(0, false)).(*database.Version)
 		assert.Nil(t, noWs)
 	})
 }
@@ -107,7 +116,7 @@ func TestVersionsGet(t *testing.T) {
 	db := testdb.Open()
 
 	t.Run("all", func(t *testing.T) {
-		versions := try.X(db.VersionsGet()).([]*database.Version)
+		versions := try.X(db.VersionsGet(true)).([]*database.Version)
 
 		for i, v := range versions {
 			assert.Equal(t, testdb.Versions[i].Name, v.Name)
@@ -118,7 +127,8 @@ func TestVersionsGet(t *testing.T) {
 	})
 
 	t.Run("with_name", func(t *testing.T) {
-		versions := try.X(db.VersionsGet("versions.name = ?", "v0.1.0")).([]*database.Version)
+		versions := try.X(
+			db.VersionsGet(true, "versions.name = ?", "v0.1.0")).([]*database.Version)
 		assert.Len(t, versions, 1)
 
 		v := versions[0]
@@ -127,12 +137,17 @@ func TestVersionsGet(t *testing.T) {
 		assert.Equal(t, "ThetaDev", v.User.Name)
 		assert.Len(t, v.Files, 2)
 	})
+
+	t.Run("none", func(t *testing.T) {
+		versions := try.X(db.VersionsGet(false, "versions.id = 0")).([]*database.Version)
+		assert.Empty(t, versions)
+	})
 }
 
 func TestVersionsCount(t *testing.T) {
 	db := testdb.Open()
 
-	params := []struct {
+	tests := []struct {
 		name   string
 		query  []interface{}
 		expect int
@@ -149,10 +164,10 @@ func TestVersionsCount(t *testing.T) {
 		},
 	}
 
-	for _, p := range params {
-		t.Run(p.name, func(t *testing.T) {
-			count := try.Int(db.VersionsCount(p.query...))
-			assert.Equal(t, p.expect, count)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			count := try.Int64(db.VersionsCount(tt.query...))
+			assert.EqualValues(t, tt.expect, count)
 		})
 	}
 }
@@ -162,6 +177,43 @@ func TestVersionDeleteByID(t *testing.T) {
 
 	try.Check(db.VersionDeleteByID(2))
 
-	gotVersion := try.X(db.VersionByID(2)).(*database.Version)
+	gotVersion := try.X(db.VersionByID(2, false)).(*database.Version)
 	assert.Nil(t, gotVersion)
+}
+
+func TestVersionIDByWebsitex(t *testing.T) {
+	db := testdb.Open()
+
+	tests := []struct {
+		name        string
+		websiteId   uint
+		versionName string
+		expect      uint
+	}{
+		{
+			name:        "latest",
+			websiteId:   1,
+			versionName: "",
+			expect:      2,
+		},
+		{
+			name:        "named",
+			websiteId:   1,
+			versionName: "v0.1.0",
+			expect:      1,
+		},
+		{
+			name:        "none",
+			websiteId:   1,
+			versionName: "XYZ",
+			expect:      0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			vid := try.Uint(db.VersionIDByWebsite(tt.websiteId, tt.versionName))
+			assert.Equal(t, tt.expect, vid)
+		})
+	}
 }

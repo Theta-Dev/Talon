@@ -26,27 +26,35 @@ func (db *Database) WebsiteUpdate(website *Website) (caught try.Err) {
 	return
 }
 
-func (db *Database) WebsiteByID(id uint) (website *Website, caught try.Err) {
+func (db *Database) WebsiteByID(id uint, deep bool) (website *Website, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting website %d", id))
 
-	var w Website
-	if tryORMIsEmpty(db.orm.Scopes(websiteFetchScope).First(&w, id)) {
+	orm := db.orm
+	if deep {
+		orm = orm.Scopes(websiteFetchScope)
+	}
+
+	if tryORMIsEmpty(orm.First(&website, id)) {
 		return nil, nil
 	}
-	return &w, nil
+	return
 }
 
-func (db *Database) WebsiteByPath(sitePath string) (website *Website, caught try.Err) {
+func (db *Database) WebsiteByPath(sitePath string, deep bool) (
+	website *Website, caught try.Err) {
 	defer try.Annotate(&caught, fmt.Sprintf("error getting website at path %s", sitePath))
 
 	normPath := util.NormalizePath(sitePath)
 
-	var w Website
-	if tryORMIsEmpty(db.orm.Scopes(websiteFetchScope).Where(
-		"path_lower = ?", normPath).First(&w)) {
+	orm := db.orm
+	if deep {
+		orm = orm.Scopes(websiteFetchScope)
+	}
+
+	if tryORMIsEmpty(orm.Where("path_lower = ?", normPath).First(&website)) {
 		return nil, nil
 	}
-	return &w, nil
+	return
 }
 
 func (db *Database) WebsitePathExists(sitePath string) (exists bool, caught try.Err) {
@@ -58,18 +66,22 @@ func (db *Database) WebsitePathExists(sitePath string) (exists bool, caught try.
 	return c > 0, nil
 }
 
-func (db *Database) WebsitesGet(query ...interface{}) (
+func (db *Database) WebsitesGet(deep bool, query ...interface{}) (
 	websites []*Website, caught try.Err) {
 
 	defer try.Annotate(&caught, "error getting websites")
 
-	var ws []*Website
-	if len(query) > 0 {
-		tryORM(db.orm.Scopes(websiteFetchScope).Where(query[0], query[1:]...).Find(&ws))
-	} else {
-		tryORM(db.orm.Scopes(websiteFetchScope).Find(&ws))
+	orm := db.orm
+	if deep {
+		orm = orm.Scopes(websiteFetchScope)
 	}
-	return ws, nil
+
+	if len(query) > 0 {
+		tryORMIsEmpty(orm.Where(query[0], query[1:]...).Find(&websites))
+	} else {
+		tryORMIsEmpty(orm.Find(&websites))
+	}
+	return
 }
 
 func (db *Database) WebsitesCount(query ...interface{}) (
@@ -98,7 +110,7 @@ func websiteFetchScope(db *gorm.DB) *gorm.DB {
 }
 
 func (w *Website) check(db *Database) try.Err {
-	w.Path = strings.Trim(w.Path, "/")
+	w.Path = util.TrimPath(w.Path)
 	w.PathLower = strings.ToLower(w.Path)
 
 	if !isRelSet(w.UserID, w.User) {
