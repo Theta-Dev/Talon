@@ -18,15 +18,15 @@ jobs:
         with:
           node-version: '16'
 
-      - name: 🪄 Setup project
-        run: |
-          make setup
-          scripts/check_go_mod.sh
-
       - name: 💙 golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.42.1
+
+      - name: 🪄 Setup project
+        run: |
+          make setup
+          scripts/check_go_mod.sh
 
       - name: 💄 js-lint
         run: make js-lint
