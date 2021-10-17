@@ -10,7 +10,6 @@ linters:
 
   enable:
     - gofumpt
-    - godot
     - lll
     - predeclared
     - gocognit
@@ -20,8 +19,6 @@ linters:
     - scopelint
 
 linters-settings:
-  godot:
-    capital: true
   lll:
     line-length: 88
   gocognit:

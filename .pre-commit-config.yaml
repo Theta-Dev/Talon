@@ -5,13 +5,5 @@ repos:
   - id: go-mod-tidy
   - id: golangci-lint-repo-mod
     name: GolangCI Lint
-
-- repo: local
-  hooks:
-  - id: test
+  - id: go-test-repo-mod
     name: Test
-    entry: scripts/test_run.sh
-    language: script
-    description: "Run Talon's tests"
-    types: [go]
-    pass_filenames: false

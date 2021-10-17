@@ -2,7 +2,7 @@ SRC_DIR=./src
 SCRIPT_DIR=./scripts
 UI_MENU_DIR=./ui/menu
 
-prep:
+setup:
 	go get -t ./...
 	cd ${UI_MENU_DIR} && npm install
 
