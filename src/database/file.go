@@ -9,12 +9,7 @@ import (
 func (db *Database) FileAdd(file *File) (caught try.Err) {
 	defer try.Annotate(&caught, "error adding file")
 
-	if try.Bool(db.FileHashExists(file.Hash)) {
-		try.Check(newErrFileHashAlreadyExists(file.Hash))
-	}
-
-	file.ID = 0
-	tryORM(db.orm.Create(&file))
+	tryORM(db.orm.Where(File{Hash: file.Hash}).FirstOrCreate(&file))
 	return
 }
 

@@ -26,7 +26,7 @@ func TestGetFileHash(t *testing.T) {
 
 func TestGetFilePath(t *testing.T) {
 	storage := Storage{path: "/tst/path"}
-	fpath, dirpath := storage.getFilePath(test_hash, dir_files)
+	fpath, dirpath := storage.getFilePath(test_hash, dirFiles)
 
 	assert.Equal(t,
 		"/tst/path/files/6e/6e99e2dbab5524a692616f208e7fbc54778dd67af6968468393a9912f51f707d",
@@ -43,7 +43,7 @@ func TestGetFile(t *testing.T) {
 	storage := try.X(New(tmpdir, db)).(*Storage)
 
 	filePath := try.String(storage.GetFile("index.html"))
-	assert.True(t, strings.HasSuffix(filePath, "/files/53/"+testdb.Files[5].Hash))
+	assert.True(t, strings.HasSuffix(filePath, "/files/b6/"+testdb.Files[5].Hash))
 }
 
 func TestStoreFile(t *testing.T) {

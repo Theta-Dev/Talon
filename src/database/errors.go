@@ -14,7 +14,6 @@ var (
 	ErrUnknownSqlDialect = errors.New(
 		"unknown dialect (allowed: sqlite, mysql, postgres)")
 	ErrUsernameAlreadyExists    = errors.New("username already exists")
-	ErrFileHashAlreadyExists    = errors.New("file hash already exists")
 	ErrSitePathAlreadyExists    = errors.New("website path already exists")
 	ErrVersionNameAlreadyExists = errors.New("version name already exists in website")
 	ErrVersionFileAlreadyExists = errors.New("version file already exists in version")
@@ -39,12 +38,6 @@ func newErrUsernameAlreadyExists(username string) try.Err {
 func newErrSitePathAlreadyExists(path string) try.Err {
 	err := try.FromErr(ErrSitePathAlreadyExists)
 	err.Annotate("site path: " + path)
-	return err
-}
-
-func newErrFileHashAlreadyExists(hash string) try.Err {
-	err := try.FromErr(ErrFileHashAlreadyExists)
-	err.Annotate("file hash: " + hash)
 	return err
 }
 

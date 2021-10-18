@@ -17,14 +17,18 @@ func TestFileAdd(t *testing.T) {
 		try.Check(db.FileAdd(file))
 
 		gotFile := try.X(db.FileByID(file.ID)).(*database.File)
-		assert.Equal(t, file.ID, gotFile.ID)
+		assert.EqualValues(t, len(testdb.Files)+1, gotFile.ID)
 		assert.Equal(t, "testHash", gotFile.Hash)
 	})
 
 	t.Run("duplicate", func(t *testing.T) {
 		file := &database.File{Hash: "testHash"}
-		err := db.FileAdd(file)
-		assert.ErrorIs(t, err, database.ErrFileHashAlreadyExists)
+		try.Check(db.FileAdd(file))
+		assert.EqualValues(t, len(testdb.Files)+1, file.ID)
+
+		gotFile := try.X(db.FileByID(file.ID)).(*database.File)
+		assert.EqualValues(t, len(testdb.Files)+1, gotFile.ID)
+		assert.Equal(t, "testHash", gotFile.Hash)
 	})
 }
 
@@ -79,6 +83,7 @@ func TestFilesGet(t *testing.T) {
 
 	t.Run("all", func(t *testing.T) {
 		files := try.X(db.FilesGet()).([]*database.File)
+		assert.Len(t, files, len(testdb.Files))
 
 		for _, f := range files {
 			i := f.ID - 1

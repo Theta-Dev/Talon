@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -14,9 +15,11 @@ import (
 )
 
 const (
-	dir_files = "files"
-	// dir_compressed = "compressed"
+	dirFiles = "files"
+	// dirCompressed = "compressed"
 )
+
+var fileCandidates = []string{"", "index.html", "index.htm"}
 
 type Storage struct {
 	path string
@@ -26,8 +29,8 @@ type Storage struct {
 func New(path string, db *database.Database) (s *Storage, caught try.Err) {
 	defer try.Annotate(&caught, "error creating storage at "+path)
 
-	try.Check(util.CreateDirIfNotExists(filepath.Join(path, dir_files)))
-	// util.CreateDirIfNotExists(filepath.Join(path, dir_compressed))
+	try.Check(util.CreateDirIfNotExists(filepath.Join(path, dirFiles)))
+	// util.CreateDirIfNotExists(filepath.Join(path, dirCompressed))
 
 	return &Storage{path: path, db: db}, nil
 }
@@ -64,6 +67,22 @@ func (s *Storage) getFilePath(hash, subdir string) (fpath, dirpath string) {
 	return
 }
 
+func (s *Storage) getVersionFileHash(vid uint, versionFilePath string) (
+	hash string, caught try.Err) {
+	defer try.Return(&caught)
+
+	for _, c := range fileCandidates {
+		fp := path.Join(versionFilePath, c)
+		vfile := try.X(s.db.VersionFileByPath(vid, fp)).(*database.VersionFile)
+
+		if vfile != nil && vfile.File != nil {
+			return vfile.File.Hash, nil
+		}
+	}
+	try.Check(ErrFileNotFound)
+	return
+}
+
 func (s *Storage) GetFile(sitePath string) (filePath string, caught try.Err) {
 	defer try.Annotate(&caught, "error getting file at url "+sitePath)
 
@@ -83,23 +102,20 @@ func (s *Storage) GetFile(sitePath string) (filePath string, caught try.Err) {
 		}
 	}
 
-	//nolint:staticcheck
 	if website == nil {
 		try.Check(ErrFileNotFound)
+		return
 	}
 
-	//nolint:staticcheck
 	vid := try.Uint(s.db.VersionIDByWebsite(website.ID, ""))
 	if vid == 0 {
 		try.Check(ErrFileNotFound)
+		return
 	}
 
-	vfile := try.X(s.db.VersionFileByPath(vid, versionFilePath)).(*database.VersionFile)
-	if vfile == nil || vfile.File == nil {
-		try.Check(ErrFileNotFound)
-	}
+	hash := try.String(s.getVersionFileHash(vid, versionFilePath))
 
-	filePath, _ = s.getFilePath(vfile.File.Hash, "files")
+	filePath, _ = s.getFilePath(hash, "files")
 
 	return
 }
@@ -121,12 +137,14 @@ func (s *Storage) StoreFile(versionId uint, sourcePath string, sitePath string) 
 	file := &database.File{Hash: hash}
 	try.Check(s.db.FileAdd(file))
 
-	vfile := &database.VersionFile{
-		Path:      sitePath,
-		VersionID: versionId,
-		File:      file,
+	if sitePath != "" {
+		vfile := &database.VersionFile{
+			Path:      sitePath,
+			VersionID: versionId,
+			File:      file,
+		}
+		try.Check(s.db.VersionFileAdd(vfile))
 	}
-	try.Check(s.db.VersionFileAdd(vfile))
 
 	try.Check(util.CreateDirIfNotExists(storeDir))
 	try.Check(util.CopyFile(sourcePath, storePath))
